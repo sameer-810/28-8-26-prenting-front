@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { apiErrorMessage, apiErrorCode } from "@api/apiClient";
-import { useAppNavigation } from "@navigation/types";
+import { useAppNavigation, goToTab } from "@navigation/types";
 import { useAuthStore } from "@shared/store/useAuthStore";
 import { useFontStore, type LanguageCode } from "@shared/fonts";
 import {
@@ -92,7 +92,7 @@ export default function AddChildScreen() {
     createChild.mutate(
       { ...values, grade: Number(values.grade) },
       {
-        onSuccess: () => navigation.navigate("Home"),
+        onSuccess: () => goToTab(navigation),
         onError: (err) => {
           const code = apiErrorCode(err);
           setFormError(

@@ -9,6 +9,9 @@ import { useBreakpoint } from "@shared/ui";
 import { OfflineBanner } from "@shared/offline/OfflineBanner";
 import HomeScreen from "@modules/home/screens/HomeScreen";
 import AddChildScreen from "@modules/onboarding/screens/AddChildScreen";
+import CaptureScreen from "@modules/capture/screens/CaptureScreen";
+import PlanScreen from "@modules/capture/screens/PlanScreen";
+import SessionScreen from "@modules/session/screens/SessionScreen";
 import { PhoneTabBar } from "./PhoneTabBar";
 import { Sidebar } from "./Sidebar";
 import { NAV_ITEMS } from "./navItems";
@@ -132,37 +135,18 @@ export default function AppNavigator() {
            */}
           <Stack.Screen name="AddChild" component={AddChildScreen} />
 
+          <Stack.Screen name="Capture" component={CaptureScreen} />
+          <Stack.Screen name="Plan" component={PlanScreen} />
           {/**
-           * Phase 5's flow, registered now as named placeholders.
-           *
-           * The home screen already routes to these, and a button that
-           * navigates nowhere is worse than one that lands on a screen saying
-           * what is coming — it reads as a bug rather than as unfinished work.
+           * The session player has NO gesture back and no swipe-to-dismiss: it
+           * owns its own exit, which asks before abandoning an evening's work.
+           * A stray edge swipe mid-phase must not end a session.
            */}
-          <Stack.Screen name="Capture">
-            {() => (
-              <PlaceholderScreen
-                title="Plan a session"
-                body="Say it, type it, or photograph the page — the capture flow arrives with Phase 5."
-              />
-            )}
-          </Stack.Screen>
-          <Stack.Screen name="Plan">
-            {() => (
-              <PlaceholderScreen
-                title="Session plan"
-                body="The five-phase plan view arrives with Phase 5."
-              />
-            )}
-          </Stack.Screen>
-          <Stack.Screen name="Session">
-            {() => (
-              <PlaceholderScreen
-                title="Session"
-                body="The 30-minute session player arrives with Phase 5."
-              />
-            )}
-          </Stack.Screen>
+          <Stack.Screen
+            name="Session"
+            component={SessionScreen}
+            options={{ gestureEnabled: false, animation: "fade" }}
+          />
         </Stack.Navigator>
       </View>
     </View>

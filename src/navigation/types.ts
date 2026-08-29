@@ -54,6 +54,23 @@ export function useAppNavigation() {
   return useNavigation<AppNavigation>();
 }
 
+/**
+ * Go to a TAB, from anywhere.
+ *
+ * The tabs live inside the "Shell" screen, so `navigate("Home")` from a stack
+ * screen searches that navigator and its ancestors — never its children — and
+ * silently does nothing. That has now bitten twice: the desktop sidebar
+ * highlighted rows without moving, and "Done" at the end of a session left the
+ * parent staring at the completion sheet.
+ *
+ * Both were invisible to the typechecker, because "Home" is a perfectly valid
+ * route name. This helper is the fix that generalises: any screen that wants a
+ * tab calls this instead of guessing the form.
+ */
+export function goToTab(navigation: AppNavigation, tab: keyof TabParamList = "Home") {
+  navigation.navigate("Shell", { screen: tab });
+}
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace ReactNavigation {

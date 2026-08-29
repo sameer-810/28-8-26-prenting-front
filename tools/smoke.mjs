@@ -75,7 +75,7 @@ const base = `http://127.0.0.1:${PORT}`;
 console.log("\n=== 1. The app boots ===");
 await page.goto(base, { waitUntil: "networkidle" });
 await page.waitForTimeout(1200);
-const bodyText = await page.textContent("body");
+const bodyText = await page.evaluate(() => document.body.innerText || "");
 check("renders something", Boolean(bodyText && bodyText.trim().length > 0));
 check("lands on the sign-in screen", /Welcome back/i.test(bodyText || ""));
 check("the brand panel renders on a wide viewport", /ParentAI/.test(bodyText || ""));
@@ -83,7 +83,7 @@ check("the brand panel renders on a wide viewport", /ParentAI/.test(bodyText || 
 console.log("\n=== 2. Client-side validation ===");
 await page.getByRole("button", { name: "Sign in" }).click();
 await page.waitForTimeout(500);
-const afterEmpty = await page.textContent("body");
+const afterEmpty = await page.evaluate(() => document.body.innerText || "");
 check(
   "an empty form is refused before any network call",
   /Enter your email|Enter your password/i.test(afterEmpty || ""),
@@ -94,7 +94,7 @@ await page.getByPlaceholder("you@example.com").fill(DEMO.email);
 await page.locator('input[type="password"]').fill("definitely-not-the-password");
 await page.getByRole("button", { name: "Sign in" }).click();
 await page.waitForTimeout(2500);
-const afterBad = await page.textContent("body");
+const afterBad = await page.evaluate(() => document.body.innerText || "");
 check(
   "a wrong password shows the server's message",
   /Incorrect email or password/i.test(afterBad || ""),
@@ -104,7 +104,7 @@ console.log("\n=== 4. Signing in ===");
 await page.locator('input[type="password"]').fill(DEMO.password);
 await page.getByRole("button", { name: "Sign in" }).click();
 await page.waitForTimeout(4000);
-const dash = await page.textContent("body");
+const dash = await page.evaluate(() => document.body.innerText || "");
 check("reaches the dashboard", /Good (morning|afternoon|evening)/i.test(dash || ""));
 check("the seeded children render", /Aarav/.test(dash || "") && /Diya/.test(dash || ""));
 check("real analytics reach the UI", /Sessions/i.test(dash || "") && /Best streak/i.test(dash || ""));
@@ -118,20 +118,20 @@ check("the desktop sidebar is present at 1280px", /Progress/.test(dash || "") &&
 console.log("\n=== 5. Navigation and URLs ===");
 await page.getByRole("tab", { name: "Progress" }).click();
 await page.waitForTimeout(900);
-check("the sidebar navigates", /Not built yet/i.test((await page.textContent("body")) || ""));
+check("the sidebar navigates", /Not built yet/i.test((await page.evaluate(() => document.body.innerText || "")) || ""));
 check("the URL follows the section", page.url().includes("/progress"), page.url());
 
 await page.goto(`${base}/children`, { waitUntil: "networkidle" });
 await page.waitForTimeout(2000);
 check(
   "a deep link restores that section after a reload",
-  page.url().includes("/children") && !/Welcome back/i.test((await page.textContent("body")) || ""),
+  page.url().includes("/children") && !/Welcome back/i.test((await page.evaluate(() => document.body.innerText || "")) || ""),
 );
 
 console.log("\n=== 6. The session survives a reload ===");
 await page.goto(base, { waitUntil: "networkidle" });
 await page.waitForTimeout(2500);
-const afterReload = await page.textContent("body");
+const afterReload = await page.evaluate(() => document.body.innerText || "");
 check(
   "still signed in after a full page reload",
   !/Welcome back/i.test(afterReload || "") && /Aarav/.test(afterReload || ""),
@@ -145,7 +145,7 @@ phone.on("console", (m) => {
 await phone.setViewportSize({ width: 390, height: 844 });
 await phone.goto(base, { waitUntil: "networkidle" });
 await phone.waitForTimeout(3000);
-const phoneText = await phone.textContent("body");
+const phoneText = await phone.evaluate(() => document.body.innerText || "");
 check("the phone layout renders the same data", /Aarav/.test(phoneText || ""));
 const tabs = await phone.getByRole("tab").count();
 check("the phone tab bar replaces the sidebar", tabs >= 4, `${tabs} tabs`);

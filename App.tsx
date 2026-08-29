@@ -83,6 +83,18 @@ const linking = {
             },
           },
           AddChild: "children/add",
+          /**
+           * The session flow is deep-linkable on purpose.
+           *
+           * On the web a parent WILL refresh, or reopen the tab, mid-session.
+           * Without a URL that lands them back on the dashboard with a
+           * half-finished session they have to hunt for; with one, the player
+           * reopens on the phase they were on — the plan is already cached on
+           * the device, so it works even if the network has gone since.
+           */
+          Capture: "plan/new/:childId",
+          Plan: "plan/:planId",
+          Session: "session/:sessionId",
         },
       },
     },

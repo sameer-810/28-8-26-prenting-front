@@ -11,5 +11,19 @@
       "@config/*": ["./src/config/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "app.d.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "app.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tools",
+    /**
+     * Unit tests are run by `node --experimental-strip-types --test`, not
+     * bundled by Metro, so they legitimately use `node:test` and `.ts` import
+     * specifiers — both of which the app's own config forbids. They are
+     * excluded from the app typecheck rather than the rules being loosened for
+     * everything.
+     */
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }
