@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { View, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import { useRoute, type RouteProp } from "@react-navigation/native";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Keyboard, Camera, ChevronRight, Sparkles } from "lucide-react-native";
 import { apiErrorCode, apiErrorDetails, apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
@@ -22,7 +22,7 @@ import {
   LoadingState,
 } from "@shared/ui";
 import { useChildren } from "@modules/auth/hooks/useAuth";
-import { planApi, captureApi } from "@modules/session/api/sessionApi";
+import { planApi } from "@modules/session/api/sessionApi";
 
 /**
  * Zero-prompt capture — PRD §4.1.

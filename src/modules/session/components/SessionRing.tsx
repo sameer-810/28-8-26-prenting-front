@@ -58,10 +58,21 @@ export function SessionRing({
   /** A hairline gap between segments so five arcs read as five, not as one. */
   const gap = 3;
 
+  /**
+   * Each arc starts where the previous one ended, so the five segments have to
+   * be walked in order with a running offset.
+   *
+   * A plain `for` rather than `map` over a `let` declared outside it: a closure
+   * that mutates a binding from the enclosing render is exactly the shape the
+   * React Compiler refuses to memoise, and it is not a false positive — a
+   * `map` callback is free to run later than the render that created it, and
+   * this one would then keep adding to an offset from a render that is over.
+   */
+  const arcs = [];
   let offset = 0;
-  const arcs = segments.map((seg) => {
+  for (const seg of segments) {
     const length = Math.max(0, seg.share * circumference - gap);
-    const arc = {
+    arcs.push({
       key: seg.key,
       /** The track — always drawn, so the shape of the session is visible. */
       trackDash: `${length} ${circumference - length}`,
@@ -71,10 +82,9 @@ export function SessionRing({
       fillOffset: -offset,
       active: seg.active,
       completed: seg.completed,
-    };
+    });
     offset += seg.share * circumference;
-    return arc;
-  });
+  }
 
   const timeColor = overrunning
     ? theme.warning.text

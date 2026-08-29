@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FileText, Award, Download } from "lucide-react-native";
+import { FileText, Award } from "lucide-react-native";
 import { apiErrorCode } from "@api/apiClient";
 import { useTheme } from "@shared/useTheme";
 import { Text, Button, Card, VStack, HStack, Banner } from "@shared/ui";

@@ -30,19 +30,33 @@ export function QuestionCard({
   const theme = useTheme();
   const [given, setGiven] = useState("");
   const [verdict, setVerdict] = useState<Verdict | null>(null);
-  /** Wall clock, so a backgrounded app does not report a two-hour answer. */
-  const shownAt = useRef(Date.now());
-
+  /**
+   * When this question appeared. Wall clock, so a backgrounded app does not
+   * report a two-hour answer.
+   *
+   * Set in an effect rather than as `useRef(Date.now())`, because the initial
+   * value of a ref is computed during render and reading the clock there is
+   * impure — under the React Compiler a re-render could produce a different
+   * "when it appeared" than the one the child actually saw.
+   *
+   * There is no state reset here, and none is needed: `PhaseContent` gives this
+   * component a `key` per question, so a new question is a new mount with
+   * genuinely fresh state. The effect that used to clear `given` and `verdict`
+   * could never fire on anything but a fresh mount, where there was nothing to
+   * clear.
+   */
+  const shownAt = useRef(0);
   useEffect(() => {
     shownAt.current = Date.now();
-    setGiven("");
-    setVerdict(null);
-  }, [question.prompt]);
+  }, []);
 
   const submit = (value: string) => {
     if (verdict) return;
     const v = grade(value, question);
-    const answerMs = Math.min(Date.now() - shownAt.current, 10 * 60 * 1000);
+    // Zero if somehow answered before the effect ran, rather than the fifty-odd
+    // years that `Date.now() - 0` would record.
+    const elapsed = shownAt.current ? Date.now() - shownAt.current : 0;
+    const answerMs = Math.min(elapsed, 10 * 60 * 1000);
     setVerdict(v);
     /**
      * Haptics carry the verdict too. A child glancing away from the screen

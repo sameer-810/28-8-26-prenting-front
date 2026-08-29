@@ -100,7 +100,6 @@ function Half({
   score: number | null;
   muted?: boolean;
 }) {
-  const theme = useTheme();
   return (
     <VStack gap={3} flex={1}>
       <Text variant="caption" tone="disabled">

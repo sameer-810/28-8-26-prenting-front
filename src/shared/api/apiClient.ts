@@ -1,3 +1,10 @@
+/**
+ * `axios.create` and `axios.isAxiosError` are read off the default export,
+ * which is the documented usage. The lint rule warns because axios ALSO exports
+ * those names, and cannot tell the two apart — the alternative it suggests
+ * would work equally well and mean the same thing, so there is nothing to fix.
+ */
+/* eslint-disable import/no-named-as-default-member */
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { environment } from "@config/env";
 import { useAuthStore } from "../store/useAuthStore";

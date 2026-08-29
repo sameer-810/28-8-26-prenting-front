@@ -4,7 +4,6 @@ import { useRoute, type RouteProp } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Clock, RefreshCw, Play, BookOpen } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
-import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
 import { useFontStore, type LanguageCode } from "@shared/fonts";
 import { useAppNavigation, goToTab, type AppStackParamList } from "@navigation/types";
@@ -20,7 +19,7 @@ import {
   LoadingState,
   ErrorState,
 } from "@shared/ui";
-import { planApi, sessionApi, type StudyPlan } from "@modules/session/api/sessionApi";
+import { planApi, sessionApi } from "@modules/session/api/sessionApi";
 
 /**
  * The plan, before it is run.

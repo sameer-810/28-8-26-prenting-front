@@ -74,9 +74,16 @@ export function goToTab(navigation: AppNavigation, tab: keyof TabParamList = "Ho
   navigation.navigate("Shell", { screen: tab });
 }
 
+/**
+ * Registers the route graph with React Navigation's own types, so `navigate`
+ * is checked everywhere — including in components that never import from this
+ * file. The empty interface body is the whole mechanism: it exists to EXTEND,
+ * which is why the rule against empty interfaces is turned off for this one
+ * declaration rather than worked around.
+ */
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace ReactNavigation {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface RootParamList extends RootStackParamList {}
   }
 }

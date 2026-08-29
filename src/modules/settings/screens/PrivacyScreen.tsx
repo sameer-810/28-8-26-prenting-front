@@ -15,7 +15,6 @@ import {
   VStack,
   HStack,
   Banner,
-  Divider,
 } from "@shared/ui";
 import { useLogout } from "@modules/auth/hooks/useAuth";
 import { settingsApi, downloadExport } from "../api/settingsApi";

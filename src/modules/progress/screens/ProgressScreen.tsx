@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import { useQuery } from "@tanstack/react-query";
-import { Lock, FileText, Award, Target } from "lucide-react-native";
+import { Lock, Target } from "lucide-react-native";
 import { apiErrorCode, apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
@@ -9,7 +9,6 @@ import { useAuthStore } from "@shared/store/useAuthStore";
 import {
   Screen,
   Text,
-  Button,
   Card,
   Chip,
   ChipRow,
@@ -22,7 +21,6 @@ import {
   ErrorState,
   Skeleton,
   Select,
-  Banner,
 } from "@shared/ui";
 import { StreakBadge } from "@shared/ui/StreakBadge";
 import { useChildren } from "@modules/auth/hooks/useAuth";
