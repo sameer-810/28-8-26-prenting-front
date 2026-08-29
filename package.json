@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "validate": "tsc --noEmit && npm run test",
     "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
-    "smoke": "node tools/smoke.mjs"
+    "smoke": "node tools/smoke.mjs",
+    "perf": "node tools/perf.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/fraunces": "^0.4.0",
