@@ -72,6 +72,37 @@ page.on("requestfailed", (r) => failedRequests.push(`${r.method()} ${r.url()}`))
 
 const base = `http://127.0.0.1:${PORT}`;
 
+/**
+ * The text a screen reader would actually reach.
+ *
+ * `innerText` is not enough once tabs are involved. A tab navigator keeps every
+ * visited tab mounted and merely stacks the blurred ones behind the active one,
+ * so `innerText` returns the dashboard AND the progress report — which made a
+ * navigation assertion here read as a failure while the screen was, visually,
+ * perfectly correct. This skips what is hidden from the accessibility tree, so
+ * it answers the question actually being asked: what is on this screen.
+ */
+const sceneText = () =>
+  page.evaluate(() => {
+    const out = [];
+    const walk = (el) => {
+      for (const child of el.childNodes) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const t = (child.nodeValue || "").trim();
+          if (t) out.push(t);
+          continue;
+        }
+        if (child.nodeType !== Node.ELEMENT_NODE) continue;
+        if (child.getAttribute("aria-hidden") === "true") continue;
+        const cs = getComputedStyle(child);
+        if (cs.display === "none" || cs.visibility === "hidden") continue;
+        walk(child);
+      }
+    };
+    walk(document.body);
+    return out.join("\n");
+  });
+
 console.log("\n=== 1. The app boots ===");
 await page.goto(base, { waitUntil: "networkidle" });
 await page.waitForTimeout(1200);
@@ -117,8 +148,22 @@ check("the desktop sidebar is present at 1280px", /Progress/.test(dash || "") &&
 
 console.log("\n=== 5. Navigation and URLs ===");
 await page.getByRole("tab", { name: "Progress" }).click();
-await page.waitForTimeout(900);
-check("the sidebar navigates", /Not built yet/i.test((await page.evaluate(() => document.body.innerText || "")) || ""));
+await page.waitForTimeout(2500);
+/**
+ * Asserts on content ONLY the Progress screen has, not on the tab's own
+ * highlight. The sidebar used to sit outside the tab navigator and navigate
+ * inwards, which moved the URL and lit the row while the screen underneath
+ * never changed — a bug every weaker assertion here passed straight through.
+ */
+const progressText = await sceneText();
+check(
+  "the sidebar navigates",
+  /Day by day/.test(progressText) && /Fluency/.test(progressText),
+);
+check(
+  "the tab left behind is hidden from assistive technology",
+  !/Good (morning|afternoon|evening)/i.test(progressText),
+);
 check("the URL follows the section", page.url().includes("/progress"), page.url());
 
 await page.goto(`${base}/children`, { waitUntil: "networkidle" });

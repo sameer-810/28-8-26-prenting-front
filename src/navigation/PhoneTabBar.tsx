@@ -52,6 +52,7 @@ export function PhoneTabBar({ state, navigation }: BottomTabBarProps) {
             }}
             accessibilityRole="tab"
             accessibilityState={{ selected: focused }}
+            aria-selected={focused}
             accessibilityLabel={item.label}
             style={{
               flex: 1,

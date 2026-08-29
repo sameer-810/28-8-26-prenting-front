@@ -182,6 +182,11 @@ export default function SignupScreen() {
                 onPress={() => onChange(!value)}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: Boolean(value) }}
+                // See shared/ui/Toggle.tsx: RN Web does not map
+                // accessibilityState onto a Pressable, so the aria attribute is
+                // passed explicitly. Consent is the last control that should be
+                // ambiguous to a screen reader.
+                aria-checked={Boolean(value)}
                 accessibilityLabel="Accept the privacy terms"
                 style={{ flexDirection: "row", gap: 10, alignItems: "flex-start" }}
               >

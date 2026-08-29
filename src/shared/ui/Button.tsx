@@ -105,6 +105,8 @@ export function Button({
         accessibilityLabel={label}
         accessibilityHint={accessibilityHint}
         accessibilityState={{ disabled: isDisabled, busy: Boolean(loading) }}
+        aria-disabled={isDisabled}
+        aria-busy={Boolean(loading)}
         onPressIn={onPressIn}
         onPressOut={() => press.set(withSpring(0, motion.spring.crisp))}
         style={[

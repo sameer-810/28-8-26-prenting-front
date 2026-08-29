@@ -87,6 +87,11 @@ export function TimelineChart({
               onPress={() => setMetric(m.key)}
               accessibilityRole="tab"
               accessibilityState={{ selected: metric === m.key }}
+              // RN Web does not map accessibilityState onto a Pressable — see
+              // shared/ui/Toggle.tsx. A tab that never announces which one is
+              // selected leaves a screen-reader user unable to tell which
+              // metric the chart is showing.
+              aria-selected={metric === m.key}
               accessibilityLabel={`Show ${m.label}`}
               style={{
                 paddingHorizontal: 10,

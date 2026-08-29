@@ -22,7 +22,10 @@ export type TabParamList = {
 export type AppStackParamList = {
   Shell: NavigatorScreenParams<TabParamList> | undefined;
   AddChild: undefined;
-  /** Phase 5 — the capture → plan → session flow. */
+  Plans: undefined;
+  Account: undefined;
+  Privacy: undefined;
+  /** The capture → plan → session flow. */
   Capture: { childId: string };
   Plan: { planId: string };
   Session: { sessionId: string };

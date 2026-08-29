@@ -106,6 +106,8 @@ export function QuestionCard({
                 }}
                 accessibilityRole="radio"
                 accessibilityState={{ checked: chosen, disabled: Boolean(verdict) }}
+                aria-checked={chosen}
+                aria-disabled={Boolean(verdict)}
                 accessibilityLabel={option}
                 style={{
                   flexDirection: "row",

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Pressable, ScrollView } from "react-native";
 import { LogOut } from "lucide-react-native";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { layout, radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
 import { useAuthStore } from "@shared/store/useAuthStore";
@@ -16,14 +17,13 @@ import { NAV_ITEMS } from "./navItems";
  * on a laptop — a parent planning the week at a kitchen table, or reading a
  * report — so the wide layout is a real target rather than a responsive
  * afterthought, and it is fully keyboard-reachable.
+ *
+ * It IS the tab bar — same slot as `PhoneTabBar`, just positioned left. That is
+ * what makes "which row is active" a read of the navigator's own state rather
+ * than a second copy that drifts, and a click an ordinary `navigate` on the
+ * navigator that owns the screens. See the note in AppNavigator.
  */
-export function Sidebar({
-  activeRoute,
-  onNavigate,
-}: {
-  activeRoute: string;
-  onNavigate: (name: string) => void;
-}) {
+export function Sidebar({ state, navigation }: BottomTabBarProps) {
   const theme = useTheme();
   const user = useAuthStore((s) => s.user);
   const family = useAuthStore((s) => s.family);
@@ -51,15 +51,26 @@ export function Sidebar({
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 12 }}>
         <VStack gap={2}>
-          {NAV_ITEMS.map((item) => {
-            const focused = activeRoute === item.name;
+          {state.routes.map((route, index) => {
+            const item = NAV_ITEMS.find((i) => i.name === route.name);
+            if (!item) return null;
+
+            const focused = state.index === index;
             const Icon = item.icon;
             return (
               <Pressable
-                key={item.name}
-                onPress={() => onNavigate(item.name)}
+                key={route.key}
+                onPress={() => {
+                  const event = navigation.emit({
+                    type: "tabPress",
+                    target: route.key,
+                    canPreventDefault: true,
+                  });
+                  if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
+                }}
                 accessibilityRole="tab"
                 accessibilityState={{ selected: focused }}
+                aria-selected={focused}
                 accessibilityLabel={item.label}
                 style={{
                   flexDirection: "row",

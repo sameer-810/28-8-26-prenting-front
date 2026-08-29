@@ -83,6 +83,9 @@ const linking = {
             },
           },
           AddChild: "children/add",
+          Plans: "settings/plans",
+          Account: "settings/account",
+          Privacy: "settings/privacy",
           /**
            * The session flow is deep-linkable on purpose.
            *

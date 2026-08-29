@@ -73,6 +73,8 @@ export function Select({
         accessibilityRole="button"
         accessibilityLabel={label ? `${label}: ${selected?.label || placeholder}` : placeholder}
         accessibilityState={{ disabled: Boolean(disabled), expanded: open }}
+        aria-expanded={open}
+        aria-disabled={Boolean(disabled)}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -165,6 +167,7 @@ export function Select({
                     }}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
+                    aria-selected={isSelected}
                     style={{
                       flexDirection: "row",
                       alignItems: "center",

@@ -69,6 +69,7 @@ export function Chip({
       // `selected` rather than `checked`: these are single-choice filters, and
       // a screen reader should say "selected", not "checked".
       accessibilityState={{ selected: Boolean(selected) }}
+      aria-selected={Boolean(selected)}
       accessibilityLabel={label}
       hitSlop={6}
     >
