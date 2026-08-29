@@ -6,6 +6,7 @@ import { useTheme } from "@shared/useTheme";
 import { palette } from "@shared/designSystem";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
+import AdminNavigator from "./AdminNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,18 @@ export default function RootNavigator() {
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />
       )}
+
+      {/**
+       * The platform console, mounted in BOTH branches.
+       *
+       * It is deliberately outside the parent-session gate above: staff reach
+       * `/admin` whether or not anybody is signed in as a parent on this
+       * device, and a member of staff should not have to sign a family out of
+       * their own tablet to look at a support ticket. `AdminNavigator` runs its
+       * own gate on `useAdminStore`, so being here grants nothing — an
+       * unauthenticated visitor gets the staff login and no data.
+       */}
+      <Stack.Screen name="Admin" component={AdminNavigator} />
     </Stack.Navigator>
   );
 }

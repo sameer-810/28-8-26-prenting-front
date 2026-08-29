@@ -38,9 +38,23 @@ export type AuthStackParamList = {
   ResetPassword: { token?: string };
 };
 
+/**
+ * The platform console. Its own stack, sitting beside `Auth` and `App` rather
+ * than inside either — it is gated on the STAFF session, which is a different
+ * session from the parent one.
+ */
+export type AdminStackParamList = {
+  AdminDashboard: undefined;
+  AdminFamilies: undefined;
+  AdminFamilyDetail: { id: string };
+  AdminCurriculum: undefined;
+  AdminStaff: undefined;
+};
+
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList> | undefined;
   App: NavigatorScreenParams<AppStackParamList> | undefined;
+  Admin: NavigatorScreenParams<AdminStackParamList> | undefined;
 };
 
 /**
@@ -50,7 +64,7 @@ export type RootStackParamList = {
  * guess that is wrong the first time a screen is moved.
  */
 export type AppNavigation = NativeStackNavigationProp<
-  AppStackParamList & AuthStackParamList & TabParamList
+  AppStackParamList & AuthStackParamList & TabParamList & AdminStackParamList
 >;
 
 export function useAppNavigation() {

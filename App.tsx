@@ -100,6 +100,25 @@ const linking = {
           Session: "session/:sessionId",
         },
       },
+
+      /**
+       * The platform console, under `/admin`.
+       *
+       * Listed at the TOP level rather than inside `App`, mirroring how it is
+       * mounted: staff reach it whether or not a parent is signed in on this
+       * device, so nesting it under the parent session would make the URL work
+       * only for somebody who happened to be logged in as a family.
+       */
+      Admin: {
+        path: "admin",
+        screens: {
+          AdminDashboard: "",
+          AdminFamilies: "households",
+          AdminFamilyDetail: "households/:id",
+          AdminCurriculum: "curriculum",
+          AdminStaff: "staff",
+        },
+      },
     },
   },
 };
