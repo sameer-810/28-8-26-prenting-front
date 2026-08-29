@@ -10,6 +10,8 @@ import { OfflineBanner } from "@shared/offline/OfflineBanner";
 import HomeScreen from "@modules/home/screens/HomeScreen";
 import AddChildScreen from "@modules/onboarding/screens/AddChildScreen";
 import CaptureScreen from "@modules/capture/screens/CaptureScreen";
+import ProgressScreen from "@modules/progress/screens/ProgressScreen";
+import ChildrenScreen from "@modules/children/screens/ChildrenScreen";
 import PlanScreen from "@modules/capture/screens/PlanScreen";
 import SessionScreen from "@modules/session/screens/SessionScreen";
 import { PhoneTabBar } from "./PhoneTabBar";
@@ -44,22 +46,8 @@ function TabShell() {
       tabBar={(props) => (isWide ? null : <PhoneTabBar {...props} />)}
     >
       <Tabs.Screen name="Home" component={HomeScreen} />
-      <Tabs.Screen name="Progress">
-        {() => (
-          <PlaceholderScreen
-            title="Progress"
-            body="Daily, weekly, monthly and yearly views arrive with Phase 6."
-          />
-        )}
-      </Tabs.Screen>
-      <Tabs.Screen name="Children">
-        {() => (
-          <PlaceholderScreen
-            title="Children"
-            body="Managing profiles arrives with Phase 6."
-          />
-        )}
-      </Tabs.Screen>
+      <Tabs.Screen name="Progress" component={ProgressScreen} />
+      <Tabs.Screen name="Children" component={ChildrenScreen} />
       <Tabs.Screen name="Settings">
         {() => (
           <PlaceholderScreen
