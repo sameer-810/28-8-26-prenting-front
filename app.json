@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "ParentAI",
+    "slug": "parentai",
+    "version": "1.0.0",
+    "runtimeVersion": { "policy": "appVersion" },
+    "orientation": "default",
+    "scheme": "parentai",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F7F4EC"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.parentai.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "ParentAI uses the camera to scan your child's textbook pages and worksheets.",
+        "NSMicrophoneUsageDescription": "ParentAI lets you say what to study instead of typing it."
+      }
+    },
+    "android": {
+      "package": "com.parentai.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F7F4EC"
+      },
+      "softwareKeyboardLayoutMode": "resize",
+      "permissions": ["android.permission.INTERNET", "android.permission.CAMERA"],
+      "blockedPermissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-localization",
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "ParentAI uses the camera to scan your child's textbook pages and worksheets."
+        }
+      ],
+      "expo-audio"
+    ],
+    "extra": {
+      "eas": { "projectId": "" }
+    }
+  }
+}
