@@ -25,20 +25,16 @@ const METRICS: { key: Metric; label: string; format: (v: number) => string }[] =
 ];
 
 /**
- * The day-by-day chart.
+ * The day-by-day chart. Two rules:
  *
- * 1. Empty days are DRAWN, as empty. The series arrives dense from the API for
- *    exactly this reason — a chart plotted only from days that exist compresses
- *    a fortnight's gap into a neighbouring bar and makes a lapsed month look
- *    continuous, which is the opposite of what a progress view is for.
+ *   1. Empty days are DRAWN, as empty — which is why the series arrives dense.
+ *      Plotting only days that exist compresses a fortnight's gap into the
+ *      neighbouring bar and makes a lapsed month look continuous.
+ *   2. It is readable without seeing it: every bar carries a label and the
+ *      summary line above states the same facts in words.
  *
- * 2. It is readable without seeing it. Every bar carries its own accessibility
- *    label, and the summary line above states the same facts in words. A chart
- *    that is the only route to the information excludes the parent using a
- *    screen reader from their own child's progress.
- *
- * Deliberately plain `View`s rather than SVG: bars are rectangles, and this
- * avoids a second rendering path to keep consistent with the theme.
+ * Plain `View`s rather than SVG — bars are rectangles, and this avoids a second
+ * rendering path.
  */
 export function TimelineChart({
   series,
@@ -227,15 +223,12 @@ function groupByWeek(series: DayPoint[], metric: Metric): DayPoint[] {
 }
 
 /**
- * "Mon 4 Aug" from a `YYYY-MM-DD` day key.
+ * "Mon 4 Aug" from a `YYYY-MM-DD` day key. Both pins matter:
  *
- * `timeZone: "UTC"` — the key is a calendar date the server already resolved in
- * IST, not an instant. Constructed with `Date.UTC` and read back in local time,
- * a parent west of UTC would see every bar labelled with the previous day.
- *
- * `"en-IN"` rather than `undefined` — leaving the locale to the device meant a
- * phone set to US English rendered these differently from every other date in
- * the app. It is one product; it gets one date format.
+ *   timeZone: "UTC"  the key is a calendar date the server resolved in IST, not
+ *                    an instant — read back in local time, a parent west of UTC
+ *                    sees every bar labelled with the previous day
+ *   "en-IN"          one product, one date format
  */
 function formatDay(dayKey: string): string {
   const [y, m, d] = dayKey.split("-").map(Number);

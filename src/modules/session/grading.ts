@@ -8,9 +8,9 @@
  * later says otherwise. Equivalent test suites on both sides cover the same
  * cases.
  *
- * The bias is generous throughout. A child typing "1/2" for a stored "½" is
- * right, and marking them wrong in front of their parent is worse than a crash
- * — a crash is obviously the app's fault, a wrong mark looks like the child's.
+ * The bias is generous throughout: a child typing "1/2" for a stored "½" is
+ * right, and a wrong mark looks like the child's fault where a crash looks like
+ * the app's.
  */
 
 const VULGAR: Record<string, string> = {

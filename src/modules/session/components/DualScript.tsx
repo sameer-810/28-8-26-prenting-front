@@ -8,19 +8,13 @@ import { VStack, HStack } from "@shared/ui/Stack";
 import { useBreakpoint } from "@shared/ui/useBreakpoint";
 
 /**
- * The two-audience block — the PRD's Harmonized Dual-Mode Display.
- *
  * A parent column in the home language beside a child column in the school
- * medium. This is the product's central claim made visible, and getting it
- * wrong in either of two specific ways breaks it:
+ * medium. Two things it must not get wrong:
  *
- *   1. Ambiguity about WHO a block is for. On a phone the two columns must
- *      stack, and a stacked pair with no labels is just two paragraphs. So the
- *      PARENT / CHILD labels are permanent, not decorative — a parent reading
- *      aloud has to know at a glance which half is theirs.
- *   2. Script handling. Devanagari clips at Latin leading, Nastaliq needs more
- *      still, and Urdu mirrors — so each column carries its own face,
- *      line-height and direction, resolved per language.
+ *   1. The PARENT / CHILD labels are permanent, not decorative. On a phone the
+ *      columns stack, and a stacked pair without labels is two paragraphs.
+ *   2. Each column carries its own face, line-height and direction — Devanagari
+ *      clips at Latin leading, Nastaliq needs more, and Urdu mirrors.
  */
 export function DualScript({
   parentLanguage,

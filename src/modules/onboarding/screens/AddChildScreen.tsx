@@ -142,18 +142,12 @@ export default function AddChildScreen() {
             />
 
             {/**
-              * The three fields below stay on the raw <Controller>, and not by
-              * oversight. ControlledSelect passes `field.onChange` straight
-              * through, which is right for a field that only stores what was
-              * picked — and wrong for these:
+              * The three below stay on the raw <Controller> because
+              * ControlledSelect passes `field.onChange` straight through:
               *
-              *   grade         needs Number(v); a Select yields strings, and the
-              *                 schema wants a number
-              *   board         re-suggests the school medium when it changes
-              *   homeLanguage  starts the font download for that script
-              *
-              * A wrapper that grew options for all of that would be harder to
-              * read than the thing it replaced.
+              *   grade         needs Number(v) — a Select yields strings
+              *   board         re-suggests the school medium
+              *   homeLanguage  starts that script's font download
               */}
             <Controller
               control={control}

@@ -1,13 +1,9 @@
 import { z } from "zod";
 
 /**
- * Client-side shapes for the console's three forms.
- *
- * These MIRROR the server's Zod schemas in `admin.validation.js` — they do not
- * replace them. The server is the authority; this exists so a staff member is
- * told what is wrong before a round trip, and so the "why is this changing?"
- * note cannot be left empty by accident on a form that is about to alter what a
- * household pays.
+ * Mirrors the server's `admin.validation.js` — it stays authoritative. This is
+ * only so a staff member is told what is wrong before a round trip, and so the
+ * mandatory "why" note cannot be left empty by accident.
  */
 
 export const adminLoginSchema = z.object({
@@ -41,14 +37,9 @@ export type ActiveChangeInput = z.infer<typeof activeChangeSchema>;
 
 /**
  * Matches the server's `newPasswordSchema` exactly: 10–128 characters, no
- * character-class rules.
- *
- * An earlier draft of this file also demanded an uppercase letter, a lowercase
- * letter and a digit — stricter than the API, and therefore wrong. A client
- * that refuses what the server would accept is not extra safety; it is a form
- * rejecting a valid password with an error the server never wrote and nobody
- * can override. If staff passwords should be stronger, the rule belongs in
- * `validationPrimitives.js` where both ends read it.
+ * character classes. Do not make it stricter here — a client that refuses what
+ * the server accepts is a form rejecting a valid password with an error nobody
+ * can override. Strengthen `validationPrimitives.js` instead; both ends read it.
  */
 export const createAdminSchema = z.object({
   name: z.string().trim().min(1, "Enter their name").max(80),

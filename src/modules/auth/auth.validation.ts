@@ -1,14 +1,10 @@
 import { z } from "zod";
 
 /**
- * Client-side schemas, deliberately mirroring the server's.
- *
- * NOT a substitute for the server's — that one is authoritative and runs on
- * every request regardless. These exist so a parent finds out about a short
- * password before a round trip, and so the form can mark the offending field
- * rather than showing a banner about it.
- *
- * Where they differ from the server, the server wins and its message is shown.
+ * Mirrors the server's schemas, which stay authoritative and run regardless.
+ * This is so a parent hears about a short password before a round trip, and so
+ * the form can mark the field rather than show a banner. Where they differ, the
+ * server's message is shown.
  */
 
 const email = z

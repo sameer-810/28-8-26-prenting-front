@@ -7,16 +7,12 @@ import { useTheme } from "@shared/useTheme";
 import { Text, VStack, useBreakpoint } from "@shared/ui";
 
 /**
- * The shell for every unauthenticated screen.
+ * The shell for every unauthenticated screen, and the ONE place a gradient
+ * appears — before anyone has an account, a brand moment is the job; on a
+ * working dashboard it would be decoration.
  *
- * This is the ONE place a gradient appears in the product. Everywhere else it
- * is retired on purpose — a gradient banner at the top of a working dashboard
- * is decoration where the parent wants density. Here, before anyone has an
- * account, a brand moment is the actual job.
- *
- * On a wide layout it becomes a split: the brand panel on the left carries the
- * promise, the form sits in a card on the right. On a phone the panel collapses
- * to a compact header so the form is not pushed below the fold.
+ * Wide: brand panel left, form card right. Phone: the panel collapses to a
+ * header so the form stays above the fold.
  */
 export function AuthLayout({
   title,

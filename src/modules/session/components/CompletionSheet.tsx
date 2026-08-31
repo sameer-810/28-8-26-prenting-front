@@ -9,16 +9,13 @@ import { FluencyMeter } from "@shared/ui/FluencyMeter";
 import type { StudyPlan, CompletionResult } from "../api/sessionApi";
 
 /**
- * The end of the session — the emotional payoff the subscription renews on.
+ * The end of the session. The one place Fraunces, apricot and a celebration
+ * appear together, and the loudest thing in the app — everywhere else is
+ * restrained so this can land.
  *
- * This is the ONE place in the product where Fraunces, apricot and a
- * celebration all appear together, and it is deliberately the loudest thing in
- * the app. Everywhere else the design is restrained precisely so this can land.
- *
- * It works offline. `result` is null when completion could not reach the server
- * (it went to the outbox instead), and the sheet falls back to the score the
- * device computed — the family still sees how they did tonight, and the streak
- * and band arrive when the queue drains.
+ * Works offline: `result` is null when completion went to the outbox instead,
+ * and the sheet falls back to the device's own score. The streak and band
+ * arrive when the queue drains.
  */
 export function CompletionSheet({
   plan,

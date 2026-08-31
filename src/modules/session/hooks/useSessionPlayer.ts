@@ -23,13 +23,10 @@ export interface AnswerRecord {
 }
 
 /**
- * The session player's state.
- *
- * The countdown is driven by wall-clock timestamps in `sessionRuntime`; this
- * hook only re-renders on a tick and pushes what happened into the outbox. That
- * separation is what makes the timer survive the app being backgrounded — the
- * interval below can be suspended, throttled or dropped entirely and the time
- * shown stays correct.
+ * The session player's state. `sessionRuntime` owns the countdown from
+ * wall-clock timestamps; this only re-renders on a tick and pushes to the
+ * outbox — so the interval below can be suspended, throttled or dropped and the
+ * time shown stays correct.
  */
 export function useSessionPlayer({
   sessionId,

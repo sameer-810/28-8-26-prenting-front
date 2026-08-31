@@ -64,7 +64,7 @@ jobs:
           # EXPO_PUBLIC_* are inlined into the bundle at export time, so they
           # must match the build profile's env or the update ships pointing at
           # the wrong API.
-          EXPO_PUBLIC_API_URL: https://two8-8-26-prenting-back.onrender.com/api/v1
+          EXPO_PUBLIC_API_URL: https://two8-8-26-prenting-back.onrender.com
         run: |
           eas update \
             --branch "${{ github.event.inputs.branch }}" \

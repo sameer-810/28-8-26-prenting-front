@@ -10,15 +10,12 @@ import type { ProofOfProgress } from "../api/progressApi";
  * The PRD's Proof of Progress — "3 months ago: Building Foundations (40% speed)
  * → today: Fluent & Confident (95% accuracy)".
  *
- * The single most persuasive screen in the product, and the one most tempting
- * to overstate. Two rules keep it honest:
+ * Two rules keep it honest:
  *
- *   · A child who got WORSE is shown as such, in plain words. A progress card
- *     that can only report improvement is a marketing asset, not a measurement,
- *     and a parent who senses that stops believing the good numbers too.
- *   · An unrated "before" is said out loud rather than rendered as zero. "You
- *     had no rating three months ago" is a true and encouraging sentence;
- *     a bar at zero is a false one.
+ *   · A child who got WORSE is shown as such, in words. A card that can only
+ *     report improvement is marketing, and a parent who senses that stops
+ *     believing the good numbers too.
+ *   · An unrated "before" is said out loud, never rendered as zero.
  */
 export function ProofOfProgressCard({ data }: { data: ProofOfProgress }) {
   const theme = useTheme();

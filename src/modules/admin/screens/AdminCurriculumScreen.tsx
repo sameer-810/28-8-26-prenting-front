@@ -10,16 +10,10 @@ import { count } from "../format";
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8];
 
 /**
- * Curriculum coverage, grouped by board.
- *
- * THE QUESTION THIS ANSWERS IS "IS THIS BOARD USABLE?", NOT "HOW MANY TOPICS
- * DO WE HAVE?"
- *
- * A flat count of three thousand topics looks like plenty and hides the thing
- * that matters: if a board has no grade 6, every grade-6 family on it types a
- * topic, gets no confident match, and is asked "did you mean…?" about something
- * from another year — or gets nothing. So the gaps are rendered as gaps,
- * explicitly, rather than left as rows that happen not to be there.
+ * Curriculum coverage, grouped by board. The question is "is this board
+ * usable?", not "how many topics are there?" — a flat count of three thousand
+ * hides a missing grade 6, which leaves every grade-6 family on that board
+ * without a confident match. Gaps are rendered as gaps.
  */
 export default function AdminCurriculumScreen() {
   const theme = useTheme();

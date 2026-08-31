@@ -2,15 +2,9 @@ import Constants from "expo-constants";
 import { Platform } from "react-native";
 
 /**
- * Where the API lives.
- *
- * `localhost` means the device itself. On the web build that is the developer's
- * machine and works; in Expo Go on a real phone it is the phone, and every
- * request fails with a connection error that looks like the API being down.
- *
- * Expo's dev server already knows the LAN address it is being reached on
- * (`hostUri`), so the phone borrows it. An explicit `EXPO_PUBLIC_API_URL_DEV`
- * still wins for anyone on a different setup.
+ * `localhost` on a phone means the phone, so Expo Go borrows the dev server's
+ * LAN address instead. Failing that, requests error in a way that looks like
+ * the API being down.
  */
 function devApiHost(): string {
   const explicit = process.env.EXPO_PUBLIC_API_URL_DEV;
@@ -25,6 +19,7 @@ function devApiHost(): string {
   return host ? `http://${host}:5005` : "http://localhost:5005";
 }
 
+/** EXPO_PUBLIC_API_URL is the ORIGIN; `/api/v1` is appended here, not there. */
 const ENV = {
   development: () => {
     const base = devApiHost();

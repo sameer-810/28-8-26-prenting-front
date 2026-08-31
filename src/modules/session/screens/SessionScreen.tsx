@@ -23,17 +23,12 @@ import {
 import { CompletionSheet } from "../components/CompletionSheet";
 
 /**
- * The 30-minute session player.
+ * The 30-minute session player. Three things it does on purpose:
  *
- * The screen the whole product exists to deliver. Three things it does that a
- * simpler version would not:
- *
- *   · It reads the plan from the DEVICE CACHE first and the network second, so
- *     a session that began online keeps working when the network goes.
- *   · It has no tab bar and one deliberate exit, because a parent should not
- *     wander out of a running session by tapping the wrong thing.
- *   · The ring is sticky. On a phone the content scrolls under it, so the time
- *     remaining is always visible without scrolling back up.
+ *   · reads the plan from the DEVICE CACHE first, network second, so a session
+ *     that began online survives the network going
+ *   · no tab bar and one exit, so nobody wanders out of a running session
+ *   · sticky ring — content scrolls under it, so the time is always visible
  */
 export default function SessionScreen() {
   const route = useRoute<RouteProp<AppStackParamList, "Session">>();

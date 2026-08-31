@@ -12,17 +12,12 @@ import { useAdminLogin } from "../hooks/useAdmin";
 import { adminLoginSchema, type AdminLoginInput } from "../admin.validation";
 
 /**
- * The way in to the platform console.
+ * The staff sign-in. No brand panel, no signup, no password reset — staff
+ * accounts have no self-service recovery, and a "forgot password?" link that
+ * leads nowhere is worse than none.
  *
- * Deliberately austere, and deliberately unlike the parent sign-in: no brand
- * panel, no "welcome back", no signup link, no password reset. Staff accounts
- * have no self-service recovery — the only way to set a staff password is a
- * script run by somebody who already holds the production database URI — and a
- * "forgot password?" link that leads nowhere is worse than its absence.
- *
- * A parent who wanders onto /admin sees this and nothing else. Their own
- * session is untouched: the two stores do not know about each other, so signing
- * in here does not sign them out there, and failing here costs them nothing.
+ * A parent who lands on /admin sees this and nothing else; their own session is
+ * untouched either way.
  */
 export default function AdminLoginScreen() {
   const theme = useTheme();

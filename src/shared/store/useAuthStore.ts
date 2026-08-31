@@ -245,12 +245,10 @@ export const useAuthStore = create<AuthState>()(
         if (refreshToken) {
           await refreshSession();
           /**
-           * Offline grace. `refreshSession` clears the session only when the
-           * server rejected it, so if credentials survived the attempt the
-           * failure was the network — boot with the cached user so a restart
-           * during a power cut lands back in the app rather than on a login
-           * screen it cannot reach the server to pass. The next successful
-           * request re-judges the session.
+           * Offline grace. `refreshSession` only clears the session when the
+           * SERVER rejected it, so surviving credentials mean the failure was
+           * the network — boot with the cached user rather than a login screen
+           * that cannot reach the server anyway.
            */
           if (get().refreshToken) {
             set({ isAuthenticated: true, isAuthChecked: true });

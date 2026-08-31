@@ -34,16 +34,11 @@ export function QuestionCard({
    * When this question appeared. Wall clock, so a backgrounded app does not
    * report a two-hour answer.
    *
-   * Set in an effect rather than as `useRef(Date.now())`, because the initial
-   * value of a ref is computed during render and reading the clock there is
-   * impure — under the React Compiler a re-render could produce a different
-   * "when it appeared" than the one the child actually saw.
+   * Set in an effect, NOT as `useRef(Date.now())` — a ref's initial value is
+   * computed during render, and reading the clock there is impure.
    *
-   * There is no state reset here, and none is needed: `PhaseContent` gives this
-   * component a `key` per question, so a new question is a new mount with
-   * genuinely fresh state. The effect that used to clear `given` and `verdict`
-   * could never fire on anything but a fresh mount, where there was nothing to
-   * clear.
+   * No state reset is needed: `PhaseContent` keys this per question, so every
+   * question is a fresh mount.
    */
   const shownAt = useRef(0);
   useEffect(() => {

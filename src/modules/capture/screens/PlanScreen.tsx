@@ -22,16 +22,12 @@ import {
 import { planApi, sessionApi } from "@modules/session/api/sessionApi";
 
 /**
- * The plan, before it is run.
+ * The plan, before it is run. The parent sees the topic, the shape of the
+ * thirty minutes and the opening of their script before committing, and can
+ * regenerate if it read their intent wrongly.
  *
- * This screen exists because of the product's own thesis: the AI must hand the
- * decision to the parent, not take it. So the parent sees the topic, the shape
- * of the thirty minutes and the opening of their script BEFORE committing —
- * and can regenerate if it read their intent wrongly.
- *
- * It also polls. Generation returns at `parent_ready` (~4s) and finishes the
- * rest in the background, so this screen shows what exists and enables Start
- * only at `ready` — a 30-minute run must never begin holding half a plan.
+ * It polls: generation returns at `parent_ready` (~4s) and finishes the rest in
+ * the background, so Start is enabled only at `ready`.
  */
 export default function PlanScreen() {
   const route = useRoute<RouteProp<AppStackParamList, "Plan">>();

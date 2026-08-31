@@ -8,15 +8,9 @@ import { useAdminOverview } from "../hooks/useAdmin";
 import { rupees, count, pct } from "../format";
 
 /**
- * The platform at a glance.
- *
- * Everything else here is growth — households, children, sessions. The AI
- * degradation rate is the one that says families are quietly receiving TEMPLATE
- * plans instead of generated ones. That failure is invisible from the outside
- * by design: the product never shows a parent an error, it hands them something
- * usable and carries on. Which means the only place it can be seen at all is
- * here, so it is coloured and it is explained in words rather than left as a
- * percentage somebody has to already understand.
+ * The platform at a glance. The number that matters is AI degradation — the
+ * product never shows a parent an error, so template plans are invisible
+ * everywhere except here. Coloured, and explained in words.
  */
 export default function AdminDashboardScreen() {
   const theme = useTheme();

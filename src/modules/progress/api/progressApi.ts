@@ -130,14 +130,9 @@ export const reportsApi = {
 /**
  * Downloads a PDF the API only serves to an authenticated caller.
  *
- * The obvious `<a href>` or `Linking.openURL` cannot work: a browser navigation
- * carries no `Authorization` header, so the request arrives unauthenticated and
- * the API — correctly — refuses it. The bytes have to be fetched by the client
- * that holds the token, then handed to the platform.
- *
- * On the web that means an object URL and a synthetic click; on native, writing
- * to the app's own directory and opening the share sheet. Both are wrapped so a
- * caller just says "save this report".
+ * `<a href>` and `Linking.openURL` cannot work — a browser navigation carries
+ * no `Authorization` header — so the bytes are fetched by the client holding
+ * the token, then handed to the platform (see @shared/download).
  */
 export async function downloadReport(
   path: string,

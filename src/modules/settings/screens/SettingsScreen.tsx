@@ -37,11 +37,8 @@ import { settingsApi } from "../api/settingsApi";
 import { useSubscription } from "../hooks/useSettings";
 
 /**
- * Household settings.
- *
- * Ordered by how often a parent actually comes here: the plan and the evening
- * reminder are the two reasons anyone opens settings in a family app; account
- * and data controls sit below, reachable but not competing.
+ * Household settings, ordered by why a parent actually opens this screen: the
+ * plan and the evening reminder first, account and data below.
  */
 export default function SettingsScreen() {
   const theme = useTheme();
