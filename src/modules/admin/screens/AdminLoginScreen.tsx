@@ -1,12 +1,13 @@
 import React from "react";
 import { View } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField } from "@shared/form";
 import { ShieldCheck } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
-import { Screen, Text, Button, Card, TextField, VStack, HStack, Banner } from "@shared/ui";
+import { Screen, Text, Button, Card, VStack, HStack, Banner } from "@shared/ui";
 import { useAdminLogin } from "../hooks/useAdmin";
 import { adminLoginSchema, type AdminLoginInput } from "../admin.validation";
 
@@ -66,41 +67,25 @@ export default function AdminLoginScreen() {
               />
             ) : null}
 
-            <Controller
+            <ControlledTextField
               control={control}
               name="email"
-              render={({ field, fieldState }) => (
-                <TextField
-                  label="Work email"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  onBlur={field.onBlur}
-                  error={fieldState.error?.message}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoComplete="username"
-                  textContentType="username"
-                  placeholder="you@parentai.app"
-                />
-              )}
+              label="Work email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="username"
+              textContentType="username"
+              placeholder="you@parentai.app"
             />
 
-            <Controller
+            <ControlledTextField
               control={control}
               name="password"
-              render={({ field, fieldState }) => (
-                <TextField
-                  label="Password"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  onBlur={field.onBlur}
-                  error={fieldState.error?.message}
-                  secureTextEntry
-                  autoComplete="current-password"
-                  textContentType="password"
-                  onSubmitEditing={handleSubmit((v) => login.mutate(v))}
-                />
-              )}
+              label="Password"
+              secureTextEntry
+              autoComplete="current-password"
+              textContentType="password"
+              onSubmitEditing={handleSubmit((v) => login.mutate(v))}
             />
 
             <Button

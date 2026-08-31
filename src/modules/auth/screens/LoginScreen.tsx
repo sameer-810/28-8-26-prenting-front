@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Pressable } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField } from "@shared/form";
 import { apiErrorMessage, apiErrorCode } from "@api/apiClient";
-import { Text, Button, TextField, VStack, HStack, Banner } from "@shared/ui";
+import { Text, Button, VStack, HStack, Banner } from "@shared/ui";
 import { useAppNavigation } from "@navigation/types";
 import { AuthLayout } from "../components/AuthLayout";
 import { useLogin } from "../hooks/useAuth";
@@ -17,7 +18,6 @@ export default function LoginScreen() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -67,43 +67,27 @@ export default function LoginScreen() {
           />
         ) : null}
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="email"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              label="Email"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.email?.message}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              textContentType="emailAddress"
-              placeholder="you@example.com"
-              returnKeyType="next"
-            />
-          )}
+          label="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          textContentType="emailAddress"
+          placeholder="you@example.com"
+          returnKeyType="next"
         />
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              label="Password"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.password?.message}
-              secureTextEntry
-              autoComplete="current-password"
-              textContentType="password"
-              returnKeyType="go"
-              onSubmitEditing={handleSubmit(onSubmit)}
-            />
-          )}
+          label="Password"
+          secureTextEntry
+          autoComplete="current-password"
+          textContentType="password"
+          returnKeyType="go"
+          onSubmitEditing={handleSubmit(onSubmit)}
         />
 
         <Pressable

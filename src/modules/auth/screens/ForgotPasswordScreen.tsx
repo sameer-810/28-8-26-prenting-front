@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Pressable } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField } from "@shared/form";
 import { z } from "zod";
-import { Text, Button, TextField, VStack, HStack, Banner } from "@shared/ui";
+import { Text, Button, VStack, HStack, Banner } from "@shared/ui";
 import { useAppNavigation } from "@navigation/types";
 import { AuthLayout } from "../components/AuthLayout";
 import { useForgotPassword } from "../hooks/useAuth";
@@ -19,7 +20,6 @@ export default function ForgotPasswordScreen() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
   } = useForm<Input>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
@@ -59,24 +59,16 @@ export default function ForgotPasswordScreen() {
           />
         ) : (
           <>
-            <Controller
+            <ControlledTextField
               control={control}
               name="email"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextField
-                  label="Email"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={errors.email?.message}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  returnKeyType="go"
-                  onSubmitEditing={handleSubmit(onSubmit)}
-                />
-              )}
+              label="Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              placeholder="you@example.com"
+              returnKeyType="go"
+              onSubmitEditing={handleSubmit(onSubmit)}
             />
             <Button
               label="Send reset link"

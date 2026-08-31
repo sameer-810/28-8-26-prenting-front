@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { useRoute, type RouteProp } from "@react-navigation/native";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField, ControlledSelect } from "@shared/form";
 import { apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
@@ -11,8 +12,6 @@ import {
   Text,
   Button,
   Card,
-  TextField,
-  Select,
   VStack,
   HStack,
   StatTile,
@@ -240,25 +239,17 @@ function SuperadminActions({
         {setPlan.isSuccess ? <Banner tone="success" title="Plan changed" /> : null}
 
         <VStack gap={10}>
-          <Controller
+          <ControlledSelect
             control={planForm.control}
             name="planCode"
-            render={({ field }) => (
-              <Select label="Plan" value={field.value} options={PLANS} onChange={field.onChange} />
-            )}
+            label="Plan"
+            options={PLANS}
           />
-          <Controller
+          <ControlledTextField
             control={planForm.control}
             name="note"
-            render={({ field, fieldState }) => (
-              <TextField
-                label="Reason (recorded against your account)"
-                value={field.value}
-                onChangeText={field.onChange}
-                error={fieldState.error?.message}
-                placeholder="Refund agreed on ticket 412"
-              />
-            )}
+            label="Reason (recorded against your account)"
+            placeholder="Refund agreed on ticket 412"
           />
           <Button
             label="Change plan"
@@ -280,18 +271,11 @@ function SuperadminActions({
         ) : null}
 
         <VStack gap={10}>
-          <Controller
+          <ControlledTextField
             control={activeForm.control}
             name="note"
-            render={({ field, fieldState }) => (
-              <TextField
-                label="Reason (recorded against your account)"
-                value={field.value}
-                onChangeText={field.onChange}
-                error={fieldState.error?.message}
-                placeholder="Chargeback raised"
-              />
-            )}
+            label="Reason (recorded against your account)"
+            placeholder="Chargeback raised"
           />
 
           {family.isActive && !confirmDisable ? (

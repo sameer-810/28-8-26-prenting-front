@@ -1,7 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField, ControlledSelect } from "@shared/form";
 import { apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
@@ -10,8 +11,6 @@ import {
   Text,
   Button,
   Card,
-  TextField,
-  Select,
   VStack,
   HStack,
   Banner,
@@ -131,61 +130,34 @@ function CreateAdminCard({ onCreated }: { onCreated: () => void }) {
           <Banner tone="success" title="Account created" body="They can sign in now." />
         ) : null}
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="name"
-          render={({ field, fieldState }) => (
-            <TextField
-              label="Name"
-              value={field.value}
-              onChangeText={field.onChange}
-              error={fieldState.error?.message}
-            />
-          )}
+          label="Name"
         />
-        <Controller
+        <ControlledTextField
           control={control}
           name="email"
-          render={({ field, fieldState }) => (
-            <TextField
-              label="Work email"
-              value={field.value}
-              onChangeText={field.onChange}
-              error={fieldState.error?.message}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          )}
+          label="Work email"
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
-        <Controller
+        <ControlledTextField
           control={control}
           name="password"
-          render={({ field, fieldState }) => (
-            <TextField
-              label="Password"
-              value={field.value}
-              onChangeText={field.onChange}
-              error={fieldState.error?.message}
-              secureTextEntry
-              autoComplete="new-password"
-              hint="At least 10 characters. Send it to them out of band and have them change it."
-            />
-          )}
+          label="Password"
+          secureTextEntry
+          autoComplete="new-password"
+          hint="At least 10 characters. Send it to them out of band and have them change it."
         />
-        <Controller
+        <ControlledSelect
           control={control}
           name="role"
-          render={({ field }) => (
-            <Select
-              label="Role"
-              value={field.value}
-              options={[
-                { value: "support", label: "Support", hint: "Read only — cannot change plans" },
-                { value: "superadmin", label: "Superadmin", hint: "Can change plans and disable households" },
-              ]}
-              onChange={field.onChange}
-            />
-          )}
+          label="Role"
+          options={[
+          { value: "support", label: "Support", hint: "Read only — cannot change plans" },
+          { value: "superadmin", label: "Superadmin", hint: "Can change plans and disable households" },
+          ]}
         />
 
         <Button

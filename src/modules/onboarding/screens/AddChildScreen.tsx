@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField, ControlledSelect } from "@shared/form";
 import { apiErrorMessage, apiErrorCode } from "@api/apiClient";
 import { useAppNavigation, goToTab } from "@navigation/types";
 import { useAuthStore } from "@shared/store/useAuthStore";
@@ -10,7 +11,6 @@ import {
   Screen,
   Text,
   Button,
-  TextField,
   Select,
   VStack,
   Banner,
@@ -132,23 +132,29 @@ export default function AddChildScreen() {
 
         <Card>
           <VStack gap={16}>
-            <Controller
+            <ControlledTextField
               control={control}
               name="name"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextField
-                  label="Child's name"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  error={errors.name?.message}
-                  placeholder="Aarav"
-                  hint="A nickname is fine — it's just what we'll call them."
-                  required
-                />
-              )}
+              label="Child's name"
+              placeholder="Aarav"
+              hint="A nickname is fine — it's just what we'll call them."
+              required
             />
 
+            {/**
+              * The three fields below stay on the raw <Controller>, and not by
+              * oversight. ControlledSelect passes `field.onChange` straight
+              * through, which is right for a field that only stores what was
+              * picked — and wrong for these:
+              *
+              *   grade         needs Number(v); a Select yields strings, and the
+              *                 schema wants a number
+              *   board         re-suggests the school medium when it changes
+              *   homeLanguage  starts the font download for that script
+              *
+              * A wrapper that grew options for all of that would be harder to
+              * read than the thing it replaced.
+              */}
             <Controller
               control={control}
               name="grade"
@@ -201,19 +207,12 @@ export default function AddChildScreen() {
               )}
             />
 
-            <Controller
+            <ControlledSelect
               control={control}
               name="schoolMedium"
-              render={({ field: { onChange, value } }) => (
-                <Select
-                  label="School teaches in"
-                  value={value}
-                  options={languageOptions}
-                  onChange={onChange}
-                  hint="Your child's questions and exams will be in this language."
-                  error={errors.schoolMedium?.message}
-                />
-              )}
+              label="School teaches in"
+              options={languageOptions}
+              hint="Your child's questions and exams will be in this language."
             />
 
             <Controller
@@ -237,18 +236,11 @@ export default function AddChildScreen() {
               )}
             />
 
-            <Controller
+            <ControlledTextField
               control={control}
               name="schoolName"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextField
-                  label="School (optional)"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  placeholder="Vidya Mandir"
-                />
-              )}
+              label="School (optional)"
+              placeholder="Vidya Mandir"
             />
           </VStack>
         </Card>

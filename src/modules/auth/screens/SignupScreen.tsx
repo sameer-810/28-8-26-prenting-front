@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Pressable, View } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField } from "@shared/form";
 import { Check } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useTheme } from "@shared/useTheme";
 import { radius } from "@shared/designSystem";
-import { Text, Button, TextField, VStack, HStack, Banner } from "@shared/ui";
+import { Text, Button, VStack, HStack, Banner } from "@shared/ui";
 import { useAppNavigation } from "@navigation/types";
 import { AuthLayout } from "../components/AuthLayout";
 import { useSignup } from "../hooks/useAuth";
@@ -80,92 +81,52 @@ export default function SignupScreen() {
           />
         ) : null}
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="firstName"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              label="Your name"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.firstName?.message}
-              autoComplete="given-name"
-              placeholder="Anita"
-              required
-            />
-          )}
+          label="Your name"
+          autoComplete="given-name"
+          placeholder="Anita"
+          required
         />
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="familyName"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              label="Family name"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.familyName?.message}
-              hint="What we'll call your household in the app."
-              placeholder="Sharma"
-              required
-            />
-          )}
+          label="Family name"
+          hint="What we'll call your household in the app."
+          placeholder="Sharma"
+          required
         />
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="email"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              label="Email"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.email?.message}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              placeholder="you@example.com"
-              required
-            />
-          )}
+          label="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          placeholder="you@example.com"
+          required
         />
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              label="Password"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.password?.message}
-              hint="At least 10 characters. A short phrase works well."
-              secureTextEntry
-              autoComplete="new-password"
-              required
-            />
-          )}
+          label="Password"
+          hint="At least 10 characters. A short phrase works well."
+          secureTextEntry
+          autoComplete="new-password"
+          required
         />
 
-        <Controller
+        <ControlledTextField
           control={control}
           name="confirmPassword"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              label="Confirm password"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.confirmPassword?.message}
-              secureTextEntry
-              autoComplete="new-password"
-              required
-            />
-          )}
+          label="Confirm password"
+          secureTextEntry
+          autoComplete="new-password"
+          required
         />
 
         {/**

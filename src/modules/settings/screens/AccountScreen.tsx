@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ControlledTextField } from "@shared/form";
 import { z } from "zod";
 import { Monitor, Smartphone, KeyRound } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
@@ -13,7 +14,6 @@ import {
   Text,
   Button,
   Card,
-  TextField,
   VStack,
   HStack,
   Banner,
@@ -56,7 +56,6 @@ export default function AccountScreen() {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm<PasswordInput>({
     resolver: zodResolver(passwordSchema),
     defaultValues: { currentPassword: "", newPassword: "", confirmPassword: "" },
@@ -110,48 +109,27 @@ export default function AccountScreen() {
               <Text variant="h3">Change your password</Text>
             </HStack>
 
-            <Controller
+            <ControlledTextField
               control={control}
               name="currentPassword"
-              render={({ field: { onChange, value } }) => (
-                <TextField
-                  label="Current password"
-                  value={value}
-                  onChangeText={onChange}
-                  error={errors.currentPassword?.message}
-                  secureTextEntry
-                  autoComplete="current-password"
-                />
-              )}
+              label="Current password"
+              secureTextEntry
+              autoComplete="current-password"
             />
-            <Controller
+            <ControlledTextField
               control={control}
               name="newPassword"
-              render={({ field: { onChange, value } }) => (
-                <TextField
-                  label="New password"
-                  value={value}
-                  onChangeText={onChange}
-                  error={errors.newPassword?.message}
-                  hint="At least 10 characters. A short phrase works well."
-                  secureTextEntry
-                  autoComplete="new-password"
-                />
-              )}
+              label="New password"
+              hint="At least 10 characters. A short phrase works well."
+              secureTextEntry
+              autoComplete="new-password"
             />
-            <Controller
+            <ControlledTextField
               control={control}
               name="confirmPassword"
-              render={({ field: { onChange, value } }) => (
-                <TextField
-                  label="Confirm new password"
-                  value={value}
-                  onChangeText={onChange}
-                  error={errors.confirmPassword?.message}
-                  secureTextEntry
-                  autoComplete="new-password"
-                />
-              )}
+              label="Confirm new password"
+              secureTextEntry
+              autoComplete="new-password"
             />
 
             <Button
