@@ -48,7 +48,6 @@ const PLANS: { value: PlanCode; label: string }[] = [
  * named nine-year-old's schoolwork.
  */
 export default function AdminFamilyDetailScreen() {
-  const theme = useTheme();
   const route = useRoute<RouteProp<AdminStackParamList, "AdminFamilyDetail">>();
   const id = route.params.id;
 

@@ -5,6 +5,7 @@ import { Check, Sparkles, AlertTriangle } from "lucide-react-native";
 import { apiErrorCode, apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
+import { shortDate, rupees } from "@shared/format";
 import { useAuthStore } from "@shared/store/useAuthStore";
 import {
   Screen,
@@ -234,7 +235,7 @@ export default function PlansScreen() {
               <Text variant="body-sm" tone="tertiary">
                 You'll keep everything until{" "}
                 {data.current.currentPeriodEnd
-                  ? new Date(data.current.currentPeriodEnd).toLocaleDateString()
+                  ? shortDate(data.current.currentPeriodEnd)
                   : "the end of your period"}
                 . Nothing is deleted.
               </Text>
@@ -272,12 +273,12 @@ export default function PlansScreen() {
                   <VStack gap={1} flex={1}>
                     <Text variant="body-sm">{prettyEvent(e.event)}</Text>
                     <Text variant="caption" tone="tertiary">
-                      {new Date(e.createdAt).toLocaleDateString()}
+                      {shortDate(e.createdAt)}
                     </Text>
                   </VStack>
                   {e.amountInPaise > 0 ? (
                     <Text variant="label-sm" numeric tone="tertiary">
-                      ₹{(e.amountInPaise / 100).toLocaleString("en-IN")}
+                      {rupees(e.amountInPaise)}
                     </Text>
                   ) : null}
                 </HStack>

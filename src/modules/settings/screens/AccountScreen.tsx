@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Monitor, Smartphone, KeyRound } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useTheme } from "@shared/useTheme";
+import { shortDate } from "@shared/format";
 import { useAuthStore } from "@shared/store/useAuthStore";
 import {
   Screen,
@@ -185,7 +186,7 @@ export default function AccountScreen() {
                   {i > 0 ? <Divider /> : null}
                   <ListRow
                     title={d.deviceName || "Unknown device"}
-                    subtitle={`${d.platform || "unknown"} · last used ${new Date(d.lastUsedAt).toLocaleDateString()}`}
+                    subtitle={`${d.platform || "unknown"} · last used ${shortDate(d.lastUsedAt)}`}
                     left={
                       d.platform === "web" ? (
                         <Monitor size={16} color={theme.text.tertiary} />

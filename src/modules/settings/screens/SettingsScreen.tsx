@@ -13,6 +13,7 @@ import {
 } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useTheme } from "@shared/useTheme";
+import { shortDate } from "@shared/format";
 import { useAuthStore } from "@shared/store/useAuthStore";
 import { useFontStore, type LanguageCode } from "@shared/fonts";
 import { useAppNavigation } from "@navigation/types";
@@ -313,7 +314,7 @@ function planSentence(
       : "Your free trial has ended.";
   }
   if (status === "active" && periodEnds) {
-    return `Renews on ${new Date(periodEnds).toLocaleDateString()}.`;
+    return `Renews on ${shortDate(periodEnds)}.`;
   }
   if (status === "past_due") {
     return "We couldn't take the last payment. We'll try again — nothing is switched off yet.";

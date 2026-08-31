@@ -5,6 +5,7 @@ import { Download, Trash2, ShieldCheck, FileClock } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
+import { shortDate } from "@shared/format";
 import { useAuthStore } from "@shared/store/useAuthStore";
 import {
   Screen,
@@ -139,7 +140,7 @@ export default function PrivacyScreen() {
               </Text>
               <Text variant="body-sm" tone="secondary">
                 {consent.accepted
-                  ? `Given on ${consent.acceptedAt ? new Date(consent.acceptedAt).toLocaleDateString() : "signup"}, against policy version ${consent.policyVersion}.`
+                  ? `Given on ${consent.acceptedAt ? shortDate(consent.acceptedAt) : "signup"}, against policy version ${consent.policyVersion}.`
                   : "Not yet recorded."}
               </Text>
             </VStack>
@@ -180,7 +181,7 @@ export default function PrivacyScreen() {
                 <VStack key={a.id} gap={1}>
                   <Text variant="body-sm">{a.description || a.action}</Text>
                   <Text variant="caption" tone="disabled">
-                    {a.by} · {new Date(a.createdAt).toLocaleDateString()}
+                    {a.by} · {shortDate(a.createdAt)}
                   </Text>
                 </VStack>
               ))}

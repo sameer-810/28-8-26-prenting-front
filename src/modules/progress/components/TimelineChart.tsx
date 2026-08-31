@@ -228,10 +228,23 @@ function groupByWeek(series: DayPoint[], metric: Metric): DayPoint[] {
   return weeks;
 }
 
+/**
+ * "Mon 4 Aug" from a `YYYY-MM-DD` day key.
+ *
+ * TWO PINS, BOTH LOAD-BEARING.
+ *
+ * `timeZone: "UTC"` — the key is a calendar date the server already resolved in
+ * IST, not an instant. Constructed with `Date.UTC` and read back in local time,
+ * a parent west of UTC would see every bar labelled with the previous day.
+ *
+ * `"en-IN"` rather than `undefined` — leaving the locale to the device meant a
+ * phone set to US English rendered these differently from every other date in
+ * the app. It is one product; it gets one date format.
+ */
 function formatDay(dayKey: string): string {
   const [y, m, d] = dayKey.split("-").map(Number);
   const date = new Date(Date.UTC(y, m - 1, d));
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString("en-IN", {
     weekday: "short",
     day: "numeric",
     month: "short",
