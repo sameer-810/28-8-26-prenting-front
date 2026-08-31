@@ -1,27 +1,18 @@
 /**
- * ParentAI Design System — "Warm Calm".
+ * ParentAI Design System — "Warm Calm". Full reasoning in
+ * docs/03-design-system.md.
  *
- * The reasoning behind every choice here is in docs/03-design-system.md. The
- * short version: five independent 2026 trend surveys converge on calm
- * interfaces, warm emotionally-grounded neutrals, soft geometry and
- * accessibility-as-infrastructure — and four of this product's own constraints
- * point the same way, which is the only reason to adopt a trend at all.
+ * The constraints that shaped it:
  *
- *   · The usage window is 5–10pm. That is a tired parent after work, with a
- *     child who would rather be elsewhere. Calm is the operating condition,
- *     not a style preference.
- *   · The AI addresses the parent, never the child. The interface has to keep
- *     handing the decision back — a plan they can regenerate, a script they can
- *     skip — because a product that quietly took over the teaching would
- *     contradict its own reason to exist.
- *   · Two audiences share one screen: a parent column in Marathi beside a child
+ *   · Used 5–10pm, by a tired parent with a reluctant child. Calm is the
+ *     operating condition, not a style.
+ *   · Two audiences on one screen — a parent column in Marathi beside a child
  *     column in English.
- *   · Building Foundations → Fluent is a cultivation metaphor. Moss is not
- *     decoration against that; it is the semantic colour of the promise.
+ *   · Building Foundations → Fluent is a cultivation metaphor, so moss is the
+ *     semantic colour of the promise rather than a brand choice.
  *
- * Everything is warm-tinted. No pure black, no pure grey, no pure white on a
- * large surface — the trace of warmth in every neutral is what separates "warm
- * calm" from "beige".
+ * Everything is warm-tinted: no pure black, grey or white on a large surface.
+ * That trace of warmth is what separates "warm calm" from "beige".
  */
 
 export const palette = {

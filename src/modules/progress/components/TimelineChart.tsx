@@ -27,8 +27,6 @@ const METRICS: { key: Metric; label: string; format: (v: number) => string }[] =
 /**
  * The day-by-day chart.
  *
- * TWO THINGS THAT ARE NOT DECORATION
- *
  * 1. Empty days are DRAWN, as empty. The series arrives dense from the API for
  *    exactly this reason — a chart plotted only from days that exist compresses
  *    a fortnight's gap into a neighbouring bar and makes a lapsed month look
@@ -230,8 +228,6 @@ function groupByWeek(series: DayPoint[], metric: Metric): DayPoint[] {
 
 /**
  * "Mon 4 Aug" from a `YYYY-MM-DD` day key.
- *
- * TWO PINS, BOTH LOAD-BEARING.
  *
  * `timeZone: "UTC"` — the key is a calendar date the server already resolved in
  * IST, not an instant. Constructed with `Date.UTC` and read back in local time,

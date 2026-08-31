@@ -42,8 +42,6 @@ const STATUS_OPTIONS = [
 /**
  * Every household on the platform.
  *
- * THE FILTERS ARE NOT APPLIED AS YOU TYPE.
- *
  * Each keystroke would be a paginated query across every family, and the answer
  * to a half-typed name is noise. The search box submits, which is also what
  * makes the result stable enough to read — a support call is somebody reading a

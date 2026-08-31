@@ -10,8 +10,6 @@ import { rupees, count, pct } from "../format";
 /**
  * The platform at a glance.
  *
- * ONE NUMBER ON THIS PAGE MATTERS MORE THAN THE REST.
- *
  * Everything else here is growth — households, children, sessions. The AI
  * degradation rate is the one that says families are quietly receiving TEMPLATE
  * plans instead of generated ones. That failure is invisible from the outside

@@ -37,8 +37,6 @@ const PLANS: { value: PlanCode; label: string }[] = [
 /**
  * One household, in the detail staff actually need.
  *
- * WHAT IS NOT HERE IS THE POINT.
- *
  * No session content, no generated teaching script, no child's answers. The API
  * does not return them, so this screen could not show them if it tried — and
  * that is deliberate on both ends. Support staff need to see that a family is

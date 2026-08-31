@@ -27,11 +27,8 @@ import type { ChildCard } from "../types";
 import { useDashboard } from "../hooks/useDashboard";
 
 /**
- * The home screen.
- *
- * One aggregate request, because this is the first thing a parent sees, on a
- * phone, often on a weak connection, at the end of a working day. Six parallel
- * requests would be six chances to be slow and six spinners.
+ * The home screen. One aggregate request rather than six — this is the first
+ * screen, on a phone, often on a weak connection.
  */
 export default function HomeScreen() {
   const navigation = useAppNavigation();
@@ -149,9 +146,8 @@ function ChildCardView({ child }: { child: ChildCard }) {
         </HStack>
 
         {/**
-         * The daily milestone card, when tonight has produced one. It names
-         * what the child actually did — "Mastered Fraction Addition today" is
-         * a reason to come back tomorrow; "Session complete" is a receipt.
+         * Names what the child actually did. "Mastered Fraction Addition" is a
+         * reason to come back tomorrow; "Session complete" is a receipt.
          */}
         {child.dailyCard ? (
           <DailyCard card={child.dailyCard} />
@@ -176,10 +172,8 @@ function ChildCardView({ child }: { child: ChildCard }) {
         <View style={{ height: 1, backgroundColor: theme.border.subtle }} />
 
         {/**
-         * The primary action changes with what is actually true: resume an
-         * open session, run a plan that is already ready, or start fresh.
-         * Offering "Start a session" to someone with one half-finished is how
-         * a product loses a family's evening.
+         * Resume an open session, run a ready plan, or start fresh — never
+         * offer "start" to someone with one half-finished.
          */}
         <View style={{ padding: 18 }}>
           {child.resumable ? (
@@ -242,11 +236,8 @@ function timeGreeting() {
 }
 
 /**
- * The subtitle is the nudge, and it is honest about the state.
- *
- * Inside the study window with nobody done yet, it says so. Outside it, it does
- * not pretend it is study time — a product that tells a parent to start a
- * 30-minute session at 11pm has stopped paying attention to them.
+ * The nudge. Outside the study window it does not pretend it is study time —
+ * telling a parent to start 30 minutes at 11pm is not a useful prompt.
  */
 function subtitleFor(data?: { inStudyWindow: boolean; children: ChildCard[]; usage: { sessionsLeft: number } }) {
   if (!data) return undefined;
@@ -261,33 +252,18 @@ function subtitleFor(data?: { inStudyWindow: boolean; children: ChildCard[]; usa
 }
 
 /**
- * Tonight's milestone card — and the reason it is a component rather than three
- * inline lines.
+ * Tonight's milestone card. Its tone follows the session's accuracy:
  *
- * IT WAS ALWAYS DRAWN AS A CELEBRATION. Apricot ground, sparkle icon, accent
- * text, every evening, whatever happened in the session. A store screenshot
- * caught it framing "0 of 8 correct" that way, which is the product telling a
- * parent something cheerful about a night their child got everything wrong.
- * That is worse than saying nothing.
+ *   >= 70%  apricot and a sparkle
+ *   <  70%  neutral card, book icon — same facts, no celebration
  *
- * So the tone follows the accuracy the server already had and now sends:
- *
- *   ≥ 70%  celebration — apricot and a sparkle. Something went well.
- *   < 70%  neutral — a plain sunken card and a book. The facts, unchanged and
- *          unhidden, without a party thrown over them.
- *
- * NOT a red or a warning state. A hard evening is information a parent needs,
- * not a failure to be scolded for — the whole revision phase exists because
- * getting things wrong is how this works. The card just stops cheering.
+ * Never a warning or error state. A hard evening is information, not a failure;
+ * the revision phase exists precisely because children get things wrong.
  */
 function DailyCard({ card }: { card: NonNullable<ChildCard["dailyCard"]> }) {
   const theme = useTheme();
 
-  /**
-   * `null` accuracy — an older payload, or a milestone with no score — is
-   * treated as "not a celebration". Assuming the cheerful branch when the
-   * number is missing is exactly the bug this exists to fix.
-   */
+  // A missing accuracy is treated as "not a celebration", never as one.
   const celebrate = (card.accuracy ?? 0) >= 0.7;
 
   const accent = celebrate ? theme.accents.apricot : null;

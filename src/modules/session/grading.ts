@@ -1,25 +1,16 @@
 /**
- * Client-side answer grading.
+ * Client-side answer grading — a port of the server's
+ * modules/practice/answerGrading.js. The duplication is intentional: the device
+ * grades for instant FEEDBACK during a 6-minute phase that may have no network,
+ * the server grades for the RECORD, and the server's verdict wins.
  *
- * A DELIBERATE PORT of the server's `src/modules/practice/answerGrading.js`,
- * and the duplication is the point rather than an oversight.
+ * KEEP THE TWO IN STEP. If they drift, a child sees "correct" and their report
+ * later says otherwise. Equivalent test suites on both sides cover the same
+ * cases.
  *
- * The child answers a question and needs to know instantly whether they were
- * right — during a 6-minute phase, possibly with no network. Waiting for a
- * server round trip would break the phase; not answering at all would break the
- * product. So the device grades for FEEDBACK and the server grades for the
- * RECORD, using the same rules.
- *
- * The coupling is real and worth stating: if these two drift, a child sees
- * "correct" and their report later says otherwise. Both sides are covered by
- * equivalent test suites over the same cases, which is what keeps them honest.
- * The server's verdict always wins where they disagree.
- *
- * The bias throughout is deliberately GENEROUS. A child typing "1/2" when the
- * stored answer is "½" is right, and telling them otherwise in front of their
- * parent is the most damaging bug this product can ship — worse than a crash,
- * because a crash is obviously the app's fault while a wrong mark looks like
- * the child's.
+ * The bias is generous throughout. A child typing "1/2" for a stored "½" is
+ * right, and marking them wrong in front of their parent is worse than a crash
+ * — a crash is obviously the app's fault, a wrong mark looks like the child's.
  */
 
 const VULGAR: Record<string, string> = {

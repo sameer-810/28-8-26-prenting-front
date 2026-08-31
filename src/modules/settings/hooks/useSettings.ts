@@ -2,21 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { settingsApi, subscriptionApi } from "../api/settingsApi";
 
 /**
- * Query keys for settings and billing.
+ * Query keys for settings and billing. Always use these — never a raw array.
  *
- * THESE WERE THE WORST CASE FOR RAW ARRAYS. `["subscription"]` is created in
- * PlansScreen, read in SettingsScreen, and invalidated from three different
- * mutations across two files; `["devices"]` is created in AccountScreen and
- * invalidated by two mutations in the same file. Every one of those was typed
- * out by hand.
+ * `subscription` is created in PlansScreen, read in SettingsScreen and
+ * invalidated by three mutations across two files. An invalidation whose key
+ * does not match does not fail: it matches nothing and returns, so the mutation
+ * reports success while the screen keeps the stale value.
  *
- * An invalidation whose key does not match the query it meant to refresh does
- * not fail — it matches nothing and returns. The mutation reports success, the
- * screen keeps the old value, and nothing anywhere says so.
- *
- * `subscription()` is a PREFIX of `subscriptionHistory()` on purpose:
- * invalidating the first also clears the second, which is what should happen
- * when a plan changes.
+ * `subscription()` is a PREFIX of `subscriptionHistory()`, so invalidating a
+ * plan change clears both.
  */
 export const settingsKeys = {
   all: ["settings"] as const,

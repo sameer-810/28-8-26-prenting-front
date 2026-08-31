@@ -18,20 +18,16 @@ const SECTIONS: { key: AdminSection; label: string }[] = [
 ];
 
 /**
- * The console's own navigation, rendered above the content on every screen.
+ * The console's navigation — a header row, not the parent app's sidebar and not
+ * a tab navigator.
  *
- * A ROW, NOT THE PARENT APP'S SIDEBAR — and not a tab navigator either.
+ * The parent shell keeps four screens mounted so a half-filled form survives a
+ * detour. Staff move between read-mostly tables a few times a day, so that
+ * machinery buys nothing and would put admin screens inside the navigator
+ * families use.
  *
- * The parent shell is a bottom-tab navigator whose whole design keeps four
- * screens mounted so a half-filled form survives a detour. Staff move between
- * four read-mostly tables a handful of times a day; the mounted-state machinery
- * would buy nothing and would put admin screens inside the navigator families
- * use. This is a plain stack with a header, so the console shares the design
- * system and none of the parent app's plumbing.
- *
- * The signed-in staff member and their ROLE are always on screen. A support
- * account seeing no plan controls needs to be able to tell at a glance that the
- * reason is their role, rather than a broken page.
+ * The staff member's ROLE is always on screen: a support account seeing no plan
+ * controls has to be able to tell that is their role, not a broken page.
  */
 export function AdminNav({
   active,

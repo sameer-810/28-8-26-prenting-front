@@ -4,8 +4,6 @@ import { Platform } from "react-native";
 /**
  * Where the API lives.
  *
- * WHY DEVELOPMENT RESOLVES THE HOST DYNAMICALLY
- * ---------------------------------------------
  * `localhost` means the device itself. On the web build that is the developer's
  * machine and works; in Expo Go on a real phone it is the phone, and every
  * request fails with a connection error that looks like the API being down.

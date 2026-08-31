@@ -21,8 +21,6 @@ export interface Segment {
  * The 30-minute countdown — one ring, five segments sized to their allocations
  * (10/8/6/3/3 minutes). The completed arc fills in moss.
  *
- * ACCESSIBILITY IS THE REASON THIS ISN'T JUST A CIRCLE.
- *
  * The numeric time and the phase name live in the middle, always, so the ring
  * is decoration on top of readable text rather than the only way to know where
  * you are. Under `prefers-reduced-motion` nothing animates — the arcs still

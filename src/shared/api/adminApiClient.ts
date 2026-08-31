@@ -5,8 +5,6 @@ import { useAdminStore } from "../store/useAdminStore";
 /**
  * The axios instance for the platform console.
  *
- * A SECOND CLIENT, NOT A FLAG ON THE FIRST.
- *
  * `apiClient` injects the parent's token from `useAuthStore` in a request
  * interceptor. Teaching it to sometimes send an admin token instead would put
  * the choice of "whose credentials is this request carrying" inside a

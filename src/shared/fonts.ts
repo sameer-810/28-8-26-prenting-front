@@ -2,29 +2,24 @@ import { create } from "zustand";
 import * as Font from "expo-font";
 
 /**
- * Vernacular typography — the engineering half of PRD §4.3.
+ * Vernacular typography — PRD §4.3.
  *
- * WHY THE INDIC FAMILIES ARE LOADED LAZILY
- * ----------------------------------------
- * Inter has no Devanagari, Tamil, Telugu, Kannada or Bengali coverage at all.
- * Without a script-matched face the parent's teaching script renders in a
- * system fallback that matches neither the design nor has reliable weights —
- * and on the web there may be no fallback at all.
+ * Inter has no Devanagari, Tamil, Telugu, Kannada or Bengali coverage, so a
+ * teaching script without a matched face falls back to something that matches
+ * neither the design nor has reliable weights — and on the web, to nothing.
  *
- * But loading all six upfront is several hundred kilobytes of font for scripts
- * five families out of six will never see, on the first screen, over an Indian
- * mobile connection. So the Latin set loads at boot and exactly one Indic
- * family loads the moment the parent's language is known — which is at
- * onboarding, minutes before any script is displayed.
+ * Loading all six upfront is hundreds of kilobytes for scripts most families
+ * never see, on the first screen, over mobile data. So the Latin set loads at
+ * boot and exactly one Indic family loads once the parent's language is known.
  *
- * Two further constraints that are NOT cosmetic:
+ * Two constraints that are not cosmetic:
  *
- *   · Indic scripts need more leading than Latin. Devanagari's shirorekha (the
- *     headline joining the letters) and Tamil's descenders clip at Latin's 1.4
- *     ratio. Each language carries its own ratio.
- *   · Urdu is right-to-left AND Nastaliq is a *sloped* calligraphic style — a
- *     line descends as it advances — so it needs 1.9 and a mirrored column,
- *     while the child's English column beside it stays left-to-right.
+ *   · Indic scripts need more leading. Devanagari's shirorekha (the headline
+ *     joining the letters) and Tamil's descenders clip at Latin's 1.4 ratio, so
+ *     each language carries its own.
+ *   · Urdu is RTL and Nastaliq is SLOPED — a line descends as it advances — so
+ *     it needs 1.9 and a mirrored column, while the child's English column
+ *     beside it stays left-to-right.
  */
 
 export type LanguageCode = "en" | "hi" | "mr" | "ur" | "ta" | "te" | "kn" | "bn";
@@ -38,23 +33,6 @@ export interface ScriptFace {
   load: () => Promise<void>;
 }
 
-/**
- * Loaders are `import()`ed, and they import the PER-WEIGHT subpath.
- *
- * Two separate savings, and both were measured:
- *
- *   · Dynamic import puts each script in its own bundle chunk, so a
- *     Hindi-speaking family never downloads the Tamil loader. The web build
- *     emits six ~5KB chunks alongside the main bundle, which is that working.
- *   · Importing `@expo-google-fonts/noto-sans-telugu` pulls the package INDEX,
- *     which references all nine weights — Thin through Black. That put 85 font
- *     files and 16MB into the build output for the four faces actually used.
- *     Importing `.../400Regular` and `.../600SemiBold` directly takes only what
- *     is loaded.
- *
- * Regular and SemiBold are the only two weights the design system asks for in a
- * vernacular block, so those are the only two shipped.
- */
 /** What a per-weight font module looks like once imported. */
 type FontModule = Record<string, unknown>;
 
@@ -76,6 +54,17 @@ async function pair(
   return out;
 }
 
+/**
+ * Dynamic `import()`, and always the PER-WEIGHT subpath. Both matter:
+ *
+ *   · Dynamic import gives each script its own chunk, so a Hindi-speaking
+ *     family never downloads the Tamil loader.
+ *   · `@expo-google-fonts/noto-sans-telugu` (the package index) references all
+ *     nine weights, Thin through Black — 85 font files and 16MB in the build
+ *     for the four faces actually used. `.../400Regular` takes only that one.
+ *
+ * Regular and SemiBold are the only weights a vernacular block ever asks for.
+ */
 const LOADERS: Record<Exclude<LanguageCode, "en">, () => Promise<Record<string, number>>> = {
   hi: () =>
     pair(

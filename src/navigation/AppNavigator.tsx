@@ -24,20 +24,17 @@ const Tabs = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 /**
- * Hides a tab from assistive technology while it is not the one on screen.
+ * Hides a tab from assistive technology while it is not on screen.
  *
- * A tab navigator keeps every visited tab MOUNTED — that is the point of it,
- * and this app depends on it: a half-filled form or a scrolled report is still
- * there when you come back. The navigator hides the blurred ones by stacking
- * them behind (`zIndex: -1`, `pointerEvents: 'none'`), which is enough for eyes
- * and a mouse and nothing else. On the web nothing is removed from the DOM, so
- * a screen reader walks straight through the dashboard, the progress report and
- * the settings form as one continuous page — three screens' worth of content
- * announced for a parent who can only hear one of them.
+ * A tab navigator keeps every visited tab mounted, and hides the blurred ones
+ * by stacking them behind (`zIndex: -1`, `pointerEvents: 'none'`). That is
+ * enough for eyes and a mouse and nothing else — on the web they stay in the
+ * DOM, so a screen reader reads the dashboard, the report and the settings form
+ * as one continuous page.
  *
- * `aria-hidden` is the right instrument rather than `display: none`, which
- * would fix the same problem by making the browser drop the scroll position of
- * everything inside — trading an accessibility bug for a state bug.
+ * `aria-hidden`, not `display: none`: the latter makes the browser drop the
+ * scroll position of everything inside, trading an accessibility bug for a
+ * state bug.
  */
 function accessibleWhenFocused(Component: React.ComponentType<any>) {
   return function Scene(props: any) {
@@ -57,39 +54,26 @@ function accessibleWhenFocused(Component: React.ComponentType<any>) {
   };
 }
 
-/**
- * Wrapped once at module scope. Wrapping inside `AppShell` would hand the
- * navigator a new component type on every render and remount the screen —
- * which is exactly the state loss the wrapper exists to avoid.
- */
+// Wrapped at module scope. Doing it inside AppShell hands the navigator a new
+// component type every render, remounting the screen on each one.
 const HomeTab = accessibleWhenFocused(HomeScreen);
 const ProgressTab = accessibleWhenFocused(ProgressScreen);
 const ChildrenTab = accessibleWhenFocused(ChildrenScreen);
 const SettingsTab = accessibleWhenFocused(SettingsScreen);
 
 /**
- * The app shell — one navigator, two chromes.
+ * The app shell — one navigator, two chromes. `tabBarPosition` moves the bar to
+ * the left edge on a wide window, where it renders as the sidebar.
  *
- * A bottom-tab navigator owns the routing on BOTH layouts, and only the chrome
- * differs: `tabBarPosition` moves the bar to the left edge on a wide window,
- * where it renders as a permanent sidebar. The same slot, the same navigator,
- * the same state.
+ * Do not swap navigators at the breakpoint instead. That remounts every screen
+ * when a desktop window is dragged past 900px, losing scroll position, form
+ * state and any session in progress.
  *
- * TWO THINGS THIS SHAPE BUYS, both learned the hard way:
- *
- * 1. It does not swap navigators at a breakpoint. That would remount every
- *    screen when a desktop window is dragged past 900px, losing scroll
- *    position, form state and any session in progress — unacceptable in a
- *    product whose central object is a 30-minute timed session.
- *
- * 2. The sidebar drives the tab navigator DIRECTLY. It used to sit outside, in
- *    a wrapper rendered as the stack's "Shell" screen, and navigate inwards
- *    with `navigate("Shell", { screen })`. Because the stack was already on
- *    "Shell", React Navigation treated that as a param merge on the current
- *    route: the URL changed to /progress, the sidebar highlighted the row, and
- *    the tab navigator underneath never moved. Rendering the sidebar in the
- *    `tabBar` slot hands it that navigator's own `navigation`, so a click is an
- *    ordinary `navigate(route.name)` with nothing to forward.
+ * Do not render the sidebar outside this navigator either. From out there,
+ * `navigate("Shell", { screen })` is a param merge on the route the stack is
+ * already on: the URL changes, the row highlights, and the tab underneath never
+ * moves. The `tabBar` slot hands the sidebar this navigator's own
+ * `navigation`, so a click is an ordinary `navigate(route.name)`.
  */
 function AppShell() {
   const theme = useTheme();
@@ -120,11 +104,9 @@ export default function AppNavigator() {
       <View style={{ flex: 1 }}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Shell" component={AppShell} />
-          {/**
-           * Screens pushed OVER the shell rather than inside a tab: they are
-           * focused tasks with their own way out, and having a tab bar under a
-           * running session would invite a parent to navigate away from it.
-           */}
+          {/* Pushed OVER the shell, not inside a tab — focused tasks with
+              their own way out. A tab bar under a running session invites a
+              parent to navigate away from it. */}
           <Stack.Screen name="AddChild" component={AddChildScreen} />
           <Stack.Screen name="Plans" component={PlansScreen} />
           <Stack.Screen name="Account" component={AccountScreen} />
@@ -132,11 +114,9 @@ export default function AppNavigator() {
 
           <Stack.Screen name="Capture" component={CaptureScreen} />
           <Stack.Screen name="Plan" component={PlanScreen} />
-          {/**
-           * The session player has NO gesture back and no swipe-to-dismiss: it
-           * owns its own exit, which asks before abandoning an evening's work.
-           * A stray edge swipe mid-phase must not end a session.
-           */}
+          {/* No gesture back: the player owns its exit, which asks before
+              abandoning an evening's work. A stray edge swipe mid-phase must
+              not end a session. */}
           <Stack.Screen
             name="Session"
             component={SessionScreen}

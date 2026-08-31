@@ -8,8 +8,6 @@ import { useOfflineStore } from "./useOfflineStore";
 /**
  * The device outbox — the client half of the PRD's offline continuity promise.
  *
- * WHAT IT IS FOR, PRECISELY
- * -------------------------
  * A running 30-minute session must survive losing the network. The plan is
  * already cached on the device when the session starts, so the countdown, the
  * questions and the grading all work locally. What cannot work locally is

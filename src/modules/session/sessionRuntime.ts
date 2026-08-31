@@ -1,20 +1,16 @@
 /**
- * The client-side session runtime — pure, no React, no IO, fully tested.
+ * The client-side session runtime. Pure, no React, no IO — see
+ * sessionRuntime.test.ts. The client owns the countdown (DECISION 3) because a
+ * running session must survive losing the network.
  *
- * The client owns the countdown (spec DECISION 3), because the PRD requires a
- * running session to survive losing the network and a server-authoritative
- * timer cannot do that.
+ * THE RULE: time is derived from WALL-CLOCK TIMESTAMPS, never accumulated from
+ * interval ticks.
  *
- * THE ONE RULE THAT MATTERS: time is derived from WALL-CLOCK TIMESTAMPS, never
- * accumulated from interval ticks.
- *
- * A `setInterval` that decrements a counter is wrong in three ways that all
- * happen in normal use: the OS suspends timers when the app is backgrounded, so
- * a parent who checks a message loses however long they were away; browsers
- * throttle intervals in inactive tabs to once a minute; and small per-tick
- * drift compounds over 30 minutes. Storing `startedAt` and computing
- * `now - startedAt` is immune to all three — the interval then exists only to
- * trigger a re-render, and dropping ticks costs nothing.
+ * A `setInterval` that decrements a counter fails three ways in normal use —
+ * the OS suspends timers when the app is backgrounded, browsers throttle
+ * inactive tabs to once a minute, and per-tick drift compounds over 30 minutes.
+ * Computing `now - startedAt` is immune to all three, and the interval then
+ * only triggers a re-render, so dropped ticks cost nothing.
  */
 
 export const PHASES = [

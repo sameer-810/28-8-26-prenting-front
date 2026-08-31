@@ -130,8 +130,6 @@ export const reportsApi = {
 /**
  * Downloads a PDF the API only serves to an authenticated caller.
  *
- * WHY THIS IS NOT JUST A LINK
- * ---------------------------
  * The obvious `<a href>` or `Linking.openURL` cannot work: a browser navigation
  * carries no `Authorization` header, so the request arrives unauthenticated and
  * the API — correctly — refuses it. The bytes have to be fetched by the client

@@ -1,20 +1,13 @@
 /**
- * Formatting, in one place.
+ * Formatting, in one place. Use these rather than `toLocaleDateString()` — a
+ * bare call takes the DEVICE's locale, so a phone set to US English renders
+ * `8/31/2026` where the rest of the app renders `31 Aug 2026`.
  *
- * WHY THIS EXISTS. Dates were being formatted in six different screens with a
- * bare `toLocaleDateString()` — no locale argument — which renders in whatever
- * the device happens to be set to. A parent on a phone configured for US
- * English saw `8/31/2026` while the platform console, which did pass a locale,
- * showed `31 Aug 2026`. Two date formats in one product, decided by a setting
- * nobody chose deliberately.
+ * Everything pins `en-IN`: rupees grouped Indian-style (₹4,999, ₹1,00,000) and
+ * day-first dates, the way a school diary writes them.
  *
- * Everything here pins `en-IN`. This is a product for Indian households: prices
- * are in rupees and grouped in the Indian style (₹4,999 and then ₹1,00,000),
- * and dates are day-first because that is what a school diary uses.
- *
- * `Intl` formatters are created ONCE at module scope rather than per call.
- * Constructing one is genuinely expensive, and these run inside list rows that
- * render on every scroll frame.
+ * The `Intl` formatters are built once at module scope — constructing one is
+ * expensive and these run inside list rows that re-render on scroll.
  */
 
 const inr = new Intl.NumberFormat("en-IN", {

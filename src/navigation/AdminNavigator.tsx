@@ -23,8 +23,6 @@ const Stack = createNativeStackNavigator();
  * about each other, so the two sessions coexist: signing in here does not sign
  * them out of their own account, and signing out here leaves it untouched.
  *
- * WHY IT LIVES IN THIS CODEBASE AT ALL
- *
  * Because the alternative is a second front-end project — a second lockfile, a
  * second design system to keep in step, a second deploy that can rot unnoticed.
  * This shares the app's components, its theme, its API client and its build.

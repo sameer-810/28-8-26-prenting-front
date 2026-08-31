@@ -4,7 +4,6 @@ import { create } from "zustand";
  * Connectivity, inferred from real traffic rather than asked of the platform.
  *
  * WHY NOT `navigator.onLine` / NetInfo
- * ------------------------------------
  * Both answer "is an interface up", which is a different question from "can I
  * reach the API". A phone on hotel wifi behind a captive portal is emphatically
  * "online" and can reach nothing; a phone that just completed a request is
