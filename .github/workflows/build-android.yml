@@ -1,0 +1,161 @@
+name: Build Android (.aab)
+
+# Run it manually: GitHub → Actions → "Build Android (.aab)" → "Run workflow".
+#
+# Builds with `eas build --local` on GitHub's free Ubuntu runner, so it uses NO
+# EAS build credits, and publishes the result as a downloadable release.
+#
+# Pick a profile:
+#   • production → signed .aab for the Play Store (default)
+#   • preview    → installable .apk you can sideload straight onto a test phone,
+#                  which is far faster to iterate on than uploading to Play
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "EAS build profile"
+        type: choice
+        options:
+          - production
+          - preview
+        default: production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Needed to publish the build as a GitHub Release asset.
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # The runner ships with ~30GB of tooling this build never touches, and an
+      # Android NDK build fills the disk without it.
+      - name: Free up disk space
+        run: |
+          echo "Disk before:"; df -h /
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup \
+            /usr/local/share/boost /usr/share/swift \
+            /opt/hostedtoolcache/CodeQL /opt/hostedtoolcache/PyPy || true
+          sudo docker image prune -a -f || true
+          echo "Disk after:"; df -h /
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Written to the GLOBAL Gradle home, not the project's.
+      #
+      # `plugins/withAndroidBuildTuning.js` sets the same values inside the
+      # generated project — but `expo prebuild` regenerates
+      # android/gradle.properties during `eas build --local`, and there is a
+      # window before the plugin is applied where the default 512 MiB metaspace
+      # is in force. The OOM lands inside that window.
+      - name: Raise Gradle memory (fixes KSP Metaspace OOM)
+        run: |
+          mkdir -p ~/.gradle
+          echo 'org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m -Dfile.encoding=UTF-8' >> ~/.gradle/gradle.properties
+
+      - name: Cache Gradle (reuse compiled native libs across runs)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+            android/app/.cxx
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/package-lock.json', 'app.json', 'eas.json') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Install eas-cli
+        run: npm install -g eas-cli
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install required Android SDK packages
+        run: sdkmanager "platforms;android-36" "build-tools;34.0.0" "ndk;27.3.13750724" "cmake;3.22.1"
+
+      - name: Pick output extension for the profile
+        id: out
+        run: |
+          if [ "${{ inputs.profile }}" = "preview" ]; then
+            echo "ext=apk" >> "$GITHUB_OUTPUT"
+          else
+            echo "ext=aab" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build (local — free, no EAS credits)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas build --local \
+            --platform android \
+            --profile "${{ inputs.profile }}" \
+            --non-interactive \
+            --output "${{ github.workspace }}/app-release.${{ steps.out.outputs.ext }}"
+
+      # `blockedPermissions` in app.json only adds tools:node="remove" to the
+      # SOURCE manifest. The Android manifest merger is what actually drops the
+      # entry, and that happens during the build — so the only place the result
+      # can be checked is here, on the artifact about to be uploaded.
+      #
+      # Worth failing the build over. This app is used by parents on behalf of
+      # children: a stray location or contacts permission on a product for
+      # minors means Play review questions, extra Data safety declarations, and
+      # a wasted 50-minute build plus a re-upload to discover it.
+      - name: Verify no blocked permission survived the merge
+        run: |
+          BT=1.17.2
+          curl -sL -o /tmp/bundletool.jar \
+            "https://github.com/google/bundletool/releases/download/$BT/bundletool-all-$BT.jar"
+          ART="app-release.${{ steps.out.outputs.ext }}"
+          if [ "${{ steps.out.outputs.ext }}" = "aab" ]; then
+            java -jar /tmp/bundletool.jar dump manifest --bundle="$ART" > /tmp/manifest.xml
+          else
+            $ANDROID_HOME/build-tools/34.0.0/aapt2 dump xmltree "$ART" \
+              --file AndroidManifest.xml > /tmp/manifest.xml
+          fi
+
+          echo "--- permissions in the shipped manifest ---"
+          grep -oE 'android\.permission\.[A-Z_]+' /tmp/manifest.xml | sort -u
+
+          BLOCKED="ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION READ_CONTACTS READ_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE RECORD_AUDIO SYSTEM_ALERT_WINDOW"
+          FOUND=""
+          for p in $BLOCKED; do
+            grep -qE "android\.permission\.$p\b" /tmp/manifest.xml && FOUND="$FOUND $p"
+          done
+          if [ -n "$FOUND" ]; then
+            echo "::error::Blocked permission(s) still present:$FOUND"
+            exit 1
+          fi
+          echo "OK — none of the blocked permissions are in the build."
+
+      # Published to a GitHub RELEASE, not an artifact.
+      #
+      # Release assets do not count against the 500 MB Actions artifact quota
+      # (they allow up to 2 GB), so this keeps working when that quota is full —
+      # which otherwise fails the upload and takes 6-12h to recalculate.
+      - name: Publish build to a GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="android-${{ inputs.profile }}-${{ github.run_number }}"
+          gh release create "$TAG" \
+            "app-release.${{ steps.out.outputs.ext }}" \
+            --title "Android ${{ inputs.profile }} build #${{ github.run_number }}" \
+            --notes "Automated \`eas build --local\` output. Download the .${{ steps.out.outputs.ext }} file below." \
+            --prerelease

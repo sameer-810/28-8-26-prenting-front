@@ -52,7 +52,9 @@
           "cameraPermission": "ParentAI uses the camera to scan your child's textbook pages and worksheets."
         }
       ],
-      "expo-audio"
+      "expo-audio",
+      "./plugins/withReleaseSigning",
+      "./plugins/withAndroidBuildTuning"
     ],
     "extra": {
       "eas": { "projectId": "" }

@@ -1,0 +1,72 @@
+name: OTA Update (eas update)
+
+# Pushes a JavaScript/UI-only change to already-installed apps in ~2 minutes,
+# with NO new build and NO Play review. GitHub → Actions → "OTA Update
+# (eas update)" → "Run workflow" → type what changed.
+#
+# WHAT OTA CANNOT DO. It ships JS/TS, styles, images and other JS-bundle assets.
+# It cannot change native code, permissions, app.json native config, or add a
+# native module — those still need a full build. It only reaches devices that
+# installed a build on the SAME channel and the same runtimeVersion
+# (policy: appVersion, so bumping `version` in app.json cuts off every existing
+# install from further updates until they reinstall).
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "What changed in this update (shown in the EAS dashboard)"
+        required: true
+        default: "JS/UI update"
+      branch:
+        description: "Channel to publish to (must match the installed build)"
+        required: true
+        default: "preview"
+        type: choice
+        options:
+          - preview
+          - production
+          - development
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install eas-cli
+        run: npm install -g eas-cli
+
+      - name: Install dependencies
+        run: npm install
+
+      # Typecheck before publishing. An OTA update reaches real phones in about
+      # two minutes with no review step in front of it, so this is the only gate
+      # there is — and a broken bundle pushed this way is harder to walk back
+      # than a build nobody installed yet.
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Publish OTA update
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          # CI=1 makes expo/eas run non-interactively. The export step inside
+          # `eas update` rejects a --non-interactive flag, so it has to be this.
+          CI: "1"
+          # EXPO_PUBLIC_* are inlined into the bundle at export time, so they
+          # must match the build profile's env or the update ships pointing at
+          # the wrong API.
+          EXPO_PUBLIC_API_URL: https://parentai-api.onrender.com/api/v1
+        run: |
+          eas update \
+            --branch "${{ github.event.inputs.branch }}" \
+            --platform android \
+            --message "${{ github.event.inputs.message }}"

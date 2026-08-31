@@ -1,0 +1,78 @@
+name: CI
+
+# Runs on every push and every pull request.
+#
+# WHAT THIS CAN AND CANNOT CHECK
+#
+# The browser suites in tools/ are the real tests of this app — they drive the
+# exported bundle against a LIVE API with a real database and real Gemini calls.
+# That is what makes them worth having, and it is also why they cannot run here:
+# they need production credentials and they would spend a family's AI quota on
+# every push.
+#
+# So this job does the half that can be automated honestly — typecheck, lint,
+# unit tests, and a real web export — and does not pretend to the other half.
+# The browser suites are run by a person before a release; the runbook says so.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      # `node --experimental-strip-types --test` — the pure logic that a
+      # browser suite would be a slow way to check: the session runtime's
+      # wall-clock timer, and the answer grading that is deliberately ported
+      # from the server so a child sees a verdict without a round trip.
+      - name: Unit tests
+        run: npm test
+
+      # A successful export is not a smoke test, but it catches the class of
+      # failure that a typecheck cannot: a bad import path resolved only by the
+      # bundler, a missing asset, a plugin that throws during config
+      # resolution. All of those ship a white screen.
+      - name: Export the web build
+        run: npx expo export --platform web
+        env:
+          EXPO_PUBLIC_API_URL: https://parentai-api.onrender.com/api/v1
+
+      # The byte budget, enforced rather than admired.
+      #
+      # `tools/perf.mjs` measures this properly, in a browser, against a live
+      # API. This is the cheap half of it that needs neither: if somebody adds a
+      # dependency that doubles the bundle, a parent on mobile data pays for it,
+      # and the pull request should say so before it merges.
+      - name: The bundle has not quietly grown
+        run: |
+          BYTES=$(find dist -name '*.js' -exec cat {} + | gzip -9 | wc -c)
+          KB=$((BYTES / 1024))
+          LIMIT=900
+          echo "JavaScript, gzipped: ${KB} KB (limit ${LIMIT} KB)"
+          if [ "$KB" -gt "$LIMIT" ]; then
+            echo "::error::The web bundle is ${KB} KB gzipped, over the ${LIMIT} KB budget."
+            echo "Either justify the increase and raise the limit here, or find what grew."
+            exit 1
+          fi

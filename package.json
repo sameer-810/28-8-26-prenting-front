@@ -15,7 +15,12 @@
     "validate": "tsc --noEmit && npm run test",
     "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
     "smoke": "node tools/smoke.mjs",
-    "perf": "node tools/perf.mjs"
+    "perf": "node tools/perf.mjs",
+    "assets:icons": "node scripts/genIcons.mjs",
+    "assets:feature": "node scripts/makeFeatureGraphic.mjs",
+    "assets:screens": "node scripts/makeStoreScreenshots.mjs",
+    "assets": "npm run assets:icons && npm run assets:feature && npm run assets:screens",
+    "smoke:admin": "node tools/adminSmoke.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/fraunces": "^0.4.0",

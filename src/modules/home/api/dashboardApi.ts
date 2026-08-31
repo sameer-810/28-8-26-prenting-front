@@ -22,7 +22,12 @@ export interface ChildCard {
     sessionsToRate: number;
   };
   last30Days: { sessions: number; minutesStudied: number; activeDays: number };
-  dailyCard: { title: string; body: string } | null;
+  /**
+   * `accuracy` is 0–1, or null on an older payload. The card's tone follows it
+   * — see HomeScreen, where celebrating a session the child got wrong was a
+   * real bug rather than a hypothetical one.
+   */
+  dailyCard: { title: string; body: string; accuracy: number | null } | null;
   resumable: { sessionId: string; currentPhase: number } | null;
   readyPlans: { id: string; title: string; subject: string }[];
   suggestions: { id: string | null; title: string; chapter: string; subject: string }[];

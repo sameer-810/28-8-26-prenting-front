@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ParentAI — Delete your account and data</title>
+    <meta
+      name="description"
+      content="How to delete your ParentAI household and everything in it, what is removed, and how long it takes."
+    />
+    <!--
+      REQUIRED BY GOOGLE PLAY. Every app that lets people create an account must
+      publish a publicly reachable URL — reachable WITHOUT signing in — that
+      explains how to delete the account and what happens to the data. The URL
+      goes in the Play Console under Data safety → Account deletion.
+
+      It is a static page in public/ rather than a route in the app precisely so
+      that a reviewer, or a parent who has already uninstalled, can read it
+      without an account.
+    -->
+    <style>
+      :root {
+        --moss-700: #375a31;
+        --moss-50: #f2f8ef;
+        --ink-900: #1f1c17;
+        --ink-500: #6b6559;
+        --border: #ded8ca;
+        --danger-bg: #fbe8e4;
+        --danger-text: #a93b29;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 28px 20px 64px;
+        color: var(--ink-900);
+        line-height: 1.62;
+        background: #fffdf9;
+      }
+      h1 {
+        font-size: 1.7rem;
+        margin-bottom: 4px;
+        color: var(--moss-700);
+      }
+      h2 {
+        font-size: 1.1rem;
+        margin-top: 32px;
+        color: var(--moss-700);
+      }
+      .muted {
+        color: var(--ink-500);
+      }
+      ol,
+      ul {
+        padding-left: 20px;
+      }
+      li {
+        margin-bottom: 6px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 8px;
+      }
+      th,
+      td {
+        border: 1px solid var(--border);
+        padding: 8px 10px;
+        text-align: left;
+        font-size: 0.95rem;
+        vertical-align: top;
+      }
+      th {
+        background: var(--moss-50);
+      }
+      .callout {
+        background: var(--danger-bg);
+        color: var(--danger-text);
+        border-radius: 8px;
+        padding: 12px 14px;
+        margin: 18px 0;
+      }
+      a {
+        color: var(--moss-700);
+      }
+      footer {
+        margin-top: 44px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        font-size: 0.9rem;
+        color: var(--ink-500);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Delete your ParentAI account</h1>
+    <p class="muted">Last updated: 31 August 2026</p>
+
+    <p>
+      You can delete your household and everything in it yourself, from inside the app. You do not
+      need to ask us, and we cannot do it for you — the erasure right is yours to exercise.
+    </p>
+
+    <h2>From the app or the web</h2>
+    <ol>
+      <li>Open ParentAI and sign in</li>
+      <li>Go to <strong>Settings → Data and privacy</strong></li>
+      <li>Tap <strong>Delete everything</strong></li>
+      <li>Type your household name exactly, to confirm</li>
+      <li>Tap <strong>Delete permanently</strong></li>
+    </ol>
+
+    <div class="callout">
+      This cannot be undone. If you want a copy of anything first, use
+      <strong>Export everything</strong> on the same screen — it downloads a single file containing
+      all of it.
+    </div>
+
+    <p class="muted">
+      Only the household <strong>owner</strong> can delete a household. If you were added as a
+      second parent, ask the owner, or delete your own parent profile from
+      <strong>Settings → Account</strong>.
+    </p>
+
+    <h2>What is deleted</h2>
+    <p>All of it, immediately, from the live database:</p>
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>What happens</th>
+      </tr>
+      <tr>
+        <td>Your parent account — name, email, phone</td>
+        <td>Deleted</td>
+      </tr>
+      <tr>
+        <td>Your children's profiles — name, grade, board, school medium</td>
+        <td>Deleted</td>
+      </tr>
+      <tr>
+        <td>Every study plan, session, answer and score</td>
+        <td>Deleted</td>
+      </tr>
+      <tr>
+        <td>Photographs of textbook pages and worksheets you uploaded</td>
+        <td>Deleted from our image storage, not merely unlinked</td>
+      </tr>
+      <tr>
+        <td>Progress history, streaks, mastery records and reports</td>
+        <td>Deleted</td>
+      </tr>
+      <tr>
+        <td>Your consent record and notification preferences</td>
+        <td>Deleted</td>
+      </tr>
+      <tr>
+        <td>Signed-in devices</td>
+        <td>All signed out, before anything else is removed</td>
+      </tr>
+    </table>
+
+    <h2>How long it takes</h2>
+    <p>
+      The deletion happens as you confirm it — there is no queue and no waiting period. Encrypted
+      infrastructure backups may retain a copy for up to <strong>30 days</strong> before they age
+      out; those backups are not readable by our staff and are never restored selectively.
+    </p>
+
+    <h2>What is kept, and why</h2>
+    <p>
+      Nothing that identifies you or your child. We retain anonymous, aggregated counts — for
+      example "how many sessions ran on 12 August" — which contain no name, no email and no link
+      back to any household. If there is an unresolved payment dispute, the payment record itself is
+      retained for as long as the law requires, and it holds no learning data.
+    </p>
+
+    <h2>Deleting one child rather than the whole household</h2>
+    <p>
+      <strong>Settings → Children</strong>, then remove the child. Their profile and their learning
+      history go; your account and any other children stay.
+    </p>
+
+    <h2>If you have already uninstalled the app</h2>
+    <p>
+      Uninstalling does not delete anything from our side. Sign in at
+      <a href="https://parentai.app">parentai.app</a> in a browser and follow the steps above, or
+      email us from the address on the account and we will guide you through it.
+    </p>
+
+    <footer>
+      Questions: <a href="mailto:hello@parentai.app">hello@parentai.app</a><br />
+      See also our <a href="/privacy-policy.html">privacy policy</a>.
+    </footer>
+  </body>
+</html>

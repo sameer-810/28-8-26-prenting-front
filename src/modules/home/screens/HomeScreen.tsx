@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Pressable } from "react-native";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, Sparkles, Clock, ChevronRight } from "lucide-react-native";
+import { Plus, Sparkles, BookOpen, Clock, ChevronRight } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useAppNavigation } from "@navigation/types";
 import { useAuthStore } from "@shared/store/useAuthStore";
@@ -157,29 +157,7 @@ function ChildCardView({ child }: { child: ChildCard }) {
          * a reason to come back tomorrow; "Session complete" is a receipt.
          */}
         {child.dailyCard ? (
-          <View
-            style={{
-              marginHorizontal: 18,
-              marginBottom: 14,
-              padding: 14,
-              borderRadius: radius.md,
-              backgroundColor: theme.accents.apricot.tint,
-            }}
-          >
-            <HStack gap={8}>
-              <Sparkles size={16} color={theme.accents.apricot.color} />
-              <VStack gap={2} flex={1}>
-                <Text variant="label" style={{ color: theme.accents.apricot.color }}>
-                  {child.dailyCard.title}
-                </Text>
-                {child.dailyCard.body ? (
-                  <Text variant="caption" tone="tertiary">
-                    {child.dailyCard.body}
-                  </Text>
-                ) : null}
-              </VStack>
-            </HStack>
-          </View>
+          <DailyCard card={child.dailyCard} />
         ) : null}
 
         <View style={{ paddingHorizontal: 18 }}>
@@ -283,4 +261,70 @@ function subtitleFor(data?: { inStudyWindow: boolean; children: ChildCard[]; usa
       : `${pending.length} sessions still to do tonight.`;
   }
   return "Outside your usual study time — plan ahead if you like.";
+}
+
+/**
+ * Tonight's milestone card — and the reason it is a component rather than three
+ * inline lines.
+ *
+ * IT WAS ALWAYS DRAWN AS A CELEBRATION. Apricot ground, sparkle icon, accent
+ * text, every evening, whatever happened in the session. A store screenshot
+ * caught it framing "0 of 8 correct" that way, which is the product telling a
+ * parent something cheerful about a night their child got everything wrong.
+ * That is worse than saying nothing.
+ *
+ * So the tone follows the accuracy the server already had and now sends:
+ *
+ *   ≥ 70%  celebration — apricot and a sparkle. Something went well.
+ *   < 70%  neutral — a plain sunken card and a book. The facts, unchanged and
+ *          unhidden, without a party thrown over them.
+ *
+ * NOT a red or a warning state. A hard evening is information a parent needs,
+ * not a failure to be scolded for — the whole revision phase exists because
+ * getting things wrong is how this works. The card just stops cheering.
+ */
+function DailyCard({ card }: { card: NonNullable<ChildCard["dailyCard"]> }) {
+  const theme = useTheme();
+
+  /**
+   * `null` accuracy — an older payload, or a milestone with no score — is
+   * treated as "not a celebration". Assuming the cheerful branch when the
+   * number is missing is exactly the bug this exists to fix.
+   */
+  const celebrate = (card.accuracy ?? 0) >= 0.7;
+
+  const accent = celebrate ? theme.accents.apricot : null;
+
+  return (
+    <View
+      style={{
+        marginHorizontal: 18,
+        marginBottom: 14,
+        padding: 14,
+        borderRadius: radius.md,
+        backgroundColor: accent ? accent.tint : theme.surface.sunken,
+      }}
+    >
+      <HStack gap={8}>
+        {celebrate ? (
+          <Sparkles size={16} color={accent!.color} />
+        ) : (
+          <BookOpen size={16} color={theme.text.tertiary} />
+        )}
+        <VStack gap={2} flex={1}>
+          <Text
+            variant="label"
+            style={{ color: accent ? accent.color : theme.text.primary }}
+          >
+            {card.title}
+          </Text>
+          {card.body ? (
+            <Text variant="caption" tone="tertiary">
+              {card.body}
+            </Text>
+          ) : null}
+        </VStack>
+      </HStack>
+    </View>
+  );
 }

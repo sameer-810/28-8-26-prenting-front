@@ -23,3 +23,7 @@ pwb.log
 test-results/
 playwright-report/
 _tmp_*
+
+# Android release signing — read by plugins/withReleaseSigning.js.
+# The keystore and its passwords never belong in the repo.
+credentials/
