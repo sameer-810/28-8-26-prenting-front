@@ -18,6 +18,12 @@ const DIST = path.join(ROOT, "dist");
 const PORT = 8099;
 const HEADED = process.argv.includes("--headed");
 const DEMO = { email: "demo.parent@parentai.app", password: "ParentAI-Demo-2026" };
+/**
+ * The API this build points at, for the teardown at the end. Read from the
+ * bundle rather than hardcoded, so a suite run against a deployed API deletes
+ * the household it created THERE rather than failing against localhost.
+ */
+const API_BASE = process.env.EXPO_PUBLIC_API_URL || "http://localhost:5005/api/v1";
 
 const pass = [];
 const fail = [];
@@ -187,7 +193,37 @@ check(
 );
 check("the free timelines stay available", /Today/.test(gated) && /This week/.test(gated));
 
-console.log("\n=== 8. Console health ===");
+console.log("\n=== 8. Cleaning up after ourselves ===");
+/**
+ * The throwaway household is DELETED, through the same erasure endpoint a
+ * parent uses.
+ *
+ * This suite signs up a real family on the real API to test the plan gate,
+ * because that gate cannot be exercised any other way. Without this step every
+ * run leaves one behind — and it did: three "GateFam" households were sitting
+ * in the client's production cluster before anybody noticed, inflating the
+ * platform console's own household count.
+ *
+ * A test that writes to a live database owns what it wrote.
+ */
+const cleaned = await trial.evaluate(async (apiBase) => {
+  try {
+    const stored = JSON.parse(localStorage.getItem("parentai-auth") || "{}");
+    const token = stored?.state?.token;
+    if (!token) return "no token";
+    const res = await fetch(`${apiBase}/family`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ confirmation: "GateFam" }),
+    });
+    return res.ok ? "deleted" : `refused ${res.status}`;
+  } catch (err) {
+    return `failed: ${err.message}`;
+  }
+}, API_BASE);
+check("the throwaway household is deleted, not left in the database", cleaned === "deleted", cleaned);
+
+console.log("\n=== 9. Console health ===");
 const real = consoleErrors.filter(
   (e) => !/Download the React DevTools|deprecated|findDOMNode|status of 40[139]/i.test(e),
 );
