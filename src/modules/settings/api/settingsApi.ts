@@ -3,36 +3,9 @@ import { apiClient, unwrap } from "@api/apiClient";
 import { environment } from "@config/env";
 import { saveOnWeb, shareOrExplain } from "@shared/download";
 import { useAuthStore, type Family } from "@shared/store/useAuthStore";
+import type { SubscriptionState } from "../types";
 
-export interface PlanOption {
-  code: string;
-  name: string;
-  badge: string | null;
-  priceInPaise: number;
-  priceLabel: string;
-  interval: string;
-  intervalLabel: string;
-  maxChildren: number;
-  sessionsPerDay: number;
-  features: string[];
-  isCurrent: boolean;
-  supportsCurrentChildren: boolean;
-}
 
-export interface SubscriptionState {
-  current: {
-    planCode: string;
-    planName: string;
-    status: string;
-    currentPeriodEnd: string | null;
-    trialEndsAt: string | null;
-    cancelledAt: string | null;
-  };
-  childCount: number;
-  plans: PlanOption[];
-  /** False when the server has no Razorpay keys — checkout cannot be offered. */
-  paymentsConfigured: boolean;
-}
 
 export const settingsApi = {
   async family() {
@@ -262,3 +235,6 @@ function loadRazorpayScript(): Promise<boolean> {
   });
   return scriptPromise;
 }
+
+/** Re-exported for existing imports; the shapes live in `../types`. */
+export type { PlanOption, SubscriptionState } from "../types";

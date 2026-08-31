@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 import { View } from "react-native";
-import { useQuery } from "@tanstack/react-query";
 import { Lock, Target } from "lucide-react-native";
 import { apiErrorCode, apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
@@ -24,7 +23,14 @@ import {
 } from "@shared/ui";
 import { StreakBadge } from "@shared/ui/StreakBadge";
 import { useChildren } from "@modules/auth/hooks/useAuth";
-import { progressApi, type Timeline } from "../api/progressApi";
+import type { Timeline } from "../types";
+import {
+  useTimeline,
+  useStreak,
+  useProofOfProgress,
+  useSubjects,
+  useMastery,
+} from "../hooks/useProgress";
 import { TimelineChart } from "../components/TimelineChart";
 import { ProofOfProgressCard } from "../components/ProofOfProgressCard";
 import { ReportsCard } from "../components/ReportsCard";
@@ -58,44 +64,24 @@ export default function ProgressScreen() {
 
   const allowed = family?.limits?.timelines ?? ["daily", "weekly"];
 
-  const { data, isLoading, error, refetch, isRefetching } = useQuery({
-    queryKey: ["timeline", child?.id, timeline],
-    queryFn: () => progressApi.timeline(child!.id, timeline),
-    enabled: Boolean(child),
-    retry: false,
-  });
-
-  const { data: streak } = useQuery({
-    queryKey: ["streak", child?.id],
-    queryFn: () => progressApi.streak(child!.id),
-    enabled: Boolean(child),
-  });
+  const { data, isLoading, error, refetch, isRefetching } = useTimeline(child?.id, timeline);
+  const { data: streak } = useStreak(child?.id);
 
   /**
-   * Proof of Progress and mastery are only fetched on the ranges where they
-   * mean something. Asking for a month-over-month comparison while looking at
-   * today would show a card about a period the parent is not looking at.
+   * Proof of Progress is only fetched on ranges where a period-over-period
+   * comparison means something, and only on plans that include the custom
+   * timeline — see the hook.
    */
   const wantsComparison = timeline === "monthly" || timeline === "yearly";
 
-  const { data: proof } = useQuery({
-    queryKey: ["proof", child?.id, timeline],
-    queryFn: () => progressApi.proofOfProgress(child!.id, { from: data?.from, to: data?.to }),
-    enabled: Boolean(child) && wantsComparison && Boolean(data) && allowed.includes("custom"),
-    retry: false,
-  });
-
-  const { data: subjects } = useQuery({
-    queryKey: ["subjects", child?.id, data?.from, data?.to],
-    queryFn: () => progressApi.subjects(child!.id, { from: data?.from, to: data?.to }),
-    enabled: Boolean(child) && Boolean(data),
-  });
-
-  const { data: mastery } = useQuery({
-    queryKey: ["mastery", child?.id, data?.from, data?.to],
-    queryFn: () => progressApi.mastery(child!.id, { from: data?.from, to: data?.to }),
-    enabled: Boolean(child) && Boolean(data),
-  });
+  const { data: proof } = useProofOfProgress(
+    child?.id,
+    timeline,
+    data,
+    wantsComparison && allowed.includes("custom"),
+  );
+  const { data: subjects } = useSubjects(child?.id, data);
+  const { data: mastery } = useMastery(child?.id, data);
 
   if (childrenLoading) {
     return (

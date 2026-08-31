@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ControlledTextField } from "@shared/form";
-import { z } from "zod";
 import { Monitor, Smartphone, KeyRound } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useTheme } from "@shared/useTheme";
@@ -21,23 +20,8 @@ import {
   Divider,
 } from "@shared/ui";
 import { settingsApi } from "../api/settingsApi";
-
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(1, "Enter your current password"),
-    newPassword: z.string().min(10, "At least 10 characters").max(128),
-    confirmPassword: z.string(),
-  })
-  .refine((v) => v.newPassword === v.confirmPassword, {
-    message: "The passwords don't match",
-    path: ["confirmPassword"],
-  })
-  .refine((v) => v.newPassword !== v.currentPassword, {
-    message: "Choose a password you haven't used here before",
-    path: ["newPassword"],
-  });
-
-type PasswordInput = z.infer<typeof passwordSchema>;
+import { useDevices, settingsKeys } from "../hooks/useSettings";
+import { passwordSchema, type PasswordInput } from "../settings.validation";
 
 export default function AccountScreen() {
   const theme = useTheme();
@@ -47,10 +31,7 @@ export default function AccountScreen() {
     { tone: "success" | "danger"; title: string; body: string } | null
   >(null);
 
-  const { data: devices } = useQuery({
-    queryKey: ["devices"],
-    queryFn: settingsApi.devices,
-  });
+  const { data: devices } = useDevices();
 
   const {
     control,
@@ -75,7 +56,7 @@ export default function AccountScreen() {
         title: "Password changed",
         body: "Your other devices have been signed out.",
       });
-      queryClient.invalidateQueries({ queryKey: ["devices"] });
+      queryClient.invalidateQueries({ queryKey: settingsKeys.devices() });
     },
     onError: (err) =>
       setMessage({
@@ -87,7 +68,7 @@ export default function AccountScreen() {
 
   const revoke = useMutation({
     mutationFn: settingsApi.revokeDevice,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["devices"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.devices() }),
   });
 
   return (

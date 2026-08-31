@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   CreditCard,
   Bell,
@@ -33,7 +33,8 @@ import {
 } from "@shared/ui";
 import { Toggle } from "@shared/ui/Toggle";
 import { useLogout, useReference } from "@modules/auth/hooks/useAuth";
-import { settingsApi, subscriptionApi } from "../api/settingsApi";
+import { settingsApi } from "../api/settingsApi";
+import { useSubscription } from "../hooks/useSettings";
 
 /**
  * Household settings.
@@ -55,10 +56,7 @@ export default function SettingsScreen() {
 
   const [error, setError] = useState<string | null>(null);
 
-  const { data: subscription } = useQuery({
-    queryKey: ["subscription"],
-    queryFn: subscriptionApi.state,
-  });
+  const { data: subscription } = useSubscription();
 
   const save = useMutation({
     mutationFn: settingsApi.updateFamily,

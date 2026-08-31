@@ -3,52 +3,7 @@ import { deviceContext } from "@api/deviceId";
 import { POLICY_VERSION } from "@config/env";
 import type { Parent, Family } from "@shared/store/useAuthStore";
 import type { LanguageCode } from "@shared/fonts";
-
-export interface SessionPayload {
-  user: Parent;
-  family: Family;
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface ChildProfile {
-  id: string;
-  familyId: string;
-  name: string;
-  dateOfBirth: string | null;
-  avatarUrl: string;
-  grade: number;
-  board: string;
-  boardName: string;
-  schoolName: string;
-  schoolMedium: LanguageCode;
-  homeLanguage: LanguageCode;
-  languages: {
-    parent: {
-      code: LanguageCode;
-      label: string;
-      script: string;
-      direction: "ltr" | "rtl";
-      fontFamily: string;
-      lineHeightRatio: number;
-    };
-    child: {
-      code: LanguageCode;
-      label: string;
-      script: string;
-      direction: "ltr" | "rtl";
-      fontFamily: string;
-      lineHeightRatio: number;
-    };
-    isDualLanguage: boolean;
-  };
-  subjects: string[];
-  streak: { current: number; longest: number; lastSessionDay: string | null };
-  totals: { sessions: number; minutesStudied: number };
-  fluency: { band: string; label: string; score: number };
-  isActive: boolean;
-  createdAt: string;
-}
+import type { SessionPayload, ChildProfile, ReferenceData } from "../types";
 
 export const authApi = {
   async login(input: { email: string; password: string }) {
@@ -128,40 +83,6 @@ export const childApi = {
   },
 };
 
-export interface ReferenceData {
-  boards: {
-    code: string;
-    name: string;
-    fullName: string;
-    scope: string;
-    state: string | null;
-    defaultMedium: string;
-    regionalLanguage: string;
-  }[];
-  languages: {
-    code: LanguageCode;
-    name: string;
-    endonym: string;
-    script: string;
-    direction: "ltr" | "rtl";
-    fontFamily: string;
-    lineHeightRatio: number;
-  }[];
-  grades: { value: number; label: string }[];
-  subjects: { code: string; label: string }[];
-  plans: {
-    code: string;
-    name: string;
-    badge: string | null;
-    priceInPaise: number;
-    priceLabel: string;
-    interval: string;
-    intervalLabel: string;
-    maxChildren: number;
-    features: string[];
-  }[];
-}
-
 export const referenceApi = {
   /**
    * Boards, languages, grades and plans — served by the API rather than
@@ -172,3 +93,6 @@ export const referenceApi = {
     return unwrap<ReferenceData>(apiClient.get("/reference"));
   },
 };
+
+/** Re-exported for existing imports; the shapes live in `../types`. */
+export type { SessionPayload, ChildProfile, ReferenceData } from "../types";

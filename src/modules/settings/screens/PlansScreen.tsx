@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Check, Sparkles, AlertTriangle } from "lucide-react-native";
 import { apiErrorCode, apiErrorMessage } from "@api/apiClient";
 import { radius } from "@shared/designSystem";
@@ -19,6 +19,7 @@ import {
   Skeleton,
 } from "@shared/ui";
 import { subscriptionApi, openRazorpayCheckout } from "../api/settingsApi";
+import { useSubscription, useSubscriptionHistory, settingsKeys } from "../hooks/useSettings";
 
 /**
  * Plans and billing.
@@ -36,15 +37,8 @@ export default function PlansScreen() {
   >(null);
   const [confirmCancel, setConfirmCancel] = useState(false);
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["subscription"],
-    queryFn: subscriptionApi.state,
-  });
-
-  const { data: history } = useQuery({
-    queryKey: ["subscription", "history"],
-    queryFn: subscriptionApi.history,
-  });
+  const { data, isLoading, refetch } = useSubscription();
+  const { data: history } = useSubscriptionHistory();
 
   const cancel = useMutation({
     mutationFn: () => subscriptionApi.cancel(false),
@@ -55,8 +49,8 @@ export default function PlansScreen() {
         title: "Cancelled",
         body: "You keep everything until the end of the period you've already paid for.",
       });
-      queryClient.invalidateQueries({ queryKey: ["subscription"] });
-      queryClient.invalidateQueries({ queryKey: ["me"] });
+      queryClient.invalidateQueries({ queryKey: settingsKeys.subscription() });
+      queryClient.invalidateQueries({ queryKey: settingsKeys.me() });
     },
     onError: (err) =>
       setMessage({ tone: "danger", title: "Couldn't cancel", body: apiErrorMessage(err) }),
@@ -89,8 +83,8 @@ export default function PlansScreen() {
         signature: result.signature,
       });
       setMessage({ tone: "success", title: "You're all set", body: "Your plan is active." });
-      queryClient.invalidateQueries({ queryKey: ["subscription"] });
-      queryClient.invalidateQueries({ queryKey: ["me"] });
+      queryClient.invalidateQueries({ queryKey: settingsKeys.subscription() });
+      queryClient.invalidateQueries({ queryKey: settingsKeys.me() });
       refetch();
     } catch (err) {
       /**

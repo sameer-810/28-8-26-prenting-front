@@ -1,55 +1,22 @@
 import { apiClient, unwrap } from "@api/apiClient";
+import type { Dashboard } from "../types";
 
-export interface ChildCard {
-  id: string;
-  name: string;
-  grade: number;
-  avatarUrl: string;
-  studiedToday: boolean;
-  today: {
-    sessions: number;
-    minutesStudied: number;
-    attempted: number;
-    correct: number;
-    accuracy: number;
-  };
-  streak: { current: number; longest: number; graceRemaining: number };
-  fluency: {
-    rated: boolean;
-    band: string;
-    label: string;
-    score: number;
-    sessionsToRate: number;
-  };
-  last30Days: { sessions: number; minutesStudied: number; activeDays: number };
-  /**
-   * `accuracy` is 0–1, or null on an older payload. The card's tone follows it
-   * — see HomeScreen, where celebrating a session the child got wrong was a
-   * real bug rather than a hypothetical one.
-   */
-  dailyCard: { title: string; body: string; accuracy: number | null } | null;
-  resumable: { sessionId: string; currentPhase: number } | null;
-  readyPlans: { id: string; title: string; subject: string }[];
-  suggestions: { id: string | null; title: string; chapter: string; subject: string }[];
-}
-
-export interface Dashboard {
-  today: string;
-  inStudyWindow: boolean;
-  studyWindow: { startHour: number; endHour: number };
-  usage: {
-    sessionsUsed: number;
-    sessionsLeft: number;
-    scansUsed: number;
-    scansLeft: number;
-  };
-  unseenMilestones: number;
-  children: ChildCard[];
-  isEmpty: boolean;
-}
-
+/**
+ * ONE aggregate request, deliberately.
+ *
+ * This is the first screen a parent sees, on a phone, often on a weak
+ * connection, at the end of a working day. Six parallel requests would be six
+ * chances to be slow and six spinners.
+ */
 export const dashboardApi = {
   async get() {
     return unwrap<Dashboard>(apiClient.get("/dashboard"));
   },
 };
+
+/**
+ * Re-exported so existing imports keep working. The types LIVE in `../types`
+ * — an api module owning its own shapes is what left them scattered across
+ * seven modules with no single place to look.
+ */
+export type { Dashboard, ChildCard } from "../types";

@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Pressable } from "react-native";
-import { useQuery } from "@tanstack/react-query";
 import { Plus, Sparkles, BookOpen, Clock, ChevronRight } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useAppNavigation } from "@navigation/types";
@@ -24,7 +23,8 @@ import {
   Chip,
 } from "@shared/ui";
 import { StreakBadge } from "@shared/ui/StreakBadge";
-import { dashboardApi, type ChildCard } from "../api/dashboardApi";
+import type { ChildCard } from "../types";
+import { useDashboard } from "../hooks/useDashboard";
 
 /**
  * The home screen.
@@ -38,10 +38,7 @@ export default function HomeScreen() {
   const user = useAuthStore((s) => s.user);
   const isOnline = useOfflineStore((s) => s.isOnline);
 
-  const { data, isLoading, error, refetch, isRefetching } = useQuery({
-    queryKey: ["dashboard"],
-    queryFn: dashboardApi.get,
-  });
+  const { data, isLoading, error, refetch, isRefetching } = useDashboard();
 
   const greeting = timeGreeting();
 
