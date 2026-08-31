@@ -57,7 +57,7 @@ jobs:
       - name: Export the web build
         run: npx expo export --platform web
         env:
-          EXPO_PUBLIC_API_URL: https://parentai-api.onrender.com/api/v1
+          EXPO_PUBLIC_API_URL: https://two8-8-26-prenting-back.onrender.com/api/v1
 
       # The byte budget, enforced rather than admired.
       #

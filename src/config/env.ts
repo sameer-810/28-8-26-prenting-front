@@ -33,7 +33,7 @@ const ENV = {
     return { apiUrl: `${base}/api/v1`, socketUrl: base };
   },
   production: () => {
-    const base = process.env.EXPO_PUBLIC_API_URL || "https://api.parentai.app";
+    const base = process.env.EXPO_PUBLIC_API_URL || "https://two8-8-26-prenting-back.onrender.com";
     return { apiUrl: `${base}/api/v1`, socketUrl: base };
   },
 };

@@ -5,7 +5,7 @@ One codebase, two artefacts: a static web bundle and a native binary.
 ## Web
 
 ```bash
-EXPO_PUBLIC_API_URL=https://api.parentai.app npx expo export -p web --clear
+EXPO_PUBLIC_API_URL=https://two8-8-26-prenting-back.onrender.com npx expo export -p web --clear
 # → dist/
 ```
 
