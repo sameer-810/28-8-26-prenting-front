@@ -1,5 +1,4 @@
 import { Platform } from "react-native";
-import * as Sharing from "expo-sharing";
 /**
  * SDK 56's file API is the `File` / `Directory` / `Paths` classes; the old
  * `FileSystem.downloadAsync` and `FileSystem.cacheDirectory` are gone. Named
@@ -9,6 +8,7 @@ import * as Sharing from "expo-sharing";
 import { File, Paths } from "expo-file-system";
 import { apiClient, unwrap } from "@api/apiClient";
 import { environment } from "@config/env";
+import { saveOnWeb, shareOrExplain } from "@shared/download";
 import { useAuthStore } from "@shared/store/useAuthStore";
 
 export type Timeline = "daily" | "weekly" | "monthly" | "yearly" | "custom";
@@ -254,17 +254,7 @@ export async function downloadReport(
     if (Platform.OS === "web") {
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) return { ok: false, reason: `The server returned ${res.status}` };
-      const blob = await res.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = objectUrl;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      // Revoked on the next tick: revoking immediately can cancel the download
-      // in some browsers before it has read the blob.
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 2000);
+      saveOnWeb(await res.blob(), filename);
       return { ok: true };
     }
 
@@ -279,17 +269,7 @@ export async function downloadReport(
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(downloaded.uri, {
-        mimeType: "application/pdf",
-        dialogTitle: filename,
-        UTI: "com.adobe.pdf",
-      });
-      return { ok: true };
-    }
-    // Saved but with nowhere to send it — worth saying rather than claiming
-    // success the parent cannot see.
-    return { ok: false, reason: "Saved to this device, but sharing isn't available here." };
+    return await shareOrExplain(downloaded.uri, "application/pdf", filename, "com.adobe.pdf");
   } catch (err) {
     return { ok: false, reason: (err as Error)?.message || "The download failed" };
   }

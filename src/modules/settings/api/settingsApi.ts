@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 import { apiClient, unwrap } from "@api/apiClient";
 import { environment } from "@config/env";
+import { saveOnWeb, shareOrExplain } from "@shared/download";
 import { useAuthStore, type Family } from "@shared/store/useAuthStore";
 
 export interface PlanOption {
@@ -152,31 +153,19 @@ export async function downloadExport(): Promise<{ ok: boolean; reason?: string }
     if (!res.ok) return { ok: false, reason: `The server returned ${res.status}` };
 
     if (Platform.OS === "web") {
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `parentai-export-${new Date().toISOString().slice(0, 10)}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      saveOnWeb(
+        await res.blob(),
+        `parentai-export-${new Date().toISOString().slice(0, 10)}.json`,
+      );
       return { ok: true };
     }
 
-    const [{ File, Paths }, Sharing] = await Promise.all([
-      import("expo-file-system"),
-      import("expo-sharing"),
-    ]);
+    const { File, Paths } = await import("expo-file-system");
     const text = await res.text();
     const file = new File(Paths.cache, `parentai-export-${Date.now()}.json`);
     file.create({ overwrite: true });
     file.write(text);
-    if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(file.uri, { mimeType: "application/json" });
-      return { ok: true };
-    }
-    return { ok: false, reason: "Saved to this device, but sharing isn't available here." };
+    return await shareOrExplain(file.uri, "application/json");
   } catch (err) {
     return { ok: false, reason: (err as Error)?.message || "The export failed" };
   }
