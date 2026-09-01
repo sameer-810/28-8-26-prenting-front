@@ -26,6 +26,15 @@ on:
           - preview
           - production
           - development
+      platform:
+        description: "Which platform(s) to update"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - android
+          - ios
 
 jobs:
   update:
@@ -65,8 +74,11 @@ jobs:
           # must match the build profile's env or the update ships pointing at
           # the wrong API.
           EXPO_PUBLIC_API_URL: https://two8-8-26-prenting-back.onrender.com
+        # "all" means iOS + Android. The web build is not an EAS Update target —
+        # it ships as a static export to Vercel, so a web change needs a redeploy
+        # there, not an OTA.
         run: |
           eas update \
             --branch "${{ github.event.inputs.branch }}" \
-            --platform android \
+            --platform "${{ github.event.inputs.platform }}" \
             --message "${{ github.event.inputs.message }}"

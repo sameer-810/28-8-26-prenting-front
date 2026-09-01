@@ -183,7 +183,15 @@ check(
 
 console.log("\n=== 5. Navigation and URLs ===");
 await page.getByRole("tab", { name: "Progress" }).click();
-await page.waitForTimeout(2500);
+/**
+ * Waits for the Progress screen's own content rather than a fixed delay. A
+ * fixed wait passes on a warm API and fails on a cold one — which is a flaky
+ * test, not a caught regression. If the screen genuinely never arrives this
+ * still fails, just on the timeout.
+ */
+await page
+  .waitForFunction(() => /Day by day/.test(document.body.innerText || ""), null, { timeout: 20000 })
+  .catch(() => {});
 /**
  * Asserts on content ONLY the Progress screen has, not on the tab's own
  * highlight. The sidebar used to sit outside the tab navigator and navigate

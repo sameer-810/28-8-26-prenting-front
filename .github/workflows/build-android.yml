@@ -133,7 +133,8 @@ jobs:
           echo "--- permissions in the shipped manifest ---"
           grep -oE 'android\.permission\.[A-Z_]+' /tmp/manifest.xml | sort -u
 
-          BLOCKED="ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION READ_CONTACTS READ_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE RECORD_AUDIO SYSTEM_ALERT_WINDOW"
+          # Must stay in step with blockedPermissions in app.json.
+          BLOCKED="ACCESS_FINE_LOCATION ACCESS_COARSE_LOCATION READ_CONTACTS READ_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE RECORD_AUDIO MODIFY_AUDIO_SETTINGS FOREGROUND_SERVICE FOREGROUND_SERVICE_MEDIA_PLAYBACK SYSTEM_ALERT_WINDOW"
           FOUND=""
           for p in $BLOCKED; do
             grep -qE "android\.permission\.$p\b" /tmp/manifest.xml && FOUND="$FOUND $p"

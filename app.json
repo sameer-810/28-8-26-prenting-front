@@ -2,8 +2,11 @@
   "expo": {
     "name": "ParentAI",
     "slug": "parentai",
+    "owner": "aaishalas-team",
     "version": "1.0.0",
-    "runtimeVersion": { "policy": "appVersion" },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "orientation": "default",
     "scheme": "parentai",
     "icon": "./assets/icon.png",
@@ -17,8 +20,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.parentai.app",
       "infoPlist": {
-        "NSCameraUsageDescription": "ParentAI uses the camera to scan your child's textbook pages and worksheets.",
-        "NSMicrophoneUsageDescription": "ParentAI lets you say what to study instead of typing it."
+        "NSCameraUsageDescription": "ParentAI uses the camera to scan your child's textbook pages and worksheets."
       }
     },
     "android": {
@@ -33,6 +35,11 @@
         "android.permission.CAMERA"
       ],
       "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "android.permission.SYSTEM_ALERT_WINDOW",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.READ_CONTACTS",
@@ -52,15 +59,19 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "ParentAI uses the camera to scan your child's textbook pages and worksheets."
+          "cameraPermission": "ParentAI uses the camera to scan your child's textbook pages and worksheets.",
+          "recordAudioAndroid": false,
+          "microphonePermission": false,
+          "barcodeScannerEnabled": false
         }
       ],
-      "expo-audio",
       "./plugins/withReleaseSigning",
       "./plugins/withAndroidBuildTuning"
     ],
     "extra": {
-      "eas": { "projectId": "" }
+      "eas": {
+        "projectId": "57c47687-7aca-44d1-b14b-9c48bc8835c8"
+      }
     }
   }
 }

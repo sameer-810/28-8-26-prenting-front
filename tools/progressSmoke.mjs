@@ -107,12 +107,6 @@ check(
     /(Fluent & Confident|Proficient|Growing|Building Foundations)/,
   )?.[0],
 );
-check(
-  "the fluency components are broken out",
-  /Accuracy/.test(progress) &&
-    /Pace/.test(progress) &&
-    /Consistency/.test(progress),
-);
 
 console.log("\n=== 3. The chart ===");
 check(
@@ -125,34 +119,79 @@ check(
   /Minutes/.test(progress) && /Sessions/.test(progress),
 );
 
+/**
+ * Asserted against the window the screen ITSELF reports, not a fixed number.
+ *
+ * The timelines are calendar-period-to-date, so "This month" on the 1st is one
+ * day. A hardcoded `bars >= 28` passed all month and failed on the 1st — that
+ * is a date-dependent test, not a caught regression.
+ */
+const windowDays = Number(progress.match(/studied out of (\d+)/)?.[1] ?? 0);
 const bars = await page
   .getByRole("button", { name: /: (no session|\d)/ })
   .count();
-check("every day in the window is a labelled bar", bars >= 28, `${bars} bars`);
-
-/** Bar labels read "Mon, 4 Aug: 30m, 1 session" — the count follows a comma. */
-const studiedBar = page
-  .getByRole("button", { name: /, \d+ sessions?$/ })
-  .first();
+check(
+  "every day in the window is a labelled bar",
+  windowDays > 0 && bars === windowDays,
+  `${bars} bars for a ${windowDays}-day window`,
+);
 
 /**
- * The dense series is the point: a chart drawn only from days that exist makes
- * a lapsed month look continuous. The demo household deliberately has gaps.
+ * Tapped on the CURRENT view, where every bar is one day. On a long range the
+ * chart folds days into weeks, and the day a grouped bar reports may itself be
+ * empty — which would make this assert the calendar, not the detail panel.
+ *
+ * Labels read "Mon, 4 Aug: 30m, 1 session"; the session count follows a comma.
  */
+await page
+  .getByRole("button", { name: /, \d+ sessions?$/ })
+  .first()
+  .click();
+await page.waitForTimeout(700);
+check("tapping a bar shows that day's detail", /correct/.test(await body()));
+
+/**
+ * Checked on "This year", which always spans enough days to contain a gap. On a
+ * short window — "This month" on the 1st — there may legitimately be no empty
+ * day, and asserting there is one tests the calendar rather than the chart.
+ */
+await page.getByRole("button", { name: /This year/i }).click();
+await page
+  .waitForFunction(() => /studied out of/.test(document.body.innerText || ""), null, {
+    timeout: 20000,
+  })
+  .catch(() => {});
 const emptyBars = await page
   .getByRole("button", { name: /: no session/ })
   .count();
 check(
   "empty days are drawn, not skipped",
   emptyBars > 0,
-  `${emptyBars} empty days rendered`,
+  `${emptyBars} empty days on the yearly view`,
 );
 
-await studiedBar.click();
-await page.waitForTimeout(700);
-check("tapping a bar shows that day's detail", /correct/.test(await body()));
+/**
+ * Asserted on the yearly window. A rating needs five sessions, so a short
+ * window legitimately shows "N more sessions to your first rating" instead of
+ * the breakdown — checking it there would test the calendar.
+ */
+const yearly = await body();
+check(
+  "the fluency components are broken out",
+  /Accuracy/.test(yearly) && /Pace/.test(yearly) && /Consistency/.test(yearly),
+);
 
 console.log("\n=== 4. Proof of Progress ===");
+/**
+ * Proof of Progress, the subject breakdown and mastery all refetch when the
+ * timeline changes, so this waits for the comparison card rather than reading
+ * the page the instant the chart finished.
+ */
+await page
+  .waitForFunction(() => /days before/.test(document.body.innerText || ""), null, {
+    timeout: 25000,
+  })
+  .catch(() => {});
 const withProof = await body();
 check(
   "the before/after comparison renders",
