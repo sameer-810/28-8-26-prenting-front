@@ -157,9 +157,13 @@ check("tapping a bar shows that day's detail", /correct/.test(await body()));
  */
 await page.getByRole("button", { name: /This year/i }).click();
 await page
-  .waitForFunction(() => /studied out of/.test(document.body.innerText || ""), null, {
-    timeout: 20000,
-  })
+  .waitForFunction(
+    () => /studied out of/.test(document.body.innerText || ""),
+    null,
+    {
+      timeout: 20000,
+    },
+  )
   .catch(() => {});
 const emptyBars = await page
   .getByRole("button", { name: /: no session/ })
@@ -188,9 +192,13 @@ console.log("\n=== 4. Proof of Progress ===");
  * the page the instant the chart finished.
  */
 await page
-  .waitForFunction(() => /days before/.test(document.body.innerText || ""), null, {
-    timeout: 25000,
-  })
+  .waitForFunction(
+    () => /days before/.test(document.body.innerText || ""),
+    null,
+    {
+      timeout: 25000,
+    },
+  )
   .catch(() => {});
 const withProof = await body();
 check(

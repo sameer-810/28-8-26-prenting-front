@@ -190,7 +190,11 @@ await page.getByRole("tab", { name: "Progress" }).click();
  * still fails, just on the timeout.
  */
 await page
-  .waitForFunction(() => /Day by day/.test(document.body.innerText || ""), null, { timeout: 20000 })
+  .waitForFunction(
+    () => /Day by day/.test(document.body.innerText || ""),
+    null,
+    { timeout: 20000 },
+  )
   .catch(() => {});
 /**
  * Asserts on content ONLY the Progress screen has, not on the tab's own
