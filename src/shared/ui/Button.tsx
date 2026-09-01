@@ -8,7 +8,11 @@ import Animated, {
 } from "react-native-reanimated";
 import { radius, motion, palette } from "../designSystem";
 import { useTheme } from "../useTheme";
-import { haptic, prefersReducedMotion, type FeedbackTone } from "../touchFeedback";
+import {
+  haptic,
+  prefersReducedMotion,
+  type FeedbackTone,
+} from "../touchFeedback";
 import { useBreakpoint } from "./useBreakpoint";
 import { Text } from "./Text";
 
@@ -40,8 +44,16 @@ interface Props {
  * padding and label size, never in how big a target a thumb gets. Density on a
  * pointer surface is a nicety; density on a touch surface is a mis-tap.
  */
-const DESKTOP = { sm: { h: 34, px: 14, fs: 13 }, md: { h: 40, px: 18, fs: 14 }, lg: { h: 46, px: 24, fs: 15 } };
-const PHONE = { sm: { h: 44, px: 16, fs: 14 }, md: { h: 48, px: 20, fs: 15 }, lg: { h: 54, px: 26, fs: 16 } };
+const DESKTOP = {
+  sm: { h: 34, px: 14, fs: 13 },
+  md: { h: 40, px: 18, fs: 14 },
+  lg: { h: 46, px: 24, fs: 15 },
+};
+const PHONE = {
+  sm: { h: 44, px: 16, fs: 14 },
+  md: { h: 48, px: 20, fs: 15 },
+  lg: { h: 54, px: 26, fs: 16 },
+};
 
 export function Button({
   label,
@@ -64,7 +76,8 @@ export function Button({
   const s = (isWide ? DESKTOP : PHONE)[size];
 
   const c = variantColors(variant, theme);
-  const tone: FeedbackTone | "none" = hapticTone ?? (c.borderWidth === 0 ? "impact" : "select");
+  const tone: FeedbackTone | "none" =
+    hapticTone ?? (c.borderWidth === 0 ? "impact" : "select");
 
   /**
    * The haptic fires on press-IN, not on press. Press-in is the moment the
@@ -132,7 +145,11 @@ export function Button({
         ) : (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             {icon}
-            <Text variant="label" weight="600" style={{ color: c.text, fontSize: s.fs }}>
+            <Text
+              variant="label"
+              weight="600"
+              style={{ color: c.text, fontSize: s.fs }}
+            >
               {label}
             </Text>
             {rightIcon}

@@ -34,7 +34,9 @@ export function StreakBadge({
           paddingHorizontal: 10,
           paddingVertical: 5,
           borderRadius: radius.full,
-          backgroundColor: active ? theme.accents.apricot.tint : theme.surface.sunken,
+          backgroundColor: active
+            ? theme.accents.apricot.tint
+            : theme.surface.sunken,
         }}
       >
         <Flame
@@ -47,7 +49,9 @@ export function StreakBadge({
         <Text
           variant="label-sm"
           numeric
-          style={{ color: active ? theme.accents.apricot.color : theme.text.disabled }}
+          style={{
+            color: active ? theme.accents.apricot.color : theme.text.disabled,
+          }}
         >
           {days === 0 ? "No streak yet" : `${days} day${days === 1 ? "" : "s"}`}
         </Text>
@@ -66,7 +70,11 @@ export function StreakBadge({
 }
 
 /** A dot per day, for the last week. Used on the child card. */
-export function WeekDots({ days }: { days: { dayKey: string; sessions: number }[] }) {
+export function WeekDots({
+  days,
+}: {
+  days: { dayKey: string; sessions: number }[];
+}) {
   const theme = useTheme();
   return (
     <View style={{ flexDirection: "row", gap: 5 }}>
@@ -78,7 +86,8 @@ export function WeekDots({ days }: { days: { dayKey: string; sessions: number }[
             width: 8,
             height: 8,
             borderRadius: 4,
-            backgroundColor: d.sessions > 0 ? palette.moss[500] : theme.border.default,
+            backgroundColor:
+              d.sessions > 0 ? palette.moss[500] : theme.border.default,
           }}
         />
       ))}

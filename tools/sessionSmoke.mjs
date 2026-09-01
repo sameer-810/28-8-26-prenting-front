@@ -17,31 +17,46 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = path.join(ROOT, "dist");
 const PORT = 8099;
 const HEADED = process.argv.includes("--headed");
-const DEMO = { email: "demo.parent@parentai.app", password: "ParentAI-Demo-2026" };
+const DEMO = {
+  email: "demo.parent@parentai.app",
+  password: "ParentAI-Demo-2026",
+};
 
 const pass = [];
 const fail = [];
 function check(name, ok, detail = "") {
   (ok ? pass : fail).push(name);
-  console.log(`${ok ? "  PASS" : "  FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`);
+  console.log(
+    `${ok ? "  PASS" : "  FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`,
+  );
 }
 
 const MIME = {
-  ".html": "text/html", ".js": "text/javascript", ".css": "text/css",
-  ".json": "application/json", ".ttf": "font/ttf", ".png": "image/png", ".ico": "image/x-icon",
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".ttf": "font/ttf",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
 };
 
 const server = http.createServer((req, res) => {
   const url = decodeURIComponent((req.url || "/").split("?")[0]);
   let file = path.join(DIST, url);
-  if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(DIST, "index.html");
-  res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream" });
+  if (!fs.existsSync(file) || fs.statSync(file).isDirectory())
+    file = path.join(DIST, "index.html");
+  res.writeHead(200, {
+    "Content-Type": MIME[path.extname(file)] || "application/octet-stream",
+  });
   fs.createReadStream(file).pipe(res);
 });
 await new Promise((r) => server.listen(PORT, r));
 
 const browser = await chromium.launch({ headless: !HEADED });
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 940 } });
+const ctx = await browser.newContext({
+  viewport: { width: 1280, height: 940 },
+});
 const page = await ctx.newPage();
 const consoleErrors = [];
 page.on("console", (m) => {
@@ -88,13 +103,23 @@ const me = await page.evaluate(async () => {
   return (await r.json()).data;
 });
 const aarav = me.children.find((c) => c.name === "Aarav");
-check("Aarav is Grade 5, whose syllabus has the fraction topics", aarav?.grade === 5);
+check(
+  "Aarav is Grade 5, whose syllabus has the fraction topics",
+  aarav?.grade === 5,
+);
 
 await page.goto(`${base}/plan/new/${aarav.id}`, { waitUntil: "networkidle" });
 await page.waitForTimeout(2600);
 const capture = await body();
-check("the capture screen opens from a deep link", /What are we studying/i.test(capture));
-check("it names the child it is for", /For Aarav, Grade 5/.test(capture), capture.match(/For \w+, Grade \d/)?.[0]);
+check(
+  "the capture screen opens from a deep link",
+  /What are we studying/i.test(capture),
+);
+check(
+  "it names the child it is for",
+  /For Aarav, Grade 5/.test(capture),
+  capture.match(/For \w+, Grade \d/)?.[0],
+);
 check("quick intents are offered", /Test tomorrow/.test(capture));
 
 console.log("\n=== 3. Ambiguity is refused, not guessed ===");
@@ -107,25 +132,42 @@ check(
   /Which one did you mean/i.test(ambiguous),
 );
 const optionCount = await page.getByRole("button").count();
-check("candidate topics are listed", optionCount > 3, `${optionCount} buttons on screen`);
+check(
+  "candidate topics are listed",
+  optionCount > 3,
+  `${optionCount} buttons on screen`,
+);
 
 console.log("\n=== 4. Generating a real plan (live Gemini) ===");
-await page.getByPlaceholder(/Maths test tomorrow/i).fill(
-  "adding fractions with unlike denominators, test tomorrow",
-);
+await page
+  .getByPlaceholder(/Maths test tomorrow/i)
+  .fill("adding fractions with unlike denominators, test tomorrow");
 const t0 = Date.now();
 await page.getByRole("button", { name: /Build tonight's session/i }).click();
 // Wait for the plan screen — generation is ~4s, then the questions land.
 await page.waitForFunction(
-  () => /TONIGHT'S SESSION|Start the session|Preparing the questions/i.test(document.body.innerText),
+  () =>
+    /TONIGHT'S SESSION|Start the session|Preparing the questions/i.test(
+      document.body.innerText,
+    ),
   { timeout: 45000 },
 );
 const firstPaint = Date.now() - t0;
-check(`the plan screen appears in ${firstPaint}ms`, firstPaint < 15000, `${firstPaint}ms`);
+check(
+  `the plan screen appears in ${firstPaint}ms`,
+  firstPaint < 15000,
+  `${firstPaint}ms`,
+);
 
 const planText = await body();
-check("the five phases are shown with their minutes", /10m/.test(planText) && /8m/.test(planText) && /6m/.test(planText));
-check("the parent's opening script is previewed", /YOU'LL START BY SAYING/i.test(planText));
+check(
+  "the five phases are shown with their minutes",
+  /10m/.test(planText) && /8m/.test(planText) && /6m/.test(planText),
+);
+check(
+  "the parent's opening script is previewed",
+  /YOU'LL START BY SAYING/i.test(planText),
+);
 check(
   "the script is in the parent's own script, not English",
   /[ऀ-ॿ]/.test(planText),
@@ -138,7 +180,9 @@ const startDisabledEarly = await page
   .count();
 check(
   "Start is disabled while the questions are still generating",
-  startDisabledEarly > 0 || (await page.getByRole("button", { name: /Start the session/i }).count()) > 0,
+  startDisabledEarly > 0 ||
+    (await page.getByRole("button", { name: /Start the session/i }).count()) >
+      0,
   startDisabledEarly > 0 ? "gated" : "already ready",
 );
 
@@ -147,16 +191,30 @@ await page.waitForFunction(
   { timeout: 45000 },
 );
 const totalReady = Date.now() - t0;
-check(`the whole plan is ready in ${totalReady}ms`, totalReady < 40000, `${totalReady}ms`);
+check(
+  `the whole plan is ready in ${totalReady}ms`,
+  totalReady < 40000,
+  `${totalReady}ms`,
+);
 
 console.log("\n=== 6. The session player ===");
 await page.getByRole("button", { name: /Start the session/i }).click();
 await page.waitForTimeout(3500);
 const player = await body();
 check("the player opens on phase 1", /PHASE 1 OF 5/i.test(player));
-check("the countdown starts at ten minutes", /10:00|9:5\d/.test(player), player.match(/\d+:\d\d/)?.[0]);
-check("the concept script is shown to read aloud", /READ THIS ALOUD/i.test(player));
-check("the common mistake is flagged for the parent", /Watch out for this/i.test(player));
+check(
+  "the countdown starts at ten minutes",
+  /10:00|9:5\d/.test(player),
+  player.match(/\d+:\d\d/)?.[0],
+);
+check(
+  "the concept script is shown to read aloud",
+  /READ THIS ALOUD/i.test(player),
+);
+check(
+  "the common mistake is flagged for the parent",
+  /Watch out for this/i.test(player),
+);
 
 const ring = await page.getByRole("progressbar").count();
 check("the ring is one labelled progress element", ring === 1);
@@ -165,13 +223,20 @@ console.log("\n=== 7. Advancing through the phases ===");
 await page.getByRole("button", { name: /Next: Teaching/i }).click();
 await page.waitForTimeout(1500);
 const teaching = await body();
-check("phase 2 shows the walkthrough", /PHASE 2 OF 5/i.test(teaching) && /Work this through together/i.test(teaching));
+check(
+  "phase 2 shows the walkthrough",
+  /PHASE 2 OF 5/i.test(teaching) &&
+    /Work this through together/i.test(teaching),
+);
 check("the parent is given questions to ASK", /Ask them/i.test(teaching));
 
 await page.getByRole("button", { name: /Next: Practice/i }).click();
 await page.waitForTimeout(1500);
 const practice = await body();
-check("phase 3 shows one question at a time", /QUESTION 1 OF 5/i.test(practice));
+check(
+  "phase 3 shows one question at a time",
+  /QUESTION 1 OF 5/i.test(practice),
+);
 check(
   "advancing is blocked until every question is answered",
   /Answer every question to move on/i.test(practice),
@@ -194,7 +259,10 @@ for (let i = 0; i < 5; i += 1) {
 }
 const answered = await body();
 check("feedback is shown after answering", /Correct|Not quite/i.test(answered));
-check("the correct answer is revealed when wrong", /The answer is/i.test(answered) || /Correct/i.test(answered));
+check(
+  "the correct answer is revealed when wrong",
+  /The answer is/i.test(answered) || /Correct/i.test(answered),
+);
 
 await page.getByRole("button", { name: /Next: Quick test/i }).click();
 await page.waitForTimeout(1500);
@@ -229,7 +297,10 @@ console.log("\n=== 10. Completion ===");
 await page.getByRole("button", { name: /Finish session/i }).click();
 await page.waitForTimeout(6000);
 const done = await body();
-check("the celebration appears", /Session complete|Every answer right/i.test(done));
+check(
+  "the celebration appears",
+  /Session complete|Every answer right/i.test(done),
+);
 check("the score is reported", /Accuracy/i.test(done) && /Correct/i.test(done));
 check("minutes studied are reported", /Studied/i.test(done));
 check(
@@ -240,13 +311,23 @@ check(
 
 await page.getByRole("button", { name: /^Done$/ }).click();
 await page.waitForTimeout(3000);
-check("returns to the dashboard", /Good (morning|afternoon|evening)/i.test(await body()));
+check(
+  "returns to the dashboard",
+  /Good (morning|afternoon|evening)/i.test(await body()),
+);
 
 console.log("\n=== 11. Console health ===");
 const real = consoleErrors.filter(
-  (e) => !/Download the React DevTools|deprecated|findDOMNode|status of 40[19]/i.test(e),
+  (e) =>
+    !/Download the React DevTools|deprecated|findDOMNode|status of 40[19]/i.test(
+      e,
+    ),
 );
-check("no unexpected console errors", real.length === 0, real.slice(0, 2).join(" | "));
+check(
+  "no unexpected console errors",
+  real.length === 0,
+  real.slice(0, 2).join(" | "),
+);
 
 if (HEADED) await page.waitForTimeout(4000);
 await browser.close();
@@ -254,6 +335,7 @@ server.close();
 
 console.log("\n" + "=".repeat(60));
 console.log(`PASSED ${pass.length} / ${pass.length + fail.length}`);
-if (fail.length) console.log("FAILED:\n" + fail.map((f) => `  - ${f}`).join("\n"));
+if (fail.length)
+  console.log("FAILED:\n" + fail.map((f) => `  - ${f}`).join("\n"));
 console.log("=".repeat(60));
 process.exit(fail.length ? 1 : 0);

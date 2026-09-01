@@ -25,7 +25,11 @@ export function QuestionCard({
   index: number;
   total: number;
   language: LanguageCode;
-  onAnswered: (result: { given: string; verdict: Verdict; answerMs: number }) => void;
+  onAnswered: (result: {
+    given: string;
+    verdict: Verdict;
+    answerMs: number;
+  }) => void;
 }) {
   const theme = useTheme();
   const [given, setGiven] = useState("");
@@ -71,7 +75,12 @@ export function QuestionCard({
           QUESTION {index + 1} OF {total}
         </Text>
         {question.skill ? (
-          <Text variant="caption" tone="disabled" numberOfLines={1} style={{ maxWidth: "55%" }}>
+          <Text
+            variant="caption"
+            tone="disabled"
+            numberOfLines={1}
+            style={{ maxWidth: "55%" }}
+          >
             {question.skill}
           </Text>
         ) : null}
@@ -100,9 +109,21 @@ export function QuestionCard({
                   : "idle";
 
             const colors = {
-              idle: { bg: theme.surface.primary, border: theme.border.strong, fg: theme.text.primary },
-              correct: { bg: theme.success.bg, border: theme.success.border, fg: theme.success.text },
-              wrong: { bg: theme.danger.bg, border: theme.danger.border, fg: theme.danger.text },
+              idle: {
+                bg: theme.surface.primary,
+                border: theme.border.strong,
+                fg: theme.text.primary,
+              },
+              correct: {
+                bg: theme.success.bg,
+                border: theme.success.border,
+                fg: theme.success.text,
+              },
+              wrong: {
+                bg: theme.danger.bg,
+                border: theme.danger.border,
+                fg: theme.danger.text,
+              },
             }[state];
 
             return (
@@ -114,7 +135,10 @@ export function QuestionCard({
                   submit(option);
                 }}
                 accessibilityRole="radio"
-                accessibilityState={{ checked: chosen, disabled: Boolean(verdict) }}
+                accessibilityState={{
+                  checked: chosen,
+                  disabled: Boolean(verdict),
+                }}
                 aria-checked={chosen}
                 aria-disabled={Boolean(verdict)}
                 accessibilityLabel={option}
@@ -131,12 +155,20 @@ export function QuestionCard({
                   borderColor: colors.border,
                 }}
               >
-                <Text variant="body" style={{ color: colors.fg, flex: 1 }} language={language}>
+                <Text
+                  variant="body"
+                  style={{ color: colors.fg, flex: 1 }}
+                  language={language}
+                >
                   {option}
                 </Text>
                 {/* Never colour alone: the icon says it too. */}
-                {state === "correct" ? <Check size={18} color={theme.success.text} /> : null}
-                {state === "wrong" ? <X size={18} color={theme.danger.text} /> : null}
+                {state === "correct" ? (
+                  <Check size={18} color={theme.success.text} />
+                ) : null}
+                {state === "wrong" ? (
+                  <X size={18} color={theme.danger.text} />
+                ) : null}
               </Pressable>
             );
           })}
@@ -165,7 +197,9 @@ export function QuestionCard({
         </VStack>
       )}
 
-      {verdict ? <Feedback verdict={verdict} question={question} language={language} /> : null}
+      {verdict ? (
+        <Feedback verdict={verdict} question={question} language={language} />
+      ) : null}
     </VStack>
   );
 }
@@ -213,14 +247,21 @@ function Feedback({
         {verdict.needsSimplifying ? (
           <HStack gap={6}>
             <Lightbulb size={14} color={theme.accents.apricot.color} />
-            <Text variant="body-sm" style={{ color: theme.accents.apricot.color, flex: 1 }}>
+            <Text
+              variant="body-sm"
+              style={{ color: theme.accents.apricot.color, flex: 1 }}
+            >
               Right — can you also write it in its simplest form?
             </Text>
           </HStack>
         ) : null}
 
         {!verdict.correct ? (
-          <Text variant="body-sm" style={{ color: tone.text }} language={language}>
+          <Text
+            variant="body-sm"
+            style={{ color: tone.text }}
+            language={language}
+          >
             The answer is {question.answer}.
           </Text>
         ) : null}

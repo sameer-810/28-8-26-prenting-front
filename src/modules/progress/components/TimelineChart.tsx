@@ -18,11 +18,20 @@ export interface DayPoint {
 
 type Metric = "minutesStudied" | "accuracy" | "sessions";
 
-const METRICS: { key: Metric; label: string; format: (v: number) => string }[] = [
-  { key: "minutesStudied", label: "Minutes", format: (v) => `${Math.round(v)}m` },
-  { key: "accuracy", label: "Accuracy", format: (v) => `${Math.round(v * 100)}%` },
-  { key: "sessions", label: "Sessions", format: (v) => String(v) },
-];
+const METRICS: { key: Metric; label: string; format: (v: number) => string }[] =
+  [
+    {
+      key: "minutesStudied",
+      label: "Minutes",
+      format: (v) => `${Math.round(v)}m`,
+    },
+    {
+      key: "accuracy",
+      label: "Accuracy",
+      format: (v) => `${Math.round(v * 100)}%`,
+    },
+    { key: "sessions", label: "Sessions", format: (v) => String(v) },
+  ];
 
 /**
  * The day-by-day chart. Two rules:
@@ -59,7 +68,9 @@ export function TimelineChart({
    */
   const grouped = windowDays > 70 ? groupByWeek(series, metric) : null;
   const points = grouped ?? series;
-  const groupedMax = grouped ? Math.max(...grouped.map((g) => g[metric] as number), 1) : max;
+  const groupedMax = grouped
+    ? Math.max(...grouped.map((g) => g[metric] as number), 1)
+    : max;
   const scaleMax = grouped ? groupedMax : max;
 
   const barWidth = isWide ? 14 : 9;
@@ -127,7 +138,11 @@ export function TimelineChart({
         horizontal
         showsHorizontalScrollIndicator={false}
         // The most recent days matter most, so a long range opens at the end.
-        contentContainerStyle={{ flexDirection: "row-reverse", gap, paddingVertical: 4 }}
+        contentContainerStyle={{
+          flexDirection: "row-reverse",
+          gap,
+          paddingVertical: 4,
+        }}
       >
         {[...points].reverse().map((d) => {
           const value = d[metric] as number;
@@ -145,7 +160,11 @@ export function TimelineChart({
                   ? `${formatDay(d.dayKey)}: no session`
                   : `${formatDay(d.dayKey)}: ${active.format(value)}, ${d.sessions} session${d.sessions === 1 ? "" : "s"}`
               }
-              style={{ alignItems: "center", justifyContent: "flex-end", height }}
+              style={{
+                alignItems: "center",
+                justifyContent: "flex-end",
+                height,
+              }}
             >
               <View
                 style={{
@@ -183,7 +202,8 @@ export function TimelineChart({
             ) : (
               <Text variant="body-sm" tone="tertiary">
                 {point.sessions} session{point.sessions === 1 ? "" : "s"} ·{" "}
-                {point.minutesStudied} minutes · {point.correct}/{point.attempted} correct
+                {point.minutesStudied} minutes · {point.correct}/
+                {point.attempted} correct
               </Text>
             )}
           </VStack>
@@ -215,7 +235,9 @@ function groupByWeek(series: DayPoint[], metric: Metric): DayPoint[] {
       accuracy: attempted > 0 ? correct / attempted : 0,
       minutesStudied: chunk.reduce((s, d) => s + d.minutesStudied, 0),
       adherence:
-        chunk.filter((d) => d.sessions > 0).reduce((s, d) => s + d.adherence, 0) /
+        chunk
+          .filter((d) => d.sessions > 0)
+          .reduce((s, d) => s + d.adherence, 0) /
         Math.max(1, chunk.filter((d) => d.sessions > 0).length),
     });
   }

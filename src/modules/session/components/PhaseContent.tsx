@@ -1,6 +1,11 @@
 import React from "react";
 import { View } from "react-native";
-import { AlertTriangle, MessageCircle, PenLine, Sparkles } from "lucide-react-native";
+import {
+  AlertTriangle,
+  MessageCircle,
+  PenLine,
+  Sparkles,
+} from "lucide-react-native";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
 import { Text, Card, VStack, HStack, LoadingState } from "@shared/ui";
@@ -73,7 +78,12 @@ export function ConceptPhase({ plan }: { plan: StudyPlan }) {
               Keep these in mind
             </Text>
             {plan.concept.summary.map((line, i) => (
-              <Text key={i} variant="body-sm" language={parentLang} tone="secondary">
+              <Text
+                key={i}
+                variant="body-sm"
+                language={parentLang}
+                tone="secondary"
+              >
                 • {line}
               </Text>
             ))}
@@ -89,12 +99,20 @@ export function ConceptPhase({ plan }: { plan: StudyPlan }) {
       {plan.concept.commonMistake ? (
         <Card tone="warning">
           <HStack gap={10} align="flex-start">
-            <AlertTriangle size={18} color={theme.warning.text} style={{ marginTop: 1 }} />
+            <AlertTriangle
+              size={18}
+              color={theme.warning.text}
+              style={{ marginTop: 1 }}
+            />
             <VStack gap={4} flex={1}>
               <Text variant="label" style={{ color: theme.warning.text }}>
                 Watch out for this
               </Text>
-              <Text variant="body-sm" language={parentLang} style={{ color: theme.warning.text }}>
+              <Text
+                variant="body-sm"
+                language={parentLang}
+                style={{ color: theme.warning.text }}
+              >
                 {plan.concept.commonMistake}
               </Text>
             </VStack>
@@ -167,7 +185,10 @@ export function TeachingPhase({ plan }: { plan: StudyPlan }) {
           <VStack gap={10}>
             <HStack gap={8}>
               <MessageCircle size={16} color={theme.accents.apricot.color} />
-              <Text variant="label" style={{ color: theme.accents.apricot.color }}>
+              <Text
+                variant="label"
+                style={{ color: theme.accents.apricot.color }}
+              >
                 Ask them
               </Text>
             </HStack>
@@ -207,7 +228,10 @@ export function QuestionPhase({
   questions: StudyPlan["practice"];
   phase: "practice" | "mock";
   answers: Record<number, { given: string; verdict: Verdict }>;
-  onAnswered: (index: number, result: { given: string; verdict: Verdict; answerMs: number }) => void;
+  onAnswered: (
+    index: number,
+    result: { given: string; verdict: Verdict; answerMs: number },
+  ) => void;
 }) {
   const childLang = plan.languages.child.code as LanguageCode;
 
@@ -242,14 +266,29 @@ export function QuestionPhase({
       {/* A dot per question, so the child can see how far there is to go. */}
       <HStack gap={6} justify="center">
         {questions.map((_, i) => (
-          <QuestionDot key={i} state={answers[i] ? (answers[i].verdict.correct ? "correct" : "wrong") : i === index ? "current" : "todo"} />
+          <QuestionDot
+            key={i}
+            state={
+              answers[i]
+                ? answers[i].verdict.correct
+                  ? "correct"
+                  : "wrong"
+                : i === index
+                  ? "current"
+                  : "todo"
+            }
+          />
         ))}
       </HStack>
     </VStack>
   );
 }
 
-function QuestionDot({ state }: { state: "correct" | "wrong" | "current" | "todo" }) {
+function QuestionDot({
+  state,
+}: {
+  state: "correct" | "wrong" | "current" | "todo";
+}) {
   const theme = useTheme();
   const color = {
     correct: theme.success.text,
@@ -297,10 +336,19 @@ export function RevisionPhase({
       <Card tone="success">
         <VStack gap={10} align="center" style={{ paddingVertical: 16 }}>
           <Sparkles size={28} color={theme.success.text} />
-          <Text variant="h2" align="center" style={{ color: theme.success.text }}>
+          <Text
+            variant="h2"
+            align="center"
+            style={{ color: theme.success.text }}
+          >
             Nothing to go back over
           </Text>
-          <Text variant="body" align="center" language={parentLang} style={{ color: theme.success.text }}>
+          <Text
+            variant="body"
+            align="center"
+            language={parentLang}
+            style={{ color: theme.success.text }}
+          >
             {revision?.encouragement || "Every answer was right tonight."}
           </Text>
         </VStack>
@@ -324,7 +372,11 @@ export function RevisionPhase({
       {revision.clarifications.map((c, i) => (
         <Card key={i}>
           <VStack gap={10}>
-            <Text variant="label" tone="secondary" language={plan.languages.child.code as LanguageCode}>
+            <Text
+              variant="label"
+              tone="secondary"
+              language={plan.languages.child.code as LanguageCode}
+            >
               {c.questionPrompt}
             </Text>
             {c.whyWrong ? (
@@ -335,7 +387,11 @@ export function RevisionPhase({
                   backgroundColor: theme.warning.bg,
                 }}
               >
-                <Text variant="body-sm" language={parentLang} style={{ color: theme.warning.text }}>
+                <Text
+                  variant="body-sm"
+                  language={parentLang}
+                  style={{ color: theme.warning.text }}
+                >
                   {c.whyWrong}
                 </Text>
               </View>
@@ -345,7 +401,9 @@ export function RevisionPhase({
               childLanguage={plan.languages.child.code as LanguageCode}
               parentLabel="EXPLAIN IT LIKE THIS"
               parentOnly
-              parentContent={<ReadAloud text={c.reteach} language={parentLang} size="body" />}
+              parentContent={
+                <ReadAloud text={c.reteach} language={parentLang} size="body" />
+              }
             />
           </VStack>
         </Card>
@@ -354,7 +412,10 @@ export function RevisionPhase({
       {revision.encouragement ? (
         <Card tone="accent">
           <VStack gap={4}>
-            <Text variant="label-sm" style={{ color: theme.accents.apricot.color }}>
+            <Text
+              variant="label-sm"
+              style={{ color: theme.accents.apricot.color }}
+            >
               END WITH THIS
             </Text>
             <Text variant="body-lg" language={parentLang}>

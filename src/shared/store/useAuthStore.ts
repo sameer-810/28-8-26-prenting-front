@@ -43,7 +43,11 @@ export interface Family {
     milestoneAlerts: boolean;
     productEmails: boolean;
   };
-  consent: { accepted: boolean; acceptedAt: string | null; policyVersion: string };
+  consent: {
+    accepted: boolean;
+    acceptedAt: string | null;
+    policyVersion: string;
+  };
   subscription: {
     planCode: string;
     planName: string;
@@ -80,7 +84,12 @@ interface AuthState {
   isHydrated: boolean;
   isAuthChecked: boolean;
 
-  setAuth: (user: Parent, family: Family, token: string, refreshToken: string) => void;
+  setAuth: (
+    user: Parent,
+    family: Family,
+    token: string,
+    refreshToken: string,
+  ) => void;
   updateUser: (patch: Partial<Parent>) => void;
   updateFamily: (patch: Partial<Family>) => void;
   updateTokens: (token: string, refreshToken: string) => void;
@@ -166,7 +175,9 @@ export const useAuthStore = create<AuthState>()(
         const { refreshToken } = get();
         if (refreshToken) {
           try {
-            await axios.post(`${environment.apiUrl}/auth/logout`, { refreshToken });
+            await axios.post(`${environment.apiUrl}/auth/logout`, {
+              refreshToken,
+            });
           } catch {
             // The token's own TTL will reclaim the slot.
           }
@@ -190,7 +201,8 @@ export const useAuthStore = create<AuthState>()(
 
       isOwner: () => get().user?.role === "owner",
 
-      homeLanguage: () => get().family?.homeLanguage || get().user?.preferredLanguage || "en",
+      homeLanguage: () =>
+        get().family?.homeLanguage || get().user?.preferredLanguage || "en",
 
       refreshSession: async () => {
         if (refreshPromise) return refreshPromise;
@@ -222,7 +234,8 @@ export const useAuthStore = create<AuthState>()(
              * means the token was never judged, so it is kept for the next
              * attempt — every forced re-login also consumes a device slot.
              */
-            const status = (err as { response?: { status?: number } })?.response?.status;
+            const status = (err as { response?: { status?: number } })?.response
+              ?.status;
             if (status === 401 || status === 403) await get().logout();
             return null;
           } finally {

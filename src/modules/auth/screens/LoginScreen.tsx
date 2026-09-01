@@ -15,10 +15,7 @@ export default function LoginScreen() {
   const login = useLogin();
   const [formError, setFormError] = useState<string | null>(null);
 
-  const {
-    control,
-    handleSubmit,
-  } = useForm<LoginInput>({
+  const { control, handleSubmit } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
@@ -26,7 +23,8 @@ export default function LoginScreen() {
   const onSubmit = (values: LoginInput) => {
     setFormError(null);
     login.mutate(values, {
-      onError: (err) => setFormError(apiErrorMessage(err, "We couldn't sign you in")),
+      onError: (err) =>
+        setFormError(apiErrorMessage(err, "We couldn't sign you in")),
     });
   };
 
@@ -35,7 +33,9 @@ export default function LoginScreen() {
    * mistyped four times needs to know that waiting fixes it, not that their
    * account is gone.
    */
-  const lockedOut = login.error ? apiErrorCode(login.error) === "TOO_MANY_REQUESTS" : false;
+  const lockedOut = login.error
+    ? apiErrorCode(login.error) === "TOO_MANY_REQUESTS"
+    : false;
 
   return (
     <AuthLayout
@@ -100,7 +100,11 @@ export default function LoginScreen() {
           </Text>
         </Pressable>
 
-        <Button label="Sign in" onPress={handleSubmit(onSubmit)} loading={login.isPending} />
+        <Button
+          label="Sign in"
+          onPress={handleSubmit(onSubmit)}
+          loading={login.isPending}
+        />
       </VStack>
     </AuthLayout>
   );

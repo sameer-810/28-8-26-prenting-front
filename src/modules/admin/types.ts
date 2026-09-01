@@ -17,7 +17,14 @@ export interface ListMeta {
 
 /** One row of the AI ledger, aggregated per operation over the last 7 days. */
 export interface AiOperationStat {
-  operation: "concept" | "session_body" | "revision" | "extraction" | "intent" | "moderation" | string;
+  operation:
+    | "concept"
+    | "session_body"
+    | "revision"
+    | "extraction"
+    | "intent"
+    | "moderation"
+    | string;
   calls: number;
   outputTokens: number;
   avgLatencyMs: number;
@@ -53,13 +60,10 @@ export interface AdminFamilyRow {
 }
 
 export type SubscriptionStatus =
-  | "trialing"
-  | "active"
-  | "past_due"
-  | "cancelled"
-  | "expired";
+  "trialing" | "active" | "past_due" | "cancelled" | "expired";
 
-export type PlanCode = "trial" | "basic_monthly" | "family_annual" | "family_plus";
+export type PlanCode =
+  "trial" | "basic_monthly" | "family_annual" | "family_plus";
 
 export interface AdminFamilyDetail {
   family: {
@@ -74,7 +78,11 @@ export interface AdminFamilyDetail {
       currentPeriodEnd: string | null;
     };
     plan: { name: string; maxChildren: number; sessionsPerDay: number };
-    consent: { accepted: boolean; acceptedAt: string | null; policyVersion: string };
+    consent: {
+      accepted: boolean;
+      acceptedAt: string | null;
+      policyVersion: string;
+    };
   };
   parents: {
     id: string;

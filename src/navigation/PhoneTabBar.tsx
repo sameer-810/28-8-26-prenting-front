@@ -48,7 +48,8 @@ export function PhoneTabBar({ state, navigation }: BottomTabBarProps) {
                 target: route.key,
                 canPreventDefault: true,
               });
-              if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
+              if (!focused && !event.defaultPrevented)
+                navigation.navigate(route.name);
             }}
             accessibilityRole="tab"
             accessibilityState={{ selected: focused }}

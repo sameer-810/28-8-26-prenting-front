@@ -184,7 +184,9 @@ export function Text({
       style={[
         base,
         { color: toneMap[tone] },
-        weight ? { fontWeight: weight, fontFamily: latinFamilyFor(variant, weight) } : undefined,
+        weight
+          ? { fontWeight: weight, fontFamily: latinFamilyFor(variant, weight) }
+          : undefined,
         numeric ? { fontVariant: ["tabular-nums"] } : undefined,
         script,
         align ? { textAlign: align } : undefined,

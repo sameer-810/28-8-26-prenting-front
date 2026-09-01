@@ -37,7 +37,13 @@ export default function ChildrenScreen() {
   const theme = useTheme();
   const navigation = useAppNavigation();
   const family = useAuthStore((s) => s.family);
-  const { data: children, isLoading, error, refetch, isRefetching } = useChildren();
+  const {
+    data: children,
+    isLoading,
+    error,
+    refetch,
+    isRefetching,
+  } = useChildren();
   const [seenCleared, setSeenCleared] = useState(false);
 
   const { data: milestones } = useQuery({
@@ -62,7 +68,10 @@ export default function ChildrenScreen() {
   if (error) {
     return (
       <Screen title="Children">
-        <ErrorState message={apiErrorMessage(error)} onRetry={() => refetch()} />
+        <ErrorState
+          message={apiErrorMessage(error)}
+          onRetry={() => refetch()}
+        />
       </Screen>
     );
   }
@@ -181,7 +190,9 @@ export default function ChildrenScreen() {
                   size="sm"
                   fullWidth={false}
                   icon={<Sparkles size={14} color="#FFFFFF" />}
-                  onPress={() => navigation.navigate("Capture", { childId: child.id })}
+                  onPress={() =>
+                    navigation.navigate("Capture", { childId: child.id })
+                  }
                 />
               </HStack>
             </VStack>

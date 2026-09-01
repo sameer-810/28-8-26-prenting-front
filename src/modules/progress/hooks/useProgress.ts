@@ -16,7 +16,8 @@ export const progressKeys = {
   all: ["progress"] as const,
   timeline: (childId?: string, range?: Timeline) =>
     [...progressKeys.all, "timeline", childId, range] as const,
-  streak: (childId?: string) => [...progressKeys.all, "streak", childId] as const,
+  streak: (childId?: string) =>
+    [...progressKeys.all, "streak", childId] as const,
   proof: (childId?: string, range?: Timeline) =>
     [...progressKeys.all, "proof", childId, range] as const,
   subjects: (childId?: string, from?: string, to?: string) =>
@@ -61,7 +62,11 @@ export function useProofOfProgress(
 ) {
   return useQuery({
     queryKey: progressKeys.proof(childId, range),
-    queryFn: () => progressApi.proofOfProgress(childId!, { from: window?.from, to: window?.to }),
+    queryFn: () =>
+      progressApi.proofOfProgress(childId!, {
+        from: window?.from,
+        to: window?.to,
+      }),
     enabled: Boolean(childId) && Boolean(window) && enabled,
     retry: false,
   });
@@ -73,7 +78,8 @@ export function useSubjects(
 ) {
   return useQuery({
     queryKey: progressKeys.subjects(childId, window?.from, window?.to),
-    queryFn: () => progressApi.subjects(childId!, { from: window?.from, to: window?.to }),
+    queryFn: () =>
+      progressApi.subjects(childId!, { from: window?.from, to: window?.to }),
     enabled: Boolean(childId) && Boolean(window),
   });
 }
@@ -84,7 +90,8 @@ export function useMastery(
 ) {
   return useQuery({
     queryKey: progressKeys.mastery(childId, window?.from, window?.to),
-    queryFn: () => progressApi.mastery(childId!, { from: window?.from, to: window?.to }),
+    queryFn: () =>
+      progressApi.mastery(childId!, { from: window?.from, to: window?.to }),
     enabled: Boolean(childId) && Boolean(window),
   });
 }

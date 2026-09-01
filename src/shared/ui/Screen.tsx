@@ -104,7 +104,11 @@ export function Screen({
   const inner = (
     <View
       style={[
-        { width: "100%", maxWidth: layout.contentMaxWidth, alignSelf: "center" },
+        {
+          width: "100%",
+          maxWidth: layout.contentMaxWidth,
+          alignSelf: "center",
+        },
         contentStyle,
       ]}
     >

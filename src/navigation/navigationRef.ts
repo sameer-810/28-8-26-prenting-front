@@ -1,4 +1,7 @@
-import { createNavigationContainerRef, CommonActions } from "@react-navigation/native";
+import {
+  createNavigationContainerRef,
+  CommonActions,
+} from "@react-navigation/native";
 import type { RootStackParamList } from "./types";
 
 /**

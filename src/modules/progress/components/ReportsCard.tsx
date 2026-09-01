@@ -18,9 +18,10 @@ import { reportsApi, downloadReport } from "../api/progressApi";
 export function ReportsCard({ child }: { child: ChildProfile }) {
   const theme = useTheme();
   const [busy, setBusy] = useState<string | null>(null);
-  const [message, setMessage] = useState<{ tone: "success" | "danger"; text: string } | null>(
-    null,
-  );
+  const [message, setMessage] = useState<{
+    tone: "success" | "danger";
+    text: string;
+  } | null>(null);
 
   const { data: report, error } = useQuery({
     queryKey: ["yearly", child.id],
@@ -62,8 +63,8 @@ export function ReportsCard({ child }: { child: ChildProfile }) {
         <VStack gap={3}>
           <Text variant="h3">{report.year} in review</Text>
           <Text variant="caption" tone="tertiary">
-            {report.totals.sessions} sessions · {report.totals.hoursStudied} hours ·{" "}
-            {Math.round(report.totals.accuracy * 100)}% accuracy
+            {report.totals.sessions} sessions · {report.totals.hoursStudied}{" "}
+            hours · {Math.round(report.totals.accuracy * 100)}% accuracy
           </Text>
         </VStack>
 
@@ -78,8 +79,8 @@ export function ReportsCard({ child }: { child: ChildProfile }) {
               GRADE {child.grade} TOPICS
             </Text>
             <Text variant="label-sm" tone="tertiary" numeric>
-              {report.coverage.topicsTouched} of {report.coverage.totalTopics} studied ·{" "}
-              {report.coverage.topicsMastered} mastered
+              {report.coverage.topicsTouched} of {report.coverage.totalTopics}{" "}
+              studied · {report.coverage.topicsMastered} mastered
             </Text>
           </HStack>
         </VStack>
@@ -97,7 +98,10 @@ export function ReportsCard({ child }: { child: ChildProfile }) {
 
         {report.worthRevisiting.length > 0 ? (
           <VStack gap={3}>
-            <Text variant="label-sm" style={{ color: theme.accents.apricot.color }}>
+            <Text
+              variant="label-sm"
+              style={{ color: theme.accents.apricot.color }}
+            >
               WORTH ANOTHER LOOK
             </Text>
             <Text variant="body-sm" tone="secondary">
@@ -109,7 +113,9 @@ export function ReportsCard({ child }: { child: ChildProfile }) {
         {message ? (
           <Banner
             tone={message.tone === "success" ? "success" : "danger"}
-            title={message.tone === "success" ? "Downloaded" : "Couldn't download"}
+            title={
+              message.tone === "success" ? "Downloaded" : "Couldn't download"
+            }
             body={message.text}
             onDismiss={() => setMessage(null)}
           />

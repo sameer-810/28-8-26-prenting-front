@@ -1,5 +1,10 @@
 import React, { ComponentProps } from "react";
-import { useController, Control, FieldValues, FieldPath } from "react-hook-form";
+import {
+  useController,
+  Control,
+  FieldValues,
+  FieldPath,
+} from "react-hook-form";
 import { Select } from "@shared/ui";
 
 /**
@@ -8,8 +13,10 @@ import { Select } from "@shared/ui";
  */
 type SelectProps = ComponentProps<typeof Select>;
 
-interface Props<T extends FieldValues>
-  extends Omit<SelectProps, "value" | "onChange" | "error"> {
+interface Props<T extends FieldValues> extends Omit<
+  SelectProps,
+  "value" | "onChange" | "error"
+> {
   control: Control<T>;
   name: FieldPath<T>;
 }

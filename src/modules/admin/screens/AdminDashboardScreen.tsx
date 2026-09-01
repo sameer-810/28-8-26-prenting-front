@@ -2,7 +2,16 @@ import React from "react";
 import { View } from "react-native";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
-import { Screen, Text, Card, VStack, HStack, StatTile, ErrorState, Skeleton } from "@shared/ui";
+import {
+  Screen,
+  Text,
+  Card,
+  VStack,
+  HStack,
+  StatTile,
+  ErrorState,
+  Skeleton,
+} from "@shared/ui";
 import { apiErrorMessage } from "@api/apiClient";
 import { useAdminOverview } from "../hooks/useAdmin";
 import { rupees, count, pct } from "../format";
@@ -31,7 +40,10 @@ export default function AdminDashboardScreen() {
   if (error || !data) {
     return (
       <Screen title="Overview">
-        <ErrorState message={apiErrorMessage(error, "Could not load the overview")} onRetry={refetch} />
+        <ErrorState
+          message={apiErrorMessage(error, "Could not load the overview")}
+          onRetry={refetch}
+        />
       </Screen>
     );
   }
@@ -48,7 +60,11 @@ export default function AdminDashboardScreen() {
       <VStack gap={16}>
         <Card>
           <HStack gap={16} wrap>
-            <StatTile value={count(data.families.total)} label="Households" hint={`${count(data.families.active)} active`} />
+            <StatTile
+              value={count(data.families.total)}
+              label="Households"
+              hint={`${count(data.families.active)} active`}
+            />
             <StatTile value={count(data.children)} label="Children" />
             <StatTile value={count(data.parents)} label="Parents" />
             <StatTile
@@ -82,7 +98,11 @@ export default function AdminDashboardScreen() {
               <VStack gap={8}>
                 {data.ai.map((op) => {
                   const tone =
-                    op.degradedPct > 0.05 ? "danger" : op.degradedPct > 0 ? "warning" : "success";
+                    op.degradedPct > 0.05
+                      ? "danger"
+                      : op.degradedPct > 0
+                        ? "warning"
+                        : "success";
                   const colors = {
                     danger: theme.danger,
                     warning: theme.warning,
@@ -98,12 +118,19 @@ export default function AdminDashboardScreen() {
                         backgroundColor: theme.surface.sunken,
                       }}
                     >
-                      <HStack justify="space-between" align="center" wrap gap={8}>
+                      <HStack
+                        justify="space-between"
+                        align="center"
+                        wrap
+                        gap={8}
+                      >
                         <VStack gap={2} flex={1}>
-                          <Text variant="label">{op.operation.replace("_", " ")}</Text>
+                          <Text variant="label">
+                            {op.operation.replace("_", " ")}
+                          </Text>
                           <Text variant="caption" tone="tertiary">
-                            {count(op.calls)} calls · {count(op.outputTokens)} output tokens ·{" "}
-                            {count(op.avgLatencyMs)}ms average
+                            {count(op.calls)} calls · {count(op.outputTokens)}{" "}
+                            output tokens · {count(op.avgLatencyMs)}ms average
                           </Text>
                         </VStack>
                         <View
@@ -114,7 +141,10 @@ export default function AdminDashboardScreen() {
                             backgroundColor: colors.bg,
                           }}
                         >
-                          <Text variant="label-sm" style={{ color: colors.text }}>
+                          <Text
+                            variant="label-sm"
+                            style={{ color: colors.text }}
+                          >
                             {pct(op.degradedPct)} degraded
                           </Text>
                         </View>
@@ -126,9 +156,9 @@ export default function AdminDashboardScreen() {
             )}
 
             <Text variant="caption" tone="tertiary">
-              Degraded means a household received a template plan instead of a generated one. The
-              product is designed never to show them an error, so this is the only place it is
-              visible.
+              Degraded means a household received a template plan instead of a
+              generated one. The product is designed never to show them an
+              error, so this is the only place it is visible.
             </Text>
           </VStack>
         </Card>

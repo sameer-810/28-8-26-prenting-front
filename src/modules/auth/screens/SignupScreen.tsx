@@ -45,7 +45,8 @@ export default function SignupScreen() {
         password: values.password,
       },
       {
-        onError: (err) => setFormError(apiErrorMessage(err, "We couldn't create your account")),
+        onError: (err) =>
+          setFormError(apiErrorMessage(err, "We couldn't create your account")),
       },
     );
   };
@@ -63,7 +64,10 @@ export default function SignupScreen() {
           <Text variant="body-sm" tone="tertiary">
             Already have an account?
           </Text>
-          <Pressable onPress={() => navigation.navigate("Login")} accessibilityRole="link">
+          <Pressable
+            onPress={() => navigation.navigate("Login")}
+            accessibilityRole="link"
+          >
             <Text variant="label" tone="link">
               Sign in
             </Text>
@@ -149,7 +153,11 @@ export default function SignupScreen() {
                 // ambiguous to a screen reader.
                 aria-checked={Boolean(value)}
                 accessibilityLabel="Accept the privacy terms"
-                style={{ flexDirection: "row", gap: 10, alignItems: "flex-start" }}
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  alignItems: "flex-start",
+                }}
               >
                 <View
                   style={{
@@ -157,14 +165,18 @@ export default function SignupScreen() {
                     height: 22,
                     borderRadius: radius.xs,
                     borderWidth: value ? 0 : 1.5,
-                    borderColor: errors.consent ? theme.danger.text : theme.border.strong,
+                    borderColor: errors.consent
+                      ? theme.danger.text
+                      : theme.border.strong,
                     backgroundColor: value ? theme.brand[600] : "transparent",
                     alignItems: "center",
                     justifyContent: "center",
                     marginTop: 1,
                   }}
                 >
-                  {value ? <Check size={14} color="#FFFFFF" strokeWidth={3} /> : null}
+                  {value ? (
+                    <Check size={14} color="#FFFFFF" strokeWidth={3} />
+                  ) : null}
                 </View>
                 <Text variant="body-sm" tone="secondary" style={{ flex: 1 }}>
                   I'm this child's parent or guardian, and I agree to ParentAI

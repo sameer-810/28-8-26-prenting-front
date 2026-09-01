@@ -24,7 +24,11 @@ export function ProofOfProgressCard({ data }: { data: ProofOfProgress }) {
   const improved = comparison.improved;
   const flat = comparison.scoreDelta === 0;
 
-  const tone = flat ? theme.text.tertiary : improved ? theme.success.text : theme.warning.text;
+  const tone = flat
+    ? theme.text.tertiary
+    : improved
+      ? theme.success.text
+      : theme.warning.text;
 
   return (
     <Card>
@@ -106,7 +110,11 @@ function Half({
         {label}
       </Text>
       {score !== null ? (
-        <Text variant="display-sm" numeric tone={muted ? "tertiary" : "primary"}>
+        <Text
+          variant="display-sm"
+          numeric
+          tone={muted ? "tertiary" : "primary"}
+        >
           {score}
         </Text>
       ) : (

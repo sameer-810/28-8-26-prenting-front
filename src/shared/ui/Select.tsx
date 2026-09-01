@@ -71,7 +71,9 @@ export function Select({
           setOpen(true);
         }}
         accessibilityRole="button"
-        accessibilityLabel={label ? `${label}: ${selected?.label || placeholder}` : placeholder}
+        accessibilityLabel={
+          label ? `${label}: ${selected?.label || placeholder}` : placeholder
+        }
         accessibilityState={{ disabled: Boolean(disabled), expanded: open }}
         aria-expanded={open}
         aria-disabled={Boolean(disabled)}
@@ -81,14 +83,20 @@ export function Select({
           justifyContent: "space-between",
           minHeight: height,
           paddingHorizontal: 14,
-          backgroundColor: disabled ? theme.surface.sunken : theme.surface.primary,
+          backgroundColor: disabled
+            ? theme.surface.sunken
+            : theme.surface.primary,
           borderWidth: 1,
           borderColor: error ? theme.danger.text : theme.border.strong,
           borderRadius: radius.md,
           opacity: disabled ? 0.6 : 1,
         }}
       >
-        <Text variant="body" tone={selected ? "primary" : "disabled"} numberOfLines={1}>
+        <Text
+          variant="body"
+          tone={selected ? "primary" : "disabled"}
+          numberOfLines={1}
+        >
           {selected?.label || placeholder}
         </Text>
         <ChevronDown size={18} color={theme.text.tertiary} />
@@ -150,7 +158,10 @@ export function Select({
               }}
             />
             {label ? (
-              <Text variant="h3" style={{ paddingHorizontal: 20, paddingBottom: 8 }}>
+              <Text
+                variant="h3"
+                style={{ paddingHorizontal: 20, paddingBottom: 8 }}
+              >
                 {label}
               </Text>
             ) : null}
@@ -174,11 +185,16 @@ export function Select({
                       justifyContent: "space-between",
                       paddingHorizontal: 20,
                       paddingVertical: 14,
-                      backgroundColor: isSelected ? theme.accents.moss.tint : "transparent",
+                      backgroundColor: isSelected
+                        ? theme.accents.moss.tint
+                        : "transparent",
                     }}
                   >
                     <VStack gap={2} flex={1}>
-                      <Text variant="body" tone={isSelected ? "accent" : "primary"}>
+                      <Text
+                        variant="body"
+                        tone={isSelected ? "accent" : "primary"}
+                      >
                         {o.label}
                       </Text>
                       {o.hint ? (
@@ -187,7 +203,9 @@ export function Select({
                         </Text>
                       ) : null}
                     </VStack>
-                    {isSelected ? <Check size={18} color={theme.text.accent} /> : null}
+                    {isSelected ? (
+                      <Check size={18} color={theme.text.accent} />
+                    ) : null}
                   </Pressable>
                 );
               })}

@@ -40,7 +40,11 @@ export function OfflineBanner() {
       }}
     >
       <HStack gap={8} justify="center">
-        {offline ? <CloudOff size={14} color={fg} /> : <RefreshCw size={14} color={fg} />}
+        {offline ? (
+          <CloudOff size={14} color={fg} />
+        ) : (
+          <RefreshCw size={14} color={fg} />
+        )}
         <Text variant="caption" style={{ color: fg }}>
           {offline
             ? pendingCount > 0

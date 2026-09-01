@@ -8,7 +8,8 @@ import { VStack, HStack } from "@shared/ui/Stack";
 import { useAdminStore } from "@shared/store/useAdminStore";
 import { useAdminLogout } from "../hooks/useAdmin";
 
-export type AdminSection = "AdminDashboard" | "AdminFamilies" | "AdminCurriculum" | "AdminStaff";
+export type AdminSection =
+  "AdminDashboard" | "AdminFamilies" | "AdminCurriculum" | "AdminStaff";
 
 const SECTIONS: { key: AdminSection; label: string }[] = [
   { key: "AdminDashboard", label: "Overview" },
@@ -81,7 +82,9 @@ export function AdminNav({
               {admin?.name || "Staff"}
             </Text>
             <Text variant="caption" tone="tertiary">
-              {admin?.role === "superadmin" ? "superadmin" : "support — read only"}
+              {admin?.role === "superadmin"
+                ? "superadmin"
+                : "support — read only"}
             </Text>
           </VStack>
           <Pressable
@@ -129,7 +132,9 @@ export function AdminNav({
                 justifyContent: "center",
                 paddingHorizontal: 13,
                 borderRadius: radius.full,
-                backgroundColor: focused ? theme.accents.moss.tint : "transparent",
+                backgroundColor: focused
+                  ? theme.accents.moss.tint
+                  : "transparent",
               }}
             >
               <Text variant="label-sm" tone={focused ? "accent" : "tertiary"}>

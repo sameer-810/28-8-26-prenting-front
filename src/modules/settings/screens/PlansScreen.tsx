@@ -19,7 +19,11 @@ import {
   Skeleton,
 } from "@shared/ui";
 import { subscriptionApi, openRazorpayCheckout } from "../api/settingsApi";
-import { useSubscription, useSubscriptionHistory, settingsKeys } from "../hooks/useSettings";
+import {
+  useSubscription,
+  useSubscriptionHistory,
+  settingsKeys,
+} from "../hooks/useSettings";
 
 /**
  * Plans and billing.
@@ -32,9 +36,11 @@ export default function PlansScreen() {
   const queryClient = useQueryClient();
   const user = useAuthStore((s) => s.user);
   const [busy, setBusy] = useState<string | null>(null);
-  const [message, setMessage] = useState<
-    { tone: "success" | "danger" | "info"; title: string; body: string } | null
-  >(null);
+  const [message, setMessage] = useState<{
+    tone: "success" | "danger" | "info";
+    title: string;
+    body: string;
+  } | null>(null);
   const [confirmCancel, setConfirmCancel] = useState(false);
 
   const { data, isLoading, refetch } = useSubscription();
@@ -53,7 +59,11 @@ export default function PlansScreen() {
       queryClient.invalidateQueries({ queryKey: settingsKeys.me() });
     },
     onError: (err) =>
-      setMessage({ tone: "danger", title: "Couldn't cancel", body: apiErrorMessage(err) }),
+      setMessage({
+        tone: "danger",
+        title: "Couldn't cancel",
+        body: apiErrorMessage(err),
+      }),
   });
 
   const subscribe = async (planCode: string) => {
@@ -72,7 +82,11 @@ export default function PlansScreen() {
       if (!result.ok) {
         // A parent who closed the modal has not failed at anything.
         if (!result.dismissed) {
-          setMessage({ tone: "danger", title: "Checkout didn't open", body: result.reason });
+          setMessage({
+            tone: "danger",
+            title: "Checkout didn't open",
+            body: result.reason,
+          });
         }
         return;
       }
@@ -82,7 +96,11 @@ export default function PlansScreen() {
         paymentId: result.paymentId,
         signature: result.signature,
       });
-      setMessage({ tone: "success", title: "You're all set", body: "Your plan is active." });
+      setMessage({
+        tone: "success",
+        title: "You're all set",
+        body: "Your plan is active.",
+      });
       queryClient.invalidateQueries({ queryKey: settingsKeys.subscription() });
       queryClient.invalidateQueries({ queryKey: settingsKeys.me() });
       refetch();
@@ -97,7 +115,9 @@ export default function PlansScreen() {
       setMessage({
         tone: "danger",
         title:
-          code === "SERVICE_UNAVAILABLE" ? "Payments aren't switched on yet" : "Couldn't start checkout",
+          code === "SERVICE_UNAVAILABLE"
+            ? "Payments aren't switched on yet"
+            : "Couldn't start checkout",
         body: apiErrorMessage(err),
       });
     } finally {
@@ -117,7 +137,10 @@ export default function PlansScreen() {
   }
 
   return (
-    <Screen title="Plans and billing" subtitle={`You have ${data.childCount} child${data.childCount === 1 ? "" : "ren"}`}>
+    <Screen
+      title="Plans and billing"
+      subtitle={`You have ${data.childCount} child${data.childCount === 1 ? "" : "ren"}`}
+    >
       <VStack gap={16} style={{ maxWidth: 620 }}>
         {message ? (
           <Banner
@@ -158,8 +181,12 @@ export default function PlansScreen() {
                   <VStack gap={2} flex={1}>
                     <HStack gap={8}>
                       <Text variant="h2">{plan.name}</Text>
-                      {plan.badge ? <Chip label={plan.badge} tone="moss" /> : null}
-                      {plan.isCurrent ? <Chip label="Current" tone="success" /> : null}
+                      {plan.badge ? (
+                        <Chip label={plan.badge} tone="moss" />
+                      ) : null}
+                      {plan.isCurrent ? (
+                        <Chip label="Current" tone="success" />
+                      ) : null}
                     </HStack>
                     <HStack gap={6} align="baseline">
                       <Text variant="display-sm" numeric>
@@ -175,8 +202,16 @@ export default function PlansScreen() {
                 <VStack gap={7}>
                   {plan.features.map((f) => (
                     <HStack key={f} gap={8} align="flex-start">
-                      <Check size={15} color={theme.text.accent} style={{ marginTop: 2 }} />
-                      <Text variant="body-sm" tone="secondary" style={{ flex: 1 }}>
+                      <Check
+                        size={15}
+                        color={theme.text.accent}
+                        style={{ marginTop: 2 }}
+                      />
+                      <Text
+                        variant="body-sm"
+                        tone="secondary"
+                        style={{ flex: 1 }}
+                      >
                         {f}
                       </Text>
                     </HStack>
@@ -198,23 +233,37 @@ export default function PlansScreen() {
                       backgroundColor: theme.warning.bg,
                     }}
                   >
-                    <AlertTriangle size={14} color={theme.warning.text} style={{ marginTop: 1 }} />
-                    <Text variant="caption" style={{ color: theme.warning.text, flex: 1 }}>
-                      Covers {plan.maxChildren} child{plan.maxChildren === 1 ? "" : "ren"} — you
-                      have {data.childCount}.
+                    <AlertTriangle
+                      size={14}
+                      color={theme.warning.text}
+                      style={{ marginTop: 1 }}
+                    />
+                    <Text
+                      variant="caption"
+                      style={{ color: theme.warning.text, flex: 1 }}
+                    >
+                      Covers {plan.maxChildren} child
+                      {plan.maxChildren === 1 ? "" : "ren"} — you have{" "}
+                      {data.childCount}.
                     </Text>
                   </View>
                 ) : null}
 
                 {plan.isCurrent ? (
-                  <Button label="Your current plan" variant="secondary" disabled />
+                  <Button
+                    label="Your current plan"
+                    variant="secondary"
+                    disabled
+                  />
                 ) : (
                   <Button
                     label={`Choose ${plan.name}`}
                     icon={<Sparkles size={15} color="#FFFFFF" />}
                     onPress={() => subscribe(plan.code)}
                     loading={busy === plan.code}
-                    disabled={!plan.supportsCurrentChildren || !data.paymentsConfigured}
+                    disabled={
+                      !plan.supportsCurrentChildren || !data.paymentsConfigured
+                    }
                   />
                 )}
               </VStack>
@@ -236,7 +285,10 @@ export default function PlansScreen() {
               {confirmCancel ? (
                 <HStack gap={8}>
                   <View style={{ flex: 1 }}>
-                    <Button label="Keep my plan" onPress={() => setConfirmCancel(false)} />
+                    <Button
+                      label="Keep my plan"
+                      onPress={() => setConfirmCancel(false)}
+                    />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Button

@@ -86,7 +86,9 @@ function AppShell() {
         tabBarPosition: isWide ? "left" : "bottom",
         sceneStyle: { backgroundColor: theme.surface.secondary },
       }}
-      tabBar={(props) => (isWide ? <Sidebar {...props} /> : <PhoneTabBar {...props} />)}
+      tabBar={(props) =>
+        isWide ? <Sidebar {...props} /> : <PhoneTabBar {...props} />
+      }
     >
       <Tabs.Screen name="Home" component={HomeTab} />
       <Tabs.Screen name="Progress" component={ProgressTab} />

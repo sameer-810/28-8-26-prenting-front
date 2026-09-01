@@ -17,10 +17,7 @@ export default function ForgotPasswordScreen() {
   const forgot = useForgotPassword();
   const [sent, setSent] = useState(false);
 
-  const {
-    control,
-    handleSubmit,
-  } = useForm<Input>({
+  const { control, handleSubmit } = useForm<Input>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   });
@@ -39,10 +36,15 @@ export default function ForgotPasswordScreen() {
   return (
     <AuthLayout
       title="Reset your password"
-      subtitle={sent ? undefined : "We'll email you a link to choose a new one."}
+      subtitle={
+        sent ? undefined : "We'll email you a link to choose a new one."
+      }
       footer={
         <HStack justify="center">
-          <Pressable onPress={() => navigation.navigate("Login")} accessibilityRole="link">
+          <Pressable
+            onPress={() => navigation.navigate("Login")}
+            accessibilityRole="link"
+          >
             <Text variant="label" tone="link">
               Back to sign in
             </Text>

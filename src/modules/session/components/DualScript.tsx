@@ -65,18 +65,23 @@ export function DualScript({
     <View
       style={{
         flex: isWide && showChild ? 1 : undefined,
-        backgroundColor: which === "parent" ? theme.accents.moss.tint : theme.surface.sunken,
+        backgroundColor:
+          which === "parent" ? theme.accents.moss.tint : theme.surface.sunken,
         borderRadius: radius.md,
         padding: 14,
         borderWidth: 1,
-        borderColor: which === "parent" ? theme.brand[200] : theme.border.subtle,
+        borderColor:
+          which === "parent" ? theme.brand[200] : theme.border.subtle,
       }}
     >
       <HStack gap={6} style={{ marginBottom: 8 }}>
         <Text
           variant="overline"
           style={{
-            color: which === "parent" ? theme.accents.moss.color : theme.text.tertiary,
+            color:
+              which === "parent"
+                ? theme.accents.moss.color
+                : theme.text.tertiary,
           }}
         >
           {label}
@@ -100,7 +105,12 @@ export function DualScript({
     parentContent,
   );
   const childCol = showChild
-    ? column("child", childLabel || "FOR YOUR CHILD", childLanguage, childContent)
+    ? column(
+        "child",
+        childLabel || "FOR YOUR CHILD",
+        childLanguage,
+        childContent,
+      )
     : null;
 
   if (!showChild) return parentCol;
@@ -141,7 +151,12 @@ export function ReadAloud({
   size?: "body" | "body-lg";
 }) {
   return (
-    <Text variant={size} language={language} selectable style={{ letterSpacing: 0.1 }}>
+    <Text
+      variant={size}
+      language={language}
+      selectable
+      style={{ letterSpacing: 0.1 }}
+    >
       {text}
     </Text>
   );

@@ -28,7 +28,10 @@
         "backgroundColor": "#F7F4EC"
       },
       "softwareKeyboardLayoutMode": "resize",
-      "permissions": ["android.permission.INTERNET", "android.permission.CAMERA"],
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.CAMERA"
+      ],
       "blockedPermissions": [
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",

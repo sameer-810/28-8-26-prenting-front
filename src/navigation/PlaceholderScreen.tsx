@@ -11,7 +11,13 @@ import { Screen, EmptyState } from "@shared/ui";
  * that says "arriving in Phase 6" are very different things to hand someone
  * reviewing the build.
  */
-export function PlaceholderScreen({ title, body }: { title: string; body: string }) {
+export function PlaceholderScreen({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}) {
   const theme = useTheme();
   return (
     <Screen title={title}>

@@ -24,20 +24,40 @@ interface EmptyProps {
   onAction?: () => void;
 }
 
-export function EmptyState({ icon, title, body, actionLabel, onAction }: EmptyProps) {
+export function EmptyState({
+  icon,
+  title,
+  body,
+  actionLabel,
+  onAction,
+}: EmptyProps) {
   return (
-    <VStack gap={10} align="center" style={{ paddingVertical: 44, paddingHorizontal: 24 }}>
+    <VStack
+      gap={10}
+      align="center"
+      style={{ paddingVertical: 44, paddingHorizontal: 24 }}
+    >
       {icon}
       <Text variant="h3" align="center">
         {title}
       </Text>
       {body ? (
-        <Text variant="body-sm" tone="tertiary" align="center" style={{ maxWidth: 320 }}>
+        <Text
+          variant="body-sm"
+          tone="tertiary"
+          align="center"
+          style={{ maxWidth: 320 }}
+        >
           {body}
         </Text>
       ) : null}
       {actionLabel && onAction ? (
-        <Button label={actionLabel} onPress={onAction} fullWidth={false} style={{ marginTop: 8 }} />
+        <Button
+          label={actionLabel}
+          onPress={onAction}
+          fullWidth={false}
+          style={{ marginTop: 8 }}
+        />
       ) : null}
     </VStack>
   );
@@ -54,7 +74,11 @@ interface ErrorProps {
 export function ErrorState({ title, message, onRetry, offline }: ErrorProps) {
   const theme = useTheme();
   return (
-    <VStack gap={10} align="center" style={{ paddingVertical: 40, paddingHorizontal: 24 }}>
+    <VStack
+      gap={10}
+      align="center"
+      style={{ paddingVertical: 40, paddingHorizontal: 24 }}
+    >
       {offline ? (
         <WifiOff size={28} color={theme.text.tertiary} />
       ) : (
@@ -63,7 +87,12 @@ export function ErrorState({ title, message, onRetry, offline }: ErrorProps) {
       <Text variant="h3" align="center">
         {title || (offline ? "You're offline" : "That didn't work")}
       </Text>
-      <Text variant="body-sm" tone="tertiary" align="center" style={{ maxWidth: 340 }}>
+      <Text
+        variant="body-sm"
+        tone="tertiary"
+        align="center"
+        style={{ maxWidth: 340 }}
+      >
         {message ||
           (offline
             ? "We'll pick this up as soon as you're back online. Anything you've done is saved."

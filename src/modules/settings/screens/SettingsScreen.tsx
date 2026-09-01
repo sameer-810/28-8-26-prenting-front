@@ -92,7 +92,12 @@ export default function SettingsScreen() {
     <Screen title="Settings" subtitle={family.name}>
       <VStack gap={16}>
         {error ? (
-          <Banner tone="danger" title="Couldn't save" body={error} onDismiss={() => setError(null)} />
+          <Banner
+            tone="danger"
+            title="Couldn't save"
+            body={error}
+            onDismiss={() => setError(null)}
+          />
         ) : null}
 
         {/* ---- Plan ---------------------------------------------------- */}
@@ -115,7 +120,8 @@ export default function SettingsScreen() {
               </Text>
               {cancelled ? (
                 <Text variant="caption" tone="warning">
-                  Cancelled — you keep access until the end of the period you've paid for.
+                  Cancelled — you keep access until the end of the period you've
+                  paid for.
                 </Text>
               ) : null}
             </VStack>
@@ -148,7 +154,10 @@ export default function SettingsScreen() {
                   options={hourOptions}
                   onChange={(v) =>
                     save.mutate({
-                      studyWindow: { startHour: Number(v), endHour: window.endHour },
+                      studyWindow: {
+                        startHour: Number(v),
+                        endHour: window.endHour,
+                      },
                     })
                   }
                 />
@@ -160,7 +169,10 @@ export default function SettingsScreen() {
                   options={hourOptions}
                   onChange={(v) =>
                     save.mutate({
-                      studyWindow: { startHour: window.startHour, endHour: Number(v) },
+                      studyWindow: {
+                        startHour: window.startHour,
+                        endHour: Number(v),
+                      },
                     })
                   }
                 />
@@ -181,7 +193,9 @@ export default function SettingsScreen() {
               label="Evening study nudge"
               hint="Only if that child hasn't already studied that day."
               value={notifications.studyReminder}
-              onChange={(v) => save.mutate({ notifications: { studyReminder: v } })}
+              onChange={(v) =>
+                save.mutate({ notifications: { studyReminder: v } })
+              }
             />
             <Divider />
             {notifications.studyReminder ? (
@@ -191,10 +205,14 @@ export default function SettingsScreen() {
                     label="Remind me at"
                     value={String(notifications.reminderHour)}
                     options={hourOptions.filter(
-                      (h) => Number(h.value) >= window.startHour && Number(h.value) < window.endHour,
+                      (h) =>
+                        Number(h.value) >= window.startHour &&
+                        Number(h.value) < window.endHour,
                     )}
                     onChange={(v) =>
-                      save.mutate({ notifications: { reminderHour: Number(v) } })
+                      save.mutate({
+                        notifications: { reminderHour: Number(v) },
+                      })
                     }
                     hint="Kept inside your study window."
                   />
@@ -207,14 +225,18 @@ export default function SettingsScreen() {
               label="Weekly summary"
               hint="A Sunday email with the week's progress."
               value={notifications.weeklySummary}
-              onChange={(v) => save.mutate({ notifications: { weeklySummary: v } })}
+              onChange={(v) =>
+                save.mutate({ notifications: { weeklySummary: v } })
+              }
             />
             <Divider />
             <Toggle
               label="Milestone alerts"
               hint="Streaks, personal bests, topics mastered."
               value={notifications.milestoneAlerts}
-              onChange={(v) => save.mutate({ notifications: { milestoneAlerts: v } })}
+              onChange={(v) =>
+                save.mutate({ notifications: { milestoneAlerts: v } })
+              }
             />
             <Divider />
             {/**
@@ -226,7 +248,9 @@ export default function SettingsScreen() {
               label="News about ParentAI"
               hint="Occasional product updates. Off by default."
               value={notifications.productEmails}
-              onChange={(v) => save.mutate({ notifications: { productEmails: v } })}
+              onChange={(v) =>
+                save.mutate({ notifications: { productEmails: v } })
+              }
             />
           </VStack>
         </Card>
@@ -296,14 +320,24 @@ function formatHour(h: number) {
 
 function planSentence(
   status: string,
-  current: { currentPeriodEnd: string | null; trialEndsAt: string | null } | undefined,
-  family: { subscription: { trialEndsAt: string | null; currentPeriodEnd: string | null } },
+  current:
+    { currentPeriodEnd: string | null; trialEndsAt: string | null } | undefined,
+  family: {
+    subscription: {
+      trialEndsAt: string | null;
+      currentPeriodEnd: string | null;
+    };
+  },
 ) {
   const trialEnds = current?.trialEndsAt ?? family.subscription.trialEndsAt;
-  const periodEnds = current?.currentPeriodEnd ?? family.subscription.currentPeriodEnd;
+  const periodEnds =
+    current?.currentPeriodEnd ?? family.subscription.currentPeriodEnd;
 
   if (status === "trialing" && trialEnds) {
-    const days = Math.max(0, Math.ceil((new Date(trialEnds).getTime() - Date.now()) / 864e5));
+    const days = Math.max(
+      0,
+      Math.ceil((new Date(trialEnds).getTime() - Date.now()) / 864e5),
+    );
     return days > 0
       ? `Free trial — ${days} day${days === 1 ? "" : "s"} left.`
       : "Your free trial has ended.";

@@ -2,7 +2,16 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useTheme } from "@shared/useTheme";
-import { Screen, Text, Card, VStack, HStack, ErrorState, Skeleton, Divider } from "@shared/ui";
+import {
+  Screen,
+  Text,
+  Card,
+  VStack,
+  HStack,
+  ErrorState,
+  Skeleton,
+  Divider,
+} from "@shared/ui";
 import { useAdminCurriculum } from "../hooks/useAdmin";
 import { count } from "../format";
 
@@ -17,13 +26,19 @@ const GRADES = [1, 2, 3, 4, 5, 6, 7, 8];
  */
 export default function AdminCurriculumScreen() {
   const theme = useTheme();
-  const { data, isLoading, error, refetch, isRefetching } = useAdminCurriculum();
+  const { data, isLoading, error, refetch, isRefetching } =
+    useAdminCurriculum();
 
   const boards = useMemo(() => {
-    const grouped: Record<string, Record<number, { subjects: string[]; topics: number; chapters: number }>> = {};
+    const grouped: Record<
+      string,
+      Record<number, { subjects: string[]; topics: number; chapters: number }>
+    > = {};
     for (const row of data || []) {
       grouped[row.board] = grouped[row.board] || {};
-      const bucket = (grouped[row.board][row.grade] = grouped[row.board][row.grade] || {
+      const bucket = (grouped[row.board][row.grade] = grouped[row.board][
+        row.grade
+      ] || {
         subjects: [],
         topics: 0,
         chapters: 0,
@@ -51,7 +66,10 @@ export default function AdminCurriculumScreen() {
   if (error || !data) {
     return (
       <Screen title="Curriculum coverage">
-        <ErrorState message={apiErrorMessage(error, "Could not load coverage")} onRetry={refetch} />
+        <ErrorState
+          message={apiErrorMessage(error, "Could not load coverage")}
+          onRetry={refetch}
+        />
       </Screen>
     );
   }
@@ -75,7 +93,10 @@ export default function AdminCurriculumScreen() {
                   <HStack justify="space-between" align="center" wrap gap={8}>
                     <Text variant="h3">{board.toUpperCase()}</Text>
                     <Text variant="caption" tone="tertiary" numeric>
-                      {count(Object.values(grades).reduce((s, g) => s + g.topics, 0))} topics
+                      {count(
+                        Object.values(grades).reduce((s, g) => s + g.topics, 0),
+                      )}{" "}
+                      topics
                     </Text>
                   </HStack>
 
@@ -87,9 +108,13 @@ export default function AdminCurriculumScreen() {
                         backgroundColor: theme.warning.bg,
                       }}
                     >
-                      <Text variant="body-sm" style={{ color: theme.warning.text }}>
-                        No topics for grade{missing.length > 1 ? "s" : ""} {missing.join(", ")} — families
-                        there cannot be matched to a topic.
+                      <Text
+                        variant="body-sm"
+                        style={{ color: theme.warning.text }}
+                      >
+                        No topics for grade{missing.length > 1 ? "s" : ""}{" "}
+                        {missing.join(", ")} — families there cannot be matched
+                        to a topic.
                       </Text>
                     </View>
                   ) : null}
@@ -99,7 +124,12 @@ export default function AdminCurriculumScreen() {
                     return (
                       <View key={grade}>
                         {i > 0 ? <Divider /> : null}
-                        <HStack justify="space-between" align="center" gap={10} style={{ paddingVertical: 6 }}>
+                        <HStack
+                          justify="space-between"
+                          align="center"
+                          gap={10}
+                          style={{ paddingVertical: 6 }}
+                        >
                           <VStack gap={2} flex={1}>
                             <Text variant="label">Grade {grade}</Text>
                             <Text variant="caption" tone="tertiary">
@@ -107,7 +137,8 @@ export default function AdminCurriculumScreen() {
                             </Text>
                           </VStack>
                           <Text variant="caption" tone="tertiary" numeric>
-                            {count(g.chapters)} chapters · {count(g.topics)} topics
+                            {count(g.chapters)} chapters · {count(g.topics)}{" "}
+                            topics
                           </Text>
                         </HStack>
                       </View>

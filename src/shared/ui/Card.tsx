@@ -8,7 +8,8 @@ interface Props {
   /** "flat" is the default: a hairline on the canvas, no shadow. */
   elevation?: "flat" | "raised" | "floating";
   padding?: "none" | "compact" | "default";
-  tone?: "default" | "sunken" | "success" | "warning" | "danger" | "info" | "accent";
+  tone?:
+    "default" | "sunken" | "success" | "warning" | "danger" | "info" | "accent";
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
@@ -46,7 +47,11 @@ export function Card({
 
   const t = tones[tone];
   const pad =
-    padding === "none" ? 0 : padding === "compact" ? layout.cardPaddingCompact : layout.cardPadding;
+    padding === "none"
+      ? 0
+      : padding === "compact"
+        ? layout.cardPaddingCompact
+        : layout.cardPadding;
 
   const body = (
     <View

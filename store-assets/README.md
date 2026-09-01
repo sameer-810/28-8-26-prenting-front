@@ -13,12 +13,12 @@ npm run assets:screens     # phone screenshots, from the real running app
 npm run assets             # all three
 ```
 
-| File | What it is | Play's rule |
-|---|---|---|
-| `play-icon-512.png` | Listing icon | 512×512, 32-bit PNG, **no alpha** |
-| `feature-graphic-1024x500.png` | Feature graphic | Exactly 1024×500, **no alpha** |
-| `screenshots/` | Captioned phone screenshots | 2–8, 16:9 or 9:16, 320–3840px per side |
-| `raw-screens/` | The same captures, uncaptioned | — |
+| File                           | What it is                     | Play's rule                            |
+| ------------------------------ | ------------------------------ | -------------------------------------- |
+| `play-icon-512.png`            | Listing icon                   | 512×512, 32-bit PNG, **no alpha**      |
+| `feature-graphic-1024x500.png` | Feature graphic                | Exactly 1024×500, **no alpha**         |
+| `screenshots/`                 | Captioned phone screenshots    | 2–8, 16:9 or 9:16, 320–3840px per side |
+| `raw-screens/`                 | The same captures, uncaptioned | —                                      |
 
 ---
 
@@ -51,8 +51,8 @@ and it is a poor advertisement even though it is true. Re-seed
 (`npm run seed:demo`) for a clean, representative household and re-capture.
 
 The first two screenshots are the ones almost everybody sees — Play shows them
-without scrolling — so those two carry the decision: *what this is*, and
-*what you get out of it*.
+without scrolling — so those two carry the decision: _what this is_, and
+_what you get out of it_.
 
 ---
 

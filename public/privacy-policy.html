@@ -26,7 +26,9 @@
         --border: #ded8ca;
       }
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+          sans-serif;
         max-width: 720px;
         margin: 0 auto;
         padding: 28px 20px 64px;
@@ -92,15 +94,16 @@
     <p class="muted">Version 1.0 · Last updated 31 August 2026</p>
 
     <p>
-      ParentAI is used by a parent to teach their own child. That shapes everything below: the
-      account is yours, the child is a profile inside it, and we hold as little about them as the
-      product can function on.
+      ParentAI is used by a parent to teach their own child. That shapes
+      everything below: the account is yours, the child is a profile inside it,
+      and we hold as little about them as the product can function on.
     </p>
 
     <div class="highlight">
-      <strong>Your child has no account with us.</strong> No login, no password, no email address,
-      no phone number — nothing they could be contacted through, by us or by anyone else. They
-      cannot sign in, because there is nothing for them to sign in to.
+      <strong>Your child has no account with us.</strong> No login, no password,
+      no email address, no phone number — nothing they could be contacted
+      through, by us or by anyone else. They cannot sign in, because there is
+      nothing for them to sign in to.
     </div>
 
     <h2>What we collect</h2>
@@ -112,18 +115,29 @@
       </tr>
       <tr>
         <td>You</td>
-        <td>Name, email address, optional phone number, password (stored only as a strong hash)</td>
+        <td>
+          Name, email address, optional phone number, password (stored only as a
+          strong hash)
+        </td>
         <td>To create your account and let you sign in</td>
       </tr>
       <tr>
         <td>Your child</td>
-        <td>First name, date of birth, grade, board, school medium, subjects</td>
-        <td>To match lessons to their actual syllabus and pitch them at the right age</td>
+        <td>
+          First name, date of birth, grade, board, school medium, subjects
+        </td>
+        <td>
+          To match lessons to their actual syllabus and pitch them at the right
+          age
+        </td>
       </tr>
       <tr>
         <td>Learning</td>
         <td>Plans generated, sessions run, answers given, scores, streaks</td>
-        <td>To show you whether it is working, and to build the revision phase from what they got wrong</td>
+        <td>
+          To show you whether it is working, and to build the revision phase
+          from what they got wrong
+        </td>
       </tr>
       <tr>
         <td>Photographs</td>
@@ -132,8 +146,13 @@
       </tr>
       <tr>
         <td>Household</td>
-        <td>Home language, study window, notification preferences, consent record</td>
-        <td>To write in your language and message you when you asked to be messaged</td>
+        <td>
+          Home language, study window, notification preferences, consent record
+        </td>
+        <td>
+          To write in your language and message you when you asked to be
+          messaged
+        </td>
       </tr>
       <tr>
         <td>Devices</td>
@@ -143,89 +162,117 @@
     </table>
 
     <p class="muted">
-      We do not collect location, contacts, your camera roll, browsing activity, or any advertising
-      identifier. The Android build blocks those permissions outright, and the build fails if one
-      ever reappears.
+      We do not collect location, contacts, your camera roll, browsing activity,
+      or any advertising identifier. The Android build blocks those permissions
+      outright, and the build fails if one ever reappears.
     </p>
 
     <h2>Who else sees it</h2>
     <p>Three processors, each doing one job:</p>
     <ul>
       <li>
-        <strong>Google (Gemini)</strong> — the topic and any photographed page are sent to generate
-        the lesson. Your name and email are never sent. Google does not use this content to train
-        its models under the paid API terms we use.
+        <strong>Google (Gemini)</strong> — the topic and any photographed page
+        are sent to generate the lesson. Your name and email are never sent.
+        Google does not use this content to train its models under the paid API
+        terms we use.
       </li>
       <li>
-        <strong>Cloudinary</strong> — stores photographs you upload, on private authenticated URLs
-        that cannot be guessed or shared.
+        <strong>Cloudinary</strong> — stores photographs you upload, on private
+        authenticated URLs that cannot be guessed or shared.
       </li>
       <li>
-        <strong>MongoDB Atlas</strong> — stores the database itself, encrypted at rest.
+        <strong>MongoDB Atlas</strong> — stores the database itself, encrypted
+        at rest.
       </li>
     </ul>
     <p>
-      <strong>We do not sell your data. We do not show third-party advertising. We do not share
-      anything with data brokers.</strong> Marketing email is off unless you switch it on.
+      <strong
+        >We do not sell your data. We do not show third-party advertising. We do
+        not share anything with data brokers.</strong
+      >
+      Marketing email is off unless you switch it on.
     </p>
 
     <h2>Our own staff</h2>
     <p>
-      Support staff can see that a household exists, what plan it is on, how many sessions have run,
-      and whether lesson generation is failing. They <strong>cannot</strong> see a lesson's content,
-      a teaching script, or a single answer your child gave — the system does not expose it to them
-      at all. They cannot see or reset your password, and they cannot sign in as you.
+      Support staff can see that a household exists, what plan it is on, how
+      many sessions have run, and whether lesson generation is failing. They
+      <strong>cannot</strong> see a lesson's content, a teaching script, or a
+      single answer your child gave — the system does not expose it to them at
+      all. They cannot see or reset your password, and they cannot sign in as
+      you.
     </p>
 
     <h2>Your rights</h2>
-    <p>From <strong>Settings → Data and privacy</strong>, without asking anyone:</p>
+    <p>
+      From <strong>Settings → Data and privacy</strong>, without asking anyone:
+    </p>
     <ul>
       <li><strong>Export</strong> — everything we hold, as one file</li>
       <li>
-        <strong>Delete</strong> — the whole household, permanently, including the photographs.
-        See <a href="/delete-account.html">how to delete your account</a>
+        <strong>Delete</strong> — the whole household, permanently, including
+        the photographs. See
+        <a href="/delete-account.html">how to delete your account</a>
       </li>
-      <li><strong>Correct</strong> — edit any detail about you or your child at any time</li>
-      <li><strong>Withdraw consent</strong> — deleting the household withdraws it entirely</li>
+      <li>
+        <strong>Correct</strong> — edit any detail about you or your child at
+        any time
+      </li>
+      <li>
+        <strong>Withdraw consent</strong> — deleting the household withdraws it
+        entirely
+      </li>
     </ul>
 
     <h2>How long we keep it</h2>
     <p>
-      For as long as your account exists. When you delete it, the data goes immediately; encrypted
-      infrastructure backups may hold a copy for up to 30 days before ageing out. An account left
-      untouched for 24 months is deleted after we email the address on it.
+      For as long as your account exists. When you delete it, the data goes
+      immediately; encrypted infrastructure backups may hold a copy for up to 30
+      days before ageing out. An account left untouched for 24 months is deleted
+      after we email the address on it.
     </p>
 
     <h2>Children</h2>
     <p>
-      ParentAI is for use <em>by a parent or guardian</em>. Accounts are held by adults, and you
-      confirm you are the parent or guardian of every child you add. Because a child cannot sign in,
-      cannot message anyone, and is never contacted by us, there is no direct collection from a
-      child at all.
+      ParentAI is for use <em>by a parent or guardian</em>. Accounts are held by
+      adults, and you confirm you are the parent or guardian of every child you
+      add. Because a child cannot sign in, cannot message anyone, and is never
+      contacted by us, there is no direct collection from a child at all.
     </p>
     <p>
-      If you believe a child's information reached us without a parent's consent, email us and we
-      will delete it.
+      If you believe a child's information reached us without a parent's
+      consent, email us and we will delete it.
     </p>
 
     <h2>Security</h2>
     <ul>
-      <li>Passwords are hashed with bcrypt. Nobody, including us, can read them</li>
-      <li>Every connection is encrypted in transit; the database is encrypted at rest</li>
-      <li>Sign-in sessions are per device and can be revoked from your account screen</li>
-      <li>Photographs are stored privately, never on a public or guessable URL</li>
+      <li>
+        Passwords are hashed with bcrypt. Nobody, including us, can read them
+      </li>
+      <li>
+        Every connection is encrypted in transit; the database is encrypted at
+        rest
+      </li>
+      <li>
+        Sign-in sessions are per device and can be revoked from your account
+        screen
+      </li>
+      <li>
+        Photographs are stored privately, never on a public or guessable URL
+      </li>
     </ul>
 
     <h2>Where your data is</h2>
     <p>
-      Servers in Singapore, the closest region to India, chosen so lessons arrive quickly. Google's
-      Gemini processes requests in its own regions.
+      Servers in Singapore, the closest region to India, chosen so lessons
+      arrive quickly. Google's Gemini processes requests in its own regions.
     </p>
 
     <h2>Changes</h2>
     <p>
-      If this policy changes materially, you will be told in the app and asked to accept the new
-      version. The version you accepted, and when, is recorded on your household.
+      If this policy changes materially, you will be told in the app and asked
+      to accept the new version. The version you accepted, and when, is recorded
+      on your household.
     </p>
 
     <footer>

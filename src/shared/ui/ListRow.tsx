@@ -28,7 +28,10 @@ export function ListRow({
   const { isWide } = useBreakpoint();
 
   const body = (
-    <HStack gap={12} style={{ minHeight: isWide ? 48 : 62, paddingVertical: 10 }}>
+    <HStack
+      gap={12}
+      style={{ minHeight: isWide ? 48 : 62, paddingVertical: 10 }}
+    >
       {left}
       <VStack gap={2} flex={1}>
         <Text variant="label-lg" tone={destructive ? "danger" : "primary"}>
@@ -41,7 +44,9 @@ export function ListRow({
         ) : null}
       </VStack>
       {right}
-      {showChevron && onPress ? <ChevronRight size={18} color={theme.text.disabled} /> : null}
+      {showChevron && onPress ? (
+        <ChevronRight size={18} color={theme.text.disabled} />
+      ) : null}
     </HStack>
   );
 

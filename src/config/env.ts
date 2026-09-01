@@ -14,7 +14,8 @@ function devApiHost(): string {
 
   const hostUri =
     Constants.expoConfig?.hostUri ||
-    (Constants.expoGoConfig as { debuggerHost?: string } | undefined)?.debuggerHost;
+    (Constants.expoGoConfig as { debuggerHost?: string } | undefined)
+      ?.debuggerHost;
   const host = hostUri?.split(":")[0];
   return host ? `http://${host}:5005` : "http://localhost:5005";
 }
@@ -26,7 +27,9 @@ const ENV = {
     return { apiUrl: `${base}/api/v1`, socketUrl: base };
   },
   production: () => {
-    const base = process.env.EXPO_PUBLIC_API_URL || "https://two8-8-26-prenting-back.onrender.com";
+    const base =
+      process.env.EXPO_PUBLIC_API_URL ||
+      "https://two8-8-26-prenting-back.onrender.com";
     return { apiUrl: `${base}/api/v1`, socketUrl: base };
   },
 };

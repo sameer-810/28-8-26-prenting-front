@@ -1,6 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { grade, summarise, normalise, parseNumeric, resolveOption } from "./grading.ts";
+import {
+  grade,
+  summarise,
+  normalise,
+  parseNumeric,
+  resolveOption,
+} from "./grading.ts";
 import type { Question } from "./grading.ts";
 
 /**

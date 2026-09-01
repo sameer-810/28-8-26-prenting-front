@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Platform, View, useColorScheme } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
@@ -151,7 +155,9 @@ export default function App() {
   if (!fontsLoaded) {
     // A bare tinted ground rather than a spinner: at this point the app has
     // nothing to say, and a spinner for 200ms is a flash of anxiety.
-    return <View style={{ flex: 1, backgroundColor: theme.surface.secondary }} />;
+    return (
+      <View style={{ flex: 1, backgroundColor: theme.surface.secondary }} />
+    );
   }
 
   /**

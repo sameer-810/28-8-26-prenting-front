@@ -37,7 +37,11 @@ export function AuthLayout({
       style={
         isWide
           ? { flex: 1, padding: 56, justifyContent: "center" }
-          : { paddingTop: insets.top + 28, paddingBottom: 28, paddingHorizontal: 24 }
+          : {
+              paddingTop: insets.top + 28,
+              paddingBottom: 28,
+              paddingHorizontal: 24,
+            }
       }
     >
       <VStack gap={isWide ? 16 : 8} style={{ maxWidth: 460 }}>
@@ -48,7 +52,9 @@ export function AuthLayout({
           variant={isWide ? "display-lg" : "display-md"}
           style={{ color: "#FFFFFF" }}
         >
-          {isWide ? "Teach your child tonight, in your own language." : "ParentAI"}
+          {isWide
+            ? "Teach your child tonight, in your own language."
+            : "ParentAI"}
         </Text>
         {isWide ? (
           <Text variant="body-lg" style={{ color: palette.moss[100] }}>
@@ -95,7 +101,14 @@ export function AuthLayout({
         {children}
       </View>
       {footer ? (
-        <View style={{ maxWidth: 440, alignSelf: "center", width: "100%", marginTop: 18 }}>
+        <View
+          style={{
+            maxWidth: 440,
+            alignSelf: "center",
+            width: "100%",
+            marginTop: 18,
+          }}
+        >
           {footer}
         </View>
       ) : null}

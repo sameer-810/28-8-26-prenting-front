@@ -35,9 +35,11 @@ export default function PrivacyScreen() {
   const logout = useLogout();
 
   const [exporting, setExporting] = useState(false);
-  const [message, setMessage] = useState<
-    { tone: "success" | "danger"; title: string; body: string } | null
-  >(null);
+  const [message, setMessage] = useState<{
+    tone: "success" | "danger";
+    title: string;
+    body: string;
+  } | null>(null);
   const [confirmText, setConfirmText] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -59,8 +61,16 @@ export default function PrivacyScreen() {
     setExporting(false);
     setMessage(
       result.ok
-        ? { tone: "success", title: "Exported", body: "Your file has been saved." }
-        : { tone: "danger", title: "Export failed", body: result.reason || "Please try again." },
+        ? {
+            tone: "success",
+            title: "Exported",
+            body: "Your file has been saved.",
+          }
+        : {
+            tone: "danger",
+            title: "Export failed",
+            body: result.reason || "Please try again.",
+          },
     );
   };
 
@@ -81,7 +91,8 @@ export default function PrivacyScreen() {
   };
 
   const nameMatches =
-    confirmText.trim().toLowerCase() === (family?.name || "").trim().toLowerCase();
+    confirmText.trim().toLowerCase() ===
+    (family?.name || "").trim().toLowerCase();
 
   return (
     <Screen title="Your data and privacy" subtitle={family?.name}>
@@ -123,7 +134,10 @@ export default function PrivacyScreen() {
                 backgroundColor: theme.accents.moss.tint,
               }}
             >
-              <Text variant="body-sm" style={{ color: theme.accents.moss.color }}>
+              <Text
+                variant="body-sm"
+                style={{ color: theme.accents.moss.color }}
+              >
                 Your children have no accounts, no logins and no contact details
                 with us. We never ask for their email, phone number or location.
               </Text>

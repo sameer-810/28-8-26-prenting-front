@@ -18,11 +18,24 @@ interface Props {
  * conditionally-rendered elements, so a row that sometimes hides its last item
  * ends up with a trailing space nobody asked for.
  */
-export function VStack({ gap = 0, align, justify, flex, style, children }: Props) {
+export function VStack({
+  gap = 0,
+  align,
+  justify,
+  flex,
+  style,
+  children,
+}: Props) {
   return (
     <View
       style={[
-        { flexDirection: "column", gap, alignItems: align, justifyContent: justify, flex },
+        {
+          flexDirection: "column",
+          gap,
+          alignItems: align,
+          justifyContent: justify,
+          flex,
+        },
         style,
       ]}
     >

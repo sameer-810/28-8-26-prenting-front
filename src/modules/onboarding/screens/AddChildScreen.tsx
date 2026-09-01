@@ -17,7 +17,11 @@ import {
   Card,
   LoadingState,
 } from "@shared/ui";
-import { useReference, useCreateChild, useChildren } from "@modules/auth/hooks/useAuth";
+import {
+  useReference,
+  useCreateChild,
+  useChildren,
+} from "@modules/auth/hooks/useAuth";
 import { childSchema, type ChildInput } from "@modules/auth/auth.validation";
 
 /**
@@ -83,7 +87,11 @@ export default function AddChildScreen() {
   );
 
   const gradeOptions = useMemo(
-    () => (reference?.grades || []).map((g) => ({ value: String(g.value), label: g.label })),
+    () =>
+      (reference?.grades || []).map((g) => ({
+        value: String(g.value),
+        label: g.label,
+      })),
     [reference],
   );
 
@@ -119,7 +127,11 @@ export default function AddChildScreen() {
       <VStack gap={18} style={{ maxWidth: 520 }}>
         {formError ? (
           <Banner
-            tone={apiErrorCode(createChild.error) === "PLAN_LIMIT" ? "warning" : "danger"}
+            tone={
+              apiErrorCode(createChild.error) === "PLAN_LIMIT"
+                ? "warning"
+                : "danger"
+            }
             title={
               apiErrorCode(createChild.error) === "PLAN_LIMIT"
                 ? "Your plan is full"
@@ -142,13 +154,13 @@ export default function AddChildScreen() {
             />
 
             {/**
-              * The three below stay on the raw <Controller> because
-              * ControlledSelect passes `field.onChange` straight through:
-              *
-              *   grade         needs Number(v) — a Select yields strings
-              *   board         re-suggests the school medium
-              *   homeLanguage  starts that script's font download
-              */}
+             * The three below stay on the raw <Controller> because
+             * ControlledSelect passes `field.onChange` straight through:
+             *
+             *   grade         needs Number(v) — a Select yields strings
+             *   board         re-suggests the school medium
+             *   homeLanguage  starts that script's font download
+             */}
             <Controller
               control={control}
               name="grade"

@@ -144,8 +144,12 @@ for (const icon of ICONS) {
     omitBackground: Boolean(icon.transparent),
   });
   await page.close();
-  console.log(`  ${path.relative(ROOT, icon.file).padEnd(34)} ${icon.size}×${icon.size}`);
+  console.log(
+    `  ${path.relative(ROOT, icon.file).padEnd(34)} ${icon.size}×${icon.size}`,
+  );
 }
 
 await browser.close();
-console.log("\n  Icons written. `npx expo prebuild --clean` to pick them up in a native build.\n");
+console.log(
+  "\n  Icons written. `npx expo prebuild --clean` to pick them up in a native build.\n",
+);

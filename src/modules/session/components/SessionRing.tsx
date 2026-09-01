@@ -98,7 +98,12 @@ export function SessionRing({
             : `${formatClock(remainingSeconds)} remaining.`)
       }
       accessibilityValue={{ now: phaseIndex, min: 1, max: 5 }}
-      style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}
+      style={{
+        width: size,
+        height: size,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
       <Svg width={size} height={size} style={{ position: "absolute" }}>
         {/* Rotated so the ring starts at twelve o'clock rather than at three. */}

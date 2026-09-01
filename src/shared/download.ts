@@ -57,7 +57,10 @@ export async function shareOrExplain(
     await Sharing.shareAsync(uri, { mimeType, dialogTitle, UTI: uti });
     return { ok: true };
   }
-  return { ok: false, reason: "Saved to this device, but sharing isn't available here." };
+  return {
+    ok: false,
+    reason: "Saved to this device, but sharing isn't available here.",
+  };
 }
 
 /** True on the web, where a download goes to the browser rather than a share sheet. */

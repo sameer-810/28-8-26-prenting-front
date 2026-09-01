@@ -58,7 +58,11 @@ export interface StudyPlan {
   mock: (Question & { index: number })[];
   revision: {
     focus: string;
-    clarifications: { questionPrompt: string; whyWrong: string; reteach: string }[];
+    clarifications: {
+      questionPrompt: string;
+      whyWrong: string;
+      reteach: string;
+    }[];
     encouragement: string;
   } | null;
   degraded: boolean;
@@ -81,7 +85,11 @@ export interface SessionRecord {
     actualSeconds: number;
     completed: boolean;
   }[];
-  progress: { elapsedPlannedSeconds: number; totalSeconds: number; fraction: number };
+  progress: {
+    elapsedPlannedSeconds: number;
+    totalSeconds: number;
+    fraction: number;
+  };
   startedAt: string;
   minutesStudied: number;
   timerAdherence: number;
@@ -99,7 +107,23 @@ export interface SessionRecord {
 export interface CompletionResult {
   session: SessionRecord;
   alreadyComplete: boolean;
-  streak: { current: number; longest: number; extended: boolean; isNewRecord: boolean } | null;
-  fluency: { rated: boolean; band: string; label: string; score: number } | null;
-  milestones: { id: string; kind: string; title: string; body: string; icon: string }[];
+  streak: {
+    current: number;
+    longest: number;
+    extended: boolean;
+    isNewRecord: boolean;
+  } | null;
+  fluency: {
+    rated: boolean;
+    band: string;
+    label: string;
+    score: number;
+  } | null;
+  milestones: {
+    id: string;
+    kind: string;
+    title: string;
+    body: string;
+    icon: string;
+  }[];
 }

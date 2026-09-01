@@ -29,7 +29,10 @@
  */
 const fs = require("fs");
 const path = require("path");
-const { withAppBuildGradle, withGradleProperties } = require("@expo/config-plugins");
+const {
+  withAppBuildGradle,
+  withGradleProperties,
+} = require("@expo/config-plugins");
 
 function loadSigning() {
   try {
@@ -52,7 +55,9 @@ function loadSigning() {
 function withSigningGradleProperties(config, props) {
   return withGradleProperties(config, (cfg) => {
     for (const [key, value] of Object.entries(props)) {
-      const i = cfg.modResults.findIndex((p) => p.type === "property" && p.key === key);
+      const i = cfg.modResults.findIndex(
+        (p) => p.type === "property" && p.key === key,
+      );
       const item = { type: "property", key, value };
       if (i >= 0) cfg.modResults[i] = item;
       else cfg.modResults.push(item);
@@ -66,7 +71,10 @@ function withSigningBuildGradle(config) {
     let src = cfg.modResults.contents;
 
     // 1. A `release` block inside signingConfigs, added once.
-    if (!src.includes("signingConfigs.release") && /signingConfigs\s*\{/.test(src)) {
+    if (
+      !src.includes("signingConfigs.release") &&
+      /signingConfigs\s*\{/.test(src)
+    ) {
       src = src.replace(
         /signingConfigs\s*\{/,
         `signingConfigs {

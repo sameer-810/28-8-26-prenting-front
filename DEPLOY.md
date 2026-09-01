@@ -21,7 +21,7 @@ emitted the fallback URL until the cache was cleared.
 
 **2. `localhost` and `127.0.0.1` are different origins.**
 The API's `CORS_ORIGIN` allowlist must contain the exact origin the browser
-sends. A mismatch surfaces in the app as *"You appear to be offline"* — because
+sends. A mismatch surfaces in the app as _"You appear to be offline"_ — because
 a CORS-blocked request is indistinguishable from a dead network to JavaScript —
 not as anything mentioning CORS.
 
@@ -39,6 +39,7 @@ npx eas build -p android --profile production
 ```
 
 Before the first build:
+
 - set `extra.eas.projectId` in `app.json` (currently empty)
 - set `EXPO_PUBLIC_API_URL` in the EAS build environment
 - replace the placeholder artwork in `assets/` — those are generated

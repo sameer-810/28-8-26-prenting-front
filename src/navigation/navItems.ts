@@ -1,4 +1,10 @@
-import { Home, TrendingUp, Users, Settings, Sparkles } from "lucide-react-native";
+import {
+  Home,
+  TrendingUp,
+  Users,
+  Settings,
+  Sparkles,
+} from "lucide-react-native";
 
 /**
  * One nav definition, two shells.

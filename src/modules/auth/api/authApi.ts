@@ -8,7 +8,9 @@ import type { SessionPayload, ChildProfile, ReferenceData } from "../types";
 export const authApi = {
   async login(input: { email: string; password: string }) {
     const device = await deviceContext();
-    return unwrap<SessionPayload>(apiClient.post("/auth/login", { ...input, device }));
+    return unwrap<SessionPayload>(
+      apiClient.post("/auth/login", { ...input, device }),
+    );
   },
 
   async signup(input: {
@@ -39,15 +41,24 @@ export const authApi = {
   },
 
   async forgotPassword(email: string) {
-    return unwrap<{ message: string }>(apiClient.post("/auth/forgot-password", { email }));
+    return unwrap<{ message: string }>(
+      apiClient.post("/auth/forgot-password", { email }),
+    );
   },
 
   async resetPassword(input: { token: string; password: string }) {
-    return unwrap<{ message: string }>(apiClient.post("/auth/reset-password", input));
+    return unwrap<{ message: string }>(
+      apiClient.post("/auth/reset-password", input),
+    );
   },
 
-  async changePassword(input: { currentPassword: string; newPassword: string }) {
-    return unwrap<{ message: string }>(apiClient.post("/auth/change-password", input));
+  async changePassword(input: {
+    currentPassword: string;
+    newPassword: string;
+  }) {
+    return unwrap<{ message: string }>(
+      apiClient.post("/auth/change-password", input),
+    );
   },
 
   async devices() {

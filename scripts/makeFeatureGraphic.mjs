@@ -125,7 +125,12 @@ const HTML = `<!doctype html>
 </html>`;
 
 fs.mkdirSync(STORE, { recursive: true });
-const out = path.join(STORE, GUIDES ? "feature-graphic-1024x500-guides.png" : "feature-graphic-1024x500.png");
+const out = path.join(
+  STORE,
+  GUIDES
+    ? "feature-graphic-1024x500-guides.png"
+    : "feature-graphic-1024x500.png",
+);
 
 const browser = await chromium.launch();
 const page = await browser.newPage({
@@ -146,4 +151,7 @@ await browser.close();
 
 console.log(`\n  wrote ${path.relative(ROOT, out)}  (1024×500, no alpha)`);
 if (!GUIDES) console.log("  run with --guides to check the safe zones\n");
-else console.log("  green = safe zone · red = where Play draws a play button if a video is attached\n");
+else
+  console.log(
+    "  green = safe zone · red = where Play draws a play button if a video is attached\n",
+  );

@@ -5,7 +5,8 @@ import { useTheme } from "../useTheme";
 import { haptic } from "../touchFeedback";
 import { Text } from "./Text";
 
-type Tone = "neutral" | "moss" | "apricot" | "success" | "warning" | "danger" | "info";
+type Tone =
+  "neutral" | "moss" | "apricot" | "success" | "warning" | "danger" | "info";
 
 export function Chip({
   label,
@@ -23,16 +24,36 @@ export function Chip({
   const theme = useTheme();
 
   const tones: Record<Tone, { bg: string; fg: string; border: string }> = {
-    neutral: { bg: theme.surface.sunken, fg: theme.text.secondary, border: theme.border.default },
-    moss: { bg: theme.accents.moss.tint, fg: theme.accents.moss.color, border: theme.accents.moss.color },
+    neutral: {
+      bg: theme.surface.sunken,
+      fg: theme.text.secondary,
+      border: theme.border.default,
+    },
+    moss: {
+      bg: theme.accents.moss.tint,
+      fg: theme.accents.moss.color,
+      border: theme.accents.moss.color,
+    },
     apricot: {
       bg: theme.accents.apricot.tint,
       fg: theme.accents.apricot.color,
       border: theme.accents.apricot.color,
     },
-    success: { bg: theme.success.bg, fg: theme.success.text, border: theme.success.border },
-    warning: { bg: theme.warning.bg, fg: theme.warning.text, border: theme.warning.border },
-    danger: { bg: theme.danger.bg, fg: theme.danger.text, border: theme.danger.border },
+    success: {
+      bg: theme.success.bg,
+      fg: theme.success.text,
+      border: theme.success.border,
+    },
+    warning: {
+      bg: theme.warning.bg,
+      fg: theme.warning.text,
+      border: theme.warning.border,
+    },
+    danger: {
+      bg: theme.danger.bg,
+      fg: theme.danger.text,
+      border: theme.danger.border,
+    },
     info: { bg: theme.info.bg, fg: theme.info.text, border: theme.info.border },
   };
 

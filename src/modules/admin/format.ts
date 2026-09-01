@@ -10,7 +10,14 @@
  */
 import { pct } from "@shared/format";
 
-export { rupees, count, pct, shortDate, dateTime, duration } from "@shared/format";
+export {
+  rupees,
+  count,
+  pct,
+  shortDate,
+  dateTime,
+  duration,
+} from "@shared/format";
 
 /**
  * A degradation rate derived from raw counts.
@@ -40,14 +47,18 @@ export function statusLabel(status: string): string {
 }
 
 /** Which semantic tone a subscription state should carry. */
-export function statusTone(status: string): "success" | "info" | "warning" | "neutral" | "danger" {
+export function statusTone(
+  status: string,
+): "success" | "info" | "warning" | "neutral" | "danger" {
   return (
-    ({
-      active: "success",
-      trialing: "info",
-      past_due: "warning",
-      cancelled: "neutral",
-      expired: "danger",
-    } as const)[status] || "neutral"
+    (
+      {
+        active: "success",
+        trialing: "info",
+        past_due: "warning",
+        cancelled: "neutral",
+        expired: "danger",
+      } as const
+    )[status] || "neutral"
   );
 }

@@ -22,7 +22,8 @@ function generate(): string {
   if (typeof globalThis.crypto?.getRandomValues === "function") {
     globalThis.crypto.getRandomValues(bytes);
   } else {
-    for (let i = 0; i < bytes.length; i += 1) bytes[i] = Math.floor(Math.random() * 256);
+    for (let i = 0; i < bytes.length; i += 1)
+      bytes[i] = Math.floor(Math.random() * 256);
   }
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
@@ -62,7 +63,11 @@ export function getDeviceName(): string {
 }
 
 export function getPlatform(): "ios" | "android" | "web" {
-  return Platform.OS === "ios" ? "ios" : Platform.OS === "android" ? "android" : "web";
+  return Platform.OS === "ios"
+    ? "ios"
+    : Platform.OS === "android"
+      ? "android"
+      : "web";
 }
 
 /** The `device` block every credential exchange sends. */

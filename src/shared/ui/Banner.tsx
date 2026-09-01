@@ -63,7 +63,12 @@ export function Banner({
         {action}
       </VStack>
       {onDismiss ? (
-        <Pressable onPress={onDismiss} hitSlop={10} accessibilityRole="button" accessibilityLabel="Dismiss">
+        <Pressable
+          onPress={onDismiss}
+          hitSlop={10}
+          accessibilityRole="button"
+          accessibilityLabel="Dismiss"
+        >
           <X size={16} color={map.c.text} />
         </Pressable>
       ) : null}

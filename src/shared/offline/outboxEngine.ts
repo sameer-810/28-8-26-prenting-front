@@ -52,7 +52,8 @@ function newId() {
   if (typeof globalThis.crypto?.getRandomValues === "function") {
     globalThis.crypto.getRandomValues(bytes);
   } else {
-    for (let i = 0; i < bytes.length; i += 1) bytes[i] = Math.floor(Math.random() * 256);
+    for (let i = 0; i < bytes.length; i += 1)
+      bytes[i] = Math.floor(Math.random() * 256);
   }
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
@@ -90,7 +91,9 @@ async function load() {
  * moment the parent taps, not when the server acknowledges. That is the whole
  * point: the UI is driven by local state and the network catches up.
  */
-export async function enqueue(op: Omit<OutboxOp, "id" | "createdAt" | "attempts">) {
+export async function enqueue(
+  op: Omit<OutboxOp, "id" | "createdAt" | "attempts">,
+) {
   await load();
   queue.push({ ...op, id: newId(), createdAt: Date.now(), attempts: 0 });
   await persist();
@@ -118,12 +121,17 @@ export async function drain(): Promise<void> {
     while (queue.length) {
       const op = queue[0];
       try {
-        await apiClient.request({ method: op.method, url: op.url, data: op.body });
+        await apiClient.request({
+          method: op.method,
+          url: op.url,
+          data: op.body,
+        });
         queue.shift();
         if (op.invalidate) landed.push(...op.invalidate);
         await persist();
       } catch (err) {
-        const status = (err as { response?: { status?: number } })?.response?.status;
+        const status = (err as { response?: { status?: number } })?.response
+          ?.status;
 
         if (status && status >= 400 && status < 500 && status !== 429) {
           /**
@@ -199,12 +207,17 @@ export function startOfflineEngine(client: QueryClient) {
    * is a good moment to try a drain, while `offline` only lowers confidence
    * enough to start probing. The probe decides.
    */
-  if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+  if (
+    typeof window !== "undefined" &&
+    typeof window.addEventListener === "function"
+  ) {
     window.addEventListener("online", () => {
       useOfflineStore.getState().setOnline(true);
       void drain();
     });
-    window.addEventListener("offline", () => useOfflineStore.getState().setOnline(false));
+    window.addEventListener("offline", () =>
+      useOfflineStore.getState().setOnline(false),
+    );
   }
 }
 

@@ -14,11 +14,41 @@
  */
 
 export const PHASES = [
-  { index: 1, key: "concept", title: "Concept", seconds: 600, audience: "parent" },
-  { index: 2, key: "teaching", title: "Teaching", seconds: 480, audience: "parent" },
-  { index: 3, key: "practice", title: "Practice", seconds: 360, audience: "child" },
-  { index: 4, key: "mock", title: "Quick test", seconds: 180, audience: "child" },
-  { index: 5, key: "revision", title: "Revision", seconds: 180, audience: "parent" },
+  {
+    index: 1,
+    key: "concept",
+    title: "Concept",
+    seconds: 600,
+    audience: "parent",
+  },
+  {
+    index: 2,
+    key: "teaching",
+    title: "Teaching",
+    seconds: 480,
+    audience: "parent",
+  },
+  {
+    index: 3,
+    key: "practice",
+    title: "Practice",
+    seconds: 360,
+    audience: "child",
+  },
+  {
+    index: 4,
+    key: "mock",
+    title: "Quick test",
+    seconds: 180,
+    audience: "child",
+  },
+  {
+    index: 5,
+    key: "revision",
+    title: "Revision",
+    seconds: 180,
+    audience: "parent",
+  },
 ] as const;
 
 export type PhaseKey = (typeof PHASES)[number]["key"];
@@ -112,8 +142,11 @@ export function elapsedSeconds(
   now = Date.now(),
 ): number {
   if (!phase.startedAt) return 0;
-  const end = phase.endedAt ?? (state.pausedAt ?? now);
-  return Math.max(0, Math.floor((end - phase.startedAt - phase.pausedMs) / 1000));
+  const end = phase.endedAt ?? state.pausedAt ?? now;
+  return Math.max(
+    0,
+    Math.floor((end - phase.startedAt - phase.pausedMs) / 1000),
+  );
 }
 
 /**
@@ -123,7 +156,10 @@ export function elapsedSeconds(
  * time-limited, and a parent mid-explanation must not be cut off. The UI shows
  * an overrun rather than jumping to the next phase on its own.
  */
-export function remainingSeconds(state: RuntimeState, now = Date.now()): number {
+export function remainingSeconds(
+  state: RuntimeState,
+  now = Date.now(),
+): number {
   const phase = currentPhase(state);
   if (!phase) return 0;
   return phase.plannedSeconds - elapsedSeconds(state, phase, now);
@@ -146,9 +182,10 @@ export function progress(state: RuntimeState, now = Date.now()): number {
     .filter((p) => p.completed)
     .reduce((s, p) => s + p.plannedSeconds, 0);
   const phase = currentPhase(state);
-  const inPhase = phase && !phase.completed
-    ? Math.min(phase.plannedSeconds, elapsedSeconds(state, phase, now))
-    : 0;
+  const inPhase =
+    phase && !phase.completed
+      ? Math.min(phase.plannedSeconds, elapsedSeconds(state, phase, now))
+      : 0;
   return Math.min(1, (done + inPhase) / TOTAL_SECONDS);
 }
 
@@ -179,7 +216,10 @@ export function segments(state: RuntimeState, now = Date.now()) {
 export function advance(
   state: RuntimeState,
   now = Date.now(),
-): { state: RuntimeState; checkpoint: { phaseIndex: number; actualSeconds: number } | null } {
+): {
+  state: RuntimeState;
+  checkpoint: { phaseIndex: number; actualSeconds: number } | null;
+} {
   const phase = currentPhase(state);
   if (!phase || phase.completed) return { state, checkpoint: null };
 
@@ -234,7 +274,10 @@ export function isFinished(state: RuntimeState): boolean {
 
 /** Whole minutes studied — what the completion screen reports. */
 export function minutesStudied(state: RuntimeState, now = Date.now()): number {
-  const seconds = state.phases.reduce((s, p) => s + elapsedSeconds(state, p, now), 0);
+  const seconds = state.phases.reduce(
+    (s, p) => s + elapsedSeconds(state, p, now),
+    0,
+  );
   return Math.round(seconds / 60);
 }
 

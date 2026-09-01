@@ -10,18 +10,32 @@ import { apiClient, unwrap } from "@api/apiClient";
 import { environment } from "@config/env";
 import { saveOnWeb, shareOrExplain } from "@shared/download";
 import { useAuthStore } from "@shared/store/useAuthStore";
-import type { Timeline, TimelineResult, ProofOfProgress, YearlyReport } from "../types";
+import type {
+  Timeline,
+  TimelineResult,
+  ProofOfProgress,
+  YearlyReport,
+} from "../types";
 
 export const progressApi = {
-  async timeline(childId: string, timeline: Timeline, range?: { from?: string; to?: string }) {
+  async timeline(
+    childId: string,
+    timeline: Timeline,
+    range?: { from?: string; to?: string },
+  ) {
     const qs = new URLSearchParams();
     if (range?.from) qs.set("from", range.from);
     if (range?.to) qs.set("to", range.to);
     const suffix = qs.toString() ? `?${qs}` : "";
-    return unwrap<TimelineResult>(apiClient.get(`/analytics/${childId}/${timeline}${suffix}`));
+    return unwrap<TimelineResult>(
+      apiClient.get(`/analytics/${childId}/${timeline}${suffix}`),
+    );
   },
 
-  async proofOfProgress(childId: string, range?: { from?: string; to?: string }) {
+  async proofOfProgress(
+    childId: string,
+    range?: { from?: string; to?: string },
+  ) {
     const qs = new URLSearchParams();
     if (range?.from) qs.set("from", range.from);
     if (range?.to) qs.set("to", range.to);
@@ -116,7 +130,9 @@ export const progressApi = {
 export const reportsApi = {
   async yearly(childId: string, year?: number) {
     const qs = year ? `?year=${year}` : "";
-    return unwrap<YearlyReport>(apiClient.get(`/reports/${childId}/yearly${qs}`));
+    return unwrap<YearlyReport>(
+      apiClient.get(`/reports/${childId}/yearly${qs}`),
+    );
   },
 
   async certificate(childId: string, year?: number) {
@@ -143,8 +159,11 @@ export async function downloadReport(
 
   try {
     if (Platform.OS === "web") {
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-      if (!res.ok) return { ok: false, reason: `The server returned ${res.status}` };
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok)
+        return { ok: false, reason: `The server returned ${res.status}` };
       saveOnWeb(await res.blob(), filename);
       return { ok: true };
     }
@@ -160,11 +179,25 @@ export async function downloadReport(
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    return await shareOrExplain(downloaded.uri, "application/pdf", filename, "com.adobe.pdf");
+    return await shareOrExplain(
+      downloaded.uri,
+      "application/pdf",
+      filename,
+      "com.adobe.pdf",
+    );
   } catch (err) {
-    return { ok: false, reason: (err as Error)?.message || "The download failed" };
+    return {
+      ok: false,
+      reason: (err as Error)?.message || "The download failed",
+    };
   }
 }
 
 /** Re-exported for existing imports; the shapes live in `../types`. */
-export type { Timeline, FluencyResult, TimelineResult, ProofOfProgress, YearlyReport } from "../types";
+export type {
+  Timeline,
+  FluencyResult,
+  TimelineResult,
+  ProofOfProgress,
+  YearlyReport,
+} from "../types";

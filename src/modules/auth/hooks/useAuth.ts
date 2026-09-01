@@ -17,7 +17,12 @@ function useSessionEstablisher() {
   const queryClient = useQueryClient();
 
   return (payload: Awaited<ReturnType<typeof authApi.login>>) => {
-    setAuth(payload.user, payload.family, payload.accessToken, payload.refreshToken);
+    setAuth(
+      payload.user,
+      payload.family,
+      payload.accessToken,
+      payload.refreshToken,
+    );
 
     /**
      * Warm the home language's font now, in the background.
@@ -116,8 +121,13 @@ export function useCreateChild() {
 export function useUpdateChild() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Record<string, unknown> }) =>
-      childApi.update(id, patch),
+    mutationFn: ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: Record<string, unknown>;
+    }) => childApi.update(id, patch),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["children"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });

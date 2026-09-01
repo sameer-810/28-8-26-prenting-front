@@ -39,7 +39,12 @@ export interface ChildCard {
   dailyCard: { title: string; body: string; accuracy: number | null } | null;
   resumable: { sessionId: string; currentPhase: number } | null;
   readyPlans: { id: string; title: string; subject: string }[];
-  suggestions: { id: string | null; title: string; chapter: string; subject: string }[];
+  suggestions: {
+    id: string | null;
+    title: string;
+    chapter: string;
+    subject: string;
+  }[];
 }
 
 export interface Dashboard {

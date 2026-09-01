@@ -19,19 +19,29 @@ const DIST = path.join(ROOT, "dist");
 const PORT = 8099;
 const HEADED = process.argv.includes("--headed");
 
-const DEMO = { email: "demo.parent@parentai.app", password: "ParentAI-Demo-2026" };
+const DEMO = {
+  email: "demo.parent@parentai.app",
+  password: "ParentAI-Demo-2026",
+};
 
 const pass = [];
 const fail = [];
 function check(name, ok, detail = "") {
   (ok ? pass : fail).push(name);
-  console.log(`${ok ? "  PASS" : "  FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`);
+  console.log(
+    `${ok ? "  PASS" : "  FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`,
+  );
 }
 
 const MIME = {
-  ".html": "text/html", ".js": "text/javascript", ".css": "text/css",
-  ".json": "application/json", ".ttf": "font/ttf", ".png": "image/png",
-  ".ico": "image/x-icon", ".svg": "image/svg+xml",
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".ttf": "font/ttf",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
+  ".svg": "image/svg+xml",
 };
 
 /**
@@ -49,7 +59,9 @@ function serve() {
       if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
         file = path.join(DIST, "index.html");
       }
-      res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream" });
+      res.writeHead(200, {
+        "Content-Type": MIME[path.extname(file)] || "application/octet-stream",
+      });
       fs.createReadStream(file).pipe(res);
     });
     server.listen(PORT, () => resolve(server));
@@ -63,12 +75,16 @@ const browser = await chromium.launch({ headless: !HEADED });
 const consoleErrors = [];
 const failedRequests = [];
 
-const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const context = await browser.newContext({
+  viewport: { width: 1280, height: 900 },
+});
 const page = await context.newPage();
 page.on("console", (m) => {
   if (m.type() === "error") consoleErrors.push(m.text());
 });
-page.on("requestfailed", (r) => failedRequests.push(`${r.method()} ${r.url()}`));
+page.on("requestfailed", (r) =>
+  failedRequests.push(`${r.method()} ${r.url()}`),
+);
 
 const base = `http://127.0.0.1:${PORT}`;
 
@@ -109,7 +125,10 @@ await page.waitForTimeout(1200);
 const bodyText = await page.evaluate(() => document.body.innerText || "");
 check("renders something", Boolean(bodyText && bodyText.trim().length > 0));
 check("lands on the sign-in screen", /Welcome back/i.test(bodyText || ""));
-check("the brand panel renders on a wide viewport", /ParentAI/.test(bodyText || ""));
+check(
+  "the brand panel renders on a wide viewport",
+  /ParentAI/.test(bodyText || ""),
+);
 
 console.log("\n=== 2. Client-side validation ===");
 await page.getByRole("button", { name: "Sign in" }).click();
@@ -122,7 +141,9 @@ check(
 
 console.log("\n=== 3. Wrong credentials ===");
 await page.getByPlaceholder("you@example.com").fill(DEMO.email);
-await page.locator('input[type="password"]').fill("definitely-not-the-password");
+await page
+  .locator('input[type="password"]')
+  .fill("definitely-not-the-password");
 await page.getByRole("button", { name: "Sign in" }).click();
 await page.waitForTimeout(2500);
 const afterBad = await page.evaluate(() => document.body.innerText || "");
@@ -136,15 +157,29 @@ await page.locator('input[type="password"]').fill(DEMO.password);
 await page.getByRole("button", { name: "Sign in" }).click();
 await page.waitForTimeout(4000);
 const dash = await page.evaluate(() => document.body.innerText || "");
-check("reaches the dashboard", /Good (morning|afternoon|evening)/i.test(dash || ""));
-check("the seeded children render", /Aarav/.test(dash || "") && /Diya/.test(dash || ""));
-check("real analytics reach the UI", /Sessions/i.test(dash || "") && /Best streak/i.test(dash || ""));
+check(
+  "reaches the dashboard",
+  /Good (morning|afternoon|evening)/i.test(dash || ""),
+);
+check(
+  "the seeded children render",
+  /Aarav/.test(dash || "") && /Diya/.test(dash || ""),
+);
+check(
+  "real analytics reach the UI",
+  /Sessions/i.test(dash || "") && /Best streak/i.test(dash || ""),
+);
 check(
   "the fluency band from the backend is shown",
   /Fluent|Proficient|Growing|Foundations/i.test(dash || ""),
-  (dash || "").match(/(Fluent & Confident|Proficient|Growing|Building Foundations)/)?.[0],
+  (dash || "").match(
+    /(Fluent & Confident|Proficient|Growing|Building Foundations)/,
+  )?.[0],
 );
-check("the desktop sidebar is present at 1280px", /Progress/.test(dash || "") && /Settings/.test(dash || ""));
+check(
+  "the desktop sidebar is present at 1280px",
+  /Progress/.test(dash || "") && /Settings/.test(dash || ""),
+);
 
 console.log("\n=== 5. Navigation and URLs ===");
 await page.getByRole("tab", { name: "Progress" }).click();
@@ -164,13 +199,20 @@ check(
   "the tab left behind is hidden from assistive technology",
   !/Good (morning|afternoon|evening)/i.test(progressText),
 );
-check("the URL follows the section", page.url().includes("/progress"), page.url());
+check(
+  "the URL follows the section",
+  page.url().includes("/progress"),
+  page.url(),
+);
 
 await page.goto(`${base}/children`, { waitUntil: "networkidle" });
 await page.waitForTimeout(2000);
 check(
   "a deep link restores that section after a reload",
-  page.url().includes("/children") && !/Welcome back/i.test((await page.evaluate(() => document.body.innerText || "")) || ""),
+  page.url().includes("/children") &&
+    !/Welcome back/i.test(
+      (await page.evaluate(() => document.body.innerText || "")) || "",
+    ),
 );
 
 console.log("\n=== 6. The session survives a reload ===");
@@ -209,9 +251,17 @@ const realErrors = consoleErrors.filter(
     !/Download the React DevTools|deprecated|findDOMNode/i.test(e) &&
     !/status of 401/i.test(e),
 );
-check("no unexpected console errors", realErrors.length === 0, realErrors.slice(0, 3).join(" | "));
+check(
+  "no unexpected console errors",
+  realErrors.length === 0,
+  realErrors.slice(0, 3).join(" | "),
+);
 const realFailed = failedRequests.filter((r) => !r.includes("favicon"));
-check("no failed requests", realFailed.length === 0, realFailed.slice(0, 3).join(" | "));
+check(
+  "no failed requests",
+  realFailed.length === 0,
+  realFailed.slice(0, 3).join(" | "),
+);
 
 if (HEADED) await page.waitForTimeout(4000);
 await browser.close();
@@ -219,6 +269,7 @@ server.close();
 
 console.log("\n" + "=".repeat(58));
 console.log(`PASSED ${pass.length} / ${pass.length + fail.length}`);
-if (fail.length) console.log("FAILED:\n" + fail.map((f) => `  - ${f}`).join("\n"));
+if (fail.length)
+  console.log("FAILED:\n" + fail.map((f) => `  - ${f}`).join("\n"));
 console.log("=".repeat(58));
 process.exit(fail.length ? 1 : 0);

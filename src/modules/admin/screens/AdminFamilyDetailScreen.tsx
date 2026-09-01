@@ -23,8 +23,18 @@ import {
 import { useAdminStore } from "@shared/store/useAdminStore";
 import type { AdminStackParamList } from "@navigation/types";
 import { useAdminFamily, useSetPlan, useSetActive } from "../hooks/useAdmin";
-import { planChangeSchema, activeChangeSchema, type PlanChangeInput } from "../admin.validation";
-import { count, shortDate, dateTime, degradedRate, statusLabel } from "../format";
+import {
+  planChangeSchema,
+  activeChangeSchema,
+  type PlanChangeInput,
+} from "../admin.validation";
+import {
+  count,
+  shortDate,
+  dateTime,
+  degradedRate,
+  statusLabel,
+} from "../format";
 import type { PlanCode } from "../types";
 
 const PLANS: { value: PlanCode; label: string }[] = [
@@ -65,7 +75,10 @@ export default function AdminFamilyDetailScreen() {
   if (error || !data) {
     return (
       <Screen title="Household">
-        <ErrorState message={apiErrorMessage(error, "Could not load this household")} onRetry={refetch} />
+        <ErrorState
+          message={apiErrorMessage(error, "Could not load this household")}
+          onRetry={refetch}
+        />
       </Screen>
     );
   }
@@ -99,12 +112,22 @@ export default function AdminFamilyDetailScreen() {
         <Card>
           <HStack gap={16} wrap>
             <StatTile value={count(data.children.length)} label="Children" />
-            <StatTile value={count(data.usage.completedSessions)} label="Sessions done" />
-            <StatTile value={count(data.usage.plansGenerated)} label="Plans made" />
+            <StatTile
+              value={count(data.usage.completedSessions)}
+              label="Sessions done"
+            />
+            <StatTile
+              value={count(data.usage.plansGenerated)}
+              label="Plans made"
+            />
             <StatTile
               value={degradedRate(data.usage.ai)}
               label="AI degraded"
-              hint={data.usage.ai.calls ? `${count(data.usage.ai.calls)} calls` : "no AI calls yet"}
+              hint={
+                data.usage.ai.calls
+                  ? `${count(data.usage.ai.calls)} calls`
+                  : "no AI calls yet"
+              }
             />
           </HStack>
           <View style={{ marginTop: 12 }}>
@@ -120,7 +143,12 @@ export default function AdminFamilyDetailScreen() {
             {data.parents.map((p, i) => (
               <View key={p.id}>
                 {i > 0 ? <Divider /> : null}
-                <HStack justify="space-between" align="center" gap={10} style={{ paddingVertical: 6 }}>
+                <HStack
+                  justify="space-between"
+                  align="center"
+                  gap={10}
+                  style={{ paddingVertical: 6 }}
+                >
                   <VStack gap={2} flex={1}>
                     <Text variant="label">{p.name || "—"}</Text>
                     <Text variant="caption" tone="tertiary">
@@ -147,22 +175,30 @@ export default function AdminFamilyDetailScreen() {
               data.children.map((c, i) => (
                 <View key={c.id}>
                   {i > 0 ? <Divider /> : null}
-                  <HStack justify="space-between" align="center" gap={10} style={{ paddingVertical: 6 }}>
+                  <HStack
+                    justify="space-between"
+                    align="center"
+                    gap={10}
+                    style={{ paddingVertical: 6 }}
+                  >
                     <VStack gap={2} flex={1}>
                       <Text variant="label">{c.name}</Text>
                       <Text variant="caption" tone="tertiary">
-                        Grade {c.grade} · {(c.board || "").toUpperCase()} · {c.fluencyBand || "no rating yet"}
+                        Grade {c.grade} · {(c.board || "").toUpperCase()} ·{" "}
+                        {c.fluencyBand || "no rating yet"}
                       </Text>
                     </VStack>
                     <Text variant="caption" tone="tertiary" numeric>
-                      {count(c.totalSessions)} sessions · {count(c.streak)}d streak
+                      {count(c.totalSessions)} sessions · {count(c.streak)}d
+                      streak
                     </Text>
                   </HStack>
                 </View>
               ))
             )}
             <Text variant="caption" tone="disabled">
-              No session content, teaching scripts or answers are available here, to anyone.
+              No session content, teaching scripts or answers are available
+              here, to anyone.
             </Text>
           </VStack>
         </Card>
@@ -185,8 +221,9 @@ export default function AdminFamilyDetailScreen() {
             <VStack gap={6}>
               <Text variant="h3">Changing this household</Text>
               <Text variant="body-sm" tone="tertiary">
-                Plan changes and suspension are restricted to superadmins. The server enforces this
-                too — the controls are hidden rather than shown and refused.
+                Plan changes and suspension are restricted to superadmins. The
+                server enforces this too — the controls are hidden rather than
+                shown and refused.
               </Text>
             </VStack>
           </Card>
@@ -208,7 +245,12 @@ function SuperadminActions({
   family,
   onDone,
 }: {
-  family: { id: string; name: string; isActive: boolean; subscription: { planCode: PlanCode } };
+  family: {
+    id: string;
+    name: string;
+    isActive: boolean;
+    subscription: { planCode: PlanCode };
+  };
   onDone: () => void;
 }) {
   const theme = useTheme();
@@ -232,9 +274,15 @@ function SuperadminActions({
         <Text variant="h3">Superadmin actions</Text>
 
         {setPlan.isError ? (
-          <Banner tone="danger" title="Plan not changed" body={apiErrorMessage(setPlan.error)} />
+          <Banner
+            tone="danger"
+            title="Plan not changed"
+            body={apiErrorMessage(setPlan.error)}
+          />
         ) : null}
-        {setPlan.isSuccess ? <Banner tone="success" title="Plan changed" /> : null}
+        {setPlan.isSuccess ? (
+          <Banner tone="success" title="Plan changed" />
+        ) : null}
 
         <VStack gap={10}>
           <ControlledSelect
@@ -253,19 +301,28 @@ function SuperadminActions({
             label="Change plan"
             loading={setPlan.isPending}
             onPress={planForm.handleSubmit((v) =>
-              setPlan.mutate(v, { onSuccess: () => { planForm.reset({ ...v, note: "" }); onDone(); } }),
+              setPlan.mutate(v, {
+                onSuccess: () => {
+                  planForm.reset({ ...v, note: "" });
+                  onDone();
+                },
+              }),
             )}
           />
           <Text variant="caption" tone="tertiary">
-            A plan too small for the children already in the household is refused by the server, not
-            silently applied.
+            A plan too small for the children already in the household is
+            refused by the server, not silently applied.
           </Text>
         </VStack>
 
         <Divider />
 
         {setActive.isError ? (
-          <Banner tone="danger" title="Not changed" body={apiErrorMessage(setActive.error)} />
+          <Banner
+            tone="danger"
+            title="Not changed"
+            body={apiErrorMessage(setActive.error)}
+          />
         ) : null}
 
         <VStack gap={10}>
@@ -296,8 +353,8 @@ function SuperadminActions({
             >
               <VStack gap={10}>
                 <Text variant="body-sm" style={{ color: theme.danger.text }}>
-                  Disable {family.name}? Every parent in it is signed out and cannot sign back in.
-                  Nothing is deleted.
+                  Disable {family.name}? Every parent in it is signed out and
+                  cannot sign back in. Nothing is deleted.
                 </Text>
                 <HStack gap={8}>
                   <Button
@@ -308,7 +365,13 @@ function SuperadminActions({
                     onPress={activeForm.handleSubmit((v) =>
                       setActive.mutate(
                         { isActive: false, note: v.note },
-                        { onSuccess: () => { setConfirmDisable(false); activeForm.reset(); onDone(); } },
+                        {
+                          onSuccess: () => {
+                            setConfirmDisable(false);
+                            activeForm.reset();
+                            onDone();
+                          },
+                        },
                       ),
                     )}
                   />
@@ -330,7 +393,12 @@ function SuperadminActions({
               onPress={activeForm.handleSubmit((v) =>
                 setActive.mutate(
                   { isActive: true, note: v.note },
-                  { onSuccess: () => { activeForm.reset(); onDone(); } },
+                  {
+                    onSuccess: () => {
+                      activeForm.reset();
+                      onDone();
+                    },
+                  },
                 ),
               )}
             />
@@ -338,8 +406,8 @@ function SuperadminActions({
         </VStack>
 
         <Text variant="caption" tone="disabled">
-          Neither action deletes anything. Erasure is the household's own right, exercised from
-          their privacy screen.
+          Neither action deletes anything. Erasure is the household's own right,
+          exercised from their privacy screen.
         </Text>
       </VStack>
     </Card>

@@ -27,19 +27,21 @@ export default function AccountScreen() {
   const theme = useTheme();
   const queryClient = useQueryClient();
   const user = useAuthStore((s) => s.user);
-  const [message, setMessage] = useState<
-    { tone: "success" | "danger"; title: string; body: string } | null
-  >(null);
+  const [message, setMessage] = useState<{
+    tone: "success" | "danger";
+    title: string;
+    body: string;
+  } | null>(null);
 
   const { data: devices } = useDevices();
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-  } = useForm<PasswordInput>({
+  const { control, handleSubmit, reset } = useForm<PasswordInput>({
     resolver: zodResolver(passwordSchema),
-    defaultValues: { currentPassword: "", newPassword: "", confirmPassword: "" },
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
   });
 
   const changePassword = useMutation({
@@ -68,7 +70,8 @@ export default function AccountScreen() {
 
   const revoke = useMutation({
     mutationFn: settingsApi.revokeDevice,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: settingsKeys.devices() }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: settingsKeys.devices() }),
   });
 
   return (
@@ -166,7 +169,11 @@ export default function AccountScreen() {
                 </React.Fragment>
               ))
             ) : (
-              <Text variant="body-sm" tone="tertiary" style={{ paddingVertical: 12 }}>
+              <Text
+                variant="body-sm"
+                tone="tertiary"
+                style={{ paddingVertical: 12 }}
+              >
                 No other devices.
               </Text>
             )}

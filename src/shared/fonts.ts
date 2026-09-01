@@ -22,7 +22,8 @@ import * as Font from "expo-font";
  *     beside it stays left-to-right.
  */
 
-export type LanguageCode = "en" | "hi" | "mr" | "ur" | "ta" | "te" | "kn" | "bn";
+export type LanguageCode =
+  "en" | "hi" | "mr" | "ur" | "ta" | "te" | "kn" | "bn";
 
 export interface ScriptFace {
   /** The family name to pass to `fontFamily`. */
@@ -65,7 +66,10 @@ async function pair(
  *
  * Regular and SemiBold are the only weights a vernacular block ever asks for.
  */
-const LOADERS: Record<Exclude<LanguageCode, "en">, () => Promise<Record<string, number>>> = {
+const LOADERS: Record<
+  Exclude<LanguageCode, "en">,
+  () => Promise<Record<string, number>>
+> = {
   hi: () =>
     pair(
       import("@expo-google-fonts/noto-sans-devanagari/400Regular"),
@@ -105,13 +109,41 @@ const LOADERS: Record<Exclude<LanguageCode, "en">, () => Promise<Record<string, 
 
 const SCRIPTS: Record<LanguageCode, Omit<ScriptFace, "load">> = {
   en: { family: "Inter_400Regular", direction: "ltr", lineHeightRatio: 1.45 },
-  hi: { family: "NotoSansDevanagari_400Regular", direction: "ltr", lineHeightRatio: 1.65 },
-  mr: { family: "NotoSansDevanagari_400Regular", direction: "ltr", lineHeightRatio: 1.65 },
-  ta: { family: "NotoSansTamil_400Regular", direction: "ltr", lineHeightRatio: 1.7 },
-  te: { family: "NotoSansTelugu_400Regular", direction: "ltr", lineHeightRatio: 1.7 },
-  kn: { family: "NotoSansKannada_400Regular", direction: "ltr", lineHeightRatio: 1.7 },
-  bn: { family: "NotoSansBengali_400Regular", direction: "ltr", lineHeightRatio: 1.65 },
-  ur: { family: "NotoNastaliqUrdu_400Regular", direction: "rtl", lineHeightRatio: 1.9 },
+  hi: {
+    family: "NotoSansDevanagari_400Regular",
+    direction: "ltr",
+    lineHeightRatio: 1.65,
+  },
+  mr: {
+    family: "NotoSansDevanagari_400Regular",
+    direction: "ltr",
+    lineHeightRatio: 1.65,
+  },
+  ta: {
+    family: "NotoSansTamil_400Regular",
+    direction: "ltr",
+    lineHeightRatio: 1.7,
+  },
+  te: {
+    family: "NotoSansTelugu_400Regular",
+    direction: "ltr",
+    lineHeightRatio: 1.7,
+  },
+  kn: {
+    family: "NotoSansKannada_400Regular",
+    direction: "ltr",
+    lineHeightRatio: 1.7,
+  },
+  bn: {
+    family: "NotoSansBengali_400Regular",
+    direction: "ltr",
+    lineHeightRatio: 1.65,
+  },
+  ur: {
+    family: "NotoNastaliqUrdu_400Regular",
+    direction: "rtl",
+    lineHeightRatio: 1.9,
+  },
 };
 
 /** Semibold counterparts, for headings inside a vernacular block. */
@@ -161,7 +193,10 @@ export const useFontStore = create<FontState>((set, get) => ({
       } catch {
         // Deliberately swallowed — see above.
       } finally {
-        set((s) => ({ ...s, pending: { ...s.pending, [language]: undefined } }));
+        set((s) => ({
+          ...s,
+          pending: { ...s.pending, [language]: undefined },
+        }));
       }
     })();
 
@@ -184,7 +219,11 @@ export function scriptFace(language: LanguageCode, weight: 400 | 600 = 400) {
   const spec = SCRIPTS[language] || SCRIPTS.en;
   const family = weight === 600 ? SEMIBOLD[language] : spec.family;
   return {
-    fontFamily: ready ? family : weight === 600 ? "Inter_600SemiBold" : "Inter_400Regular",
+    fontFamily: ready
+      ? family
+      : weight === 600
+        ? "Inter_600SemiBold"
+        : "Inter_400Regular",
     writingDirection: spec.direction,
     lineHeightRatio: spec.lineHeightRatio,
     isRtl: spec.direction === "rtl",

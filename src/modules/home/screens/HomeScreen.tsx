@@ -1,6 +1,12 @@
 import React from "react";
 import { View, Pressable } from "react-native";
-import { Plus, Sparkles, BookOpen, Clock, ChevronRight } from "lucide-react-native";
+import {
+  Plus,
+  Sparkles,
+  BookOpen,
+  Clock,
+  ChevronRight,
+} from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useAppNavigation } from "@navigation/types";
 import { useAuthStore } from "@shared/store/useAuthStore";
@@ -149,19 +155,25 @@ function ChildCardView({ child }: { child: ChildCard }) {
          * Names what the child actually did. "Mastered Fraction Addition" is a
          * reason to come back tomorrow; "Session complete" is a receipt.
          */}
-        {child.dailyCard ? (
-          <DailyCard card={child.dailyCard} />
-        ) : null}
+        {child.dailyCard ? <DailyCard card={child.dailyCard} /> : null}
 
         <View style={{ paddingHorizontal: 18 }}>
           <StatRow>
-            <StatTile value={child.last30Days.sessions} label="Sessions" hint="30 days" />
+            <StatTile
+              value={child.last30Days.sessions}
+              label="Sessions"
+              hint="30 days"
+            />
             <StatTile
               value={`${Math.round(child.last30Days.minutesStudied / 60)}h`}
               label="Studied"
               hint="30 days"
             />
-            <StatTile value={child.streak.longest} label="Best streak" hint="days" />
+            <StatTile
+              value={child.streak.longest}
+              label="Best streak"
+              hint="days"
+            />
           </StatRow>
         </View>
 
@@ -181,7 +193,9 @@ function ChildCardView({ child }: { child: ChildCard }) {
               label="Resume session"
               icon={<Clock size={16} color="#FFFFFF" />}
               onPress={() =>
-                navigation.navigate("Session", { sessionId: child.resumable!.sessionId })
+                navigation.navigate("Session", {
+                  sessionId: child.resumable!.sessionId,
+                })
               }
             />
           ) : (
@@ -214,7 +228,12 @@ function ChildCardView({ child }: { child: ChildCard }) {
                     paddingVertical: 8,
                   }}
                 >
-                  <Text variant="body-sm" tone="secondary" style={{ flex: 1 }} numberOfLines={1}>
+                  <Text
+                    variant="body-sm"
+                    tone="secondary"
+                    style={{ flex: 1 }}
+                    numberOfLines={1}
+                  >
                     {plan.title}
                   </Text>
                   <ChevronRight size={16} color={theme.text.disabled} />
@@ -239,7 +258,11 @@ function timeGreeting() {
  * The nudge. Outside the study window it does not pretend it is study time —
  * telling a parent to start 30 minutes at 11pm is not a useful prompt.
  */
-function subtitleFor(data?: { inStudyWindow: boolean; children: ChildCard[]; usage: { sessionsLeft: number } }) {
+function subtitleFor(data?: {
+  inStudyWindow: boolean;
+  children: ChildCard[];
+  usage: { sessionsLeft: number };
+}) {
   if (!data) return undefined;
   const pending = data.children.filter((c) => !c.studiedToday);
   if (pending.length === 0) return "Everyone's done for today. Nicely handled.";

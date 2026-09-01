@@ -83,7 +83,12 @@ export default function CaptureScreen() {
        */
       if (apiErrorCode(err) === "TOPIC_AMBIGUOUS") {
         const details = apiErrorDetails<{
-          suggestions: { id: string; topic: string; chapter: string; score: number }[];
+          suggestions: {
+            id: string;
+            topic: string;
+            chapter: string;
+            score: number;
+          }[];
         }>(err);
         setSuggestions(details?.suggestions ?? []);
         setError(null);
@@ -126,7 +131,11 @@ export default function CaptureScreen() {
         {error ? (
           <Banner
             tone={quotaExceeded ? "warning" : "danger"}
-            title={quotaExceeded ? "That's today's sessions used" : "Couldn't build a session"}
+            title={
+              quotaExceeded
+                ? "That's today's sessions used"
+                : "Couldn't build a session"
+            }
             body={error}
             onDismiss={() => setError(null)}
           />
@@ -171,7 +180,9 @@ export default function CaptureScreen() {
                 <Chip
                   key={q}
                   label={q}
-                  onPress={() => setIntent((prev) => (prev ? `${prev} — ${q}` : q))}
+                  onPress={() =>
+                    setIntent((prev) => (prev ? `${prev} — ${q}` : q))
+                  }
                 />
               ))}
             </HStack>

@@ -7,7 +7,11 @@ import { z } from "zod";
  */
 
 export const adminLoginSchema = z.object({
-  email: z.string().trim().min(1, "Enter your work email").email("That doesn't look like an email"),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Enter your work email")
+    .email("That doesn't look like an email"),
   password: z.string().min(1, "Enter your password"),
 });
 
@@ -43,7 +47,11 @@ export type ActiveChangeInput = z.infer<typeof activeChangeSchema>;
  */
 export const createAdminSchema = z.object({
   name: z.string().trim().min(1, "Enter their name").max(80),
-  email: z.string().trim().min(1, "Enter their work email").email("That doesn't look like an email"),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Enter their work email")
+    .email("That doesn't look like an email"),
   password: z.string().min(10, "At least 10 characters").max(128),
   role: z.enum(["superadmin", "support"]),
 });

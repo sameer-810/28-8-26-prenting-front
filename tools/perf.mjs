@@ -28,13 +28,18 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = path.join(ROOT, "dist");
 const PORT = 8099;
 const HEADED = process.argv.includes("--headed");
-const DEMO = { email: "demo.parent@parentai.app", password: "ParentAI-Demo-2026" };
+const DEMO = {
+  email: "demo.parent@parentai.app",
+  password: "ParentAI-Demo-2026",
+};
 
 const pass = [];
 const fail = [];
 function check(name, ok, detail = "") {
   (ok ? pass : fail).push(name);
-  console.log(`${ok ? "  PASS" : "  FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`);
+  console.log(
+    `${ok ? "  PASS" : "  FAIL"}  ${name}${detail ? ` — ${detail}` : ""}`,
+  );
 }
 
 /**
@@ -53,9 +58,14 @@ const BUDGETS = {
 };
 
 const MIME = {
-  ".html": "text/html", ".js": "text/javascript", ".css": "text/css",
-  ".json": "application/json", ".ttf": "font/ttf", ".png": "image/png",
-  ".ico": "image/x-icon", ".svg": "image/svg+xml",
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".ttf": "font/ttf",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
+  ".svg": "image/svg+xml",
 };
 /**
  * Everything except the formats that are already compressed internally.
@@ -65,15 +75,27 @@ const MIME = {
  * it, so excluding it reported the font payload at roughly double what a parent
  * downloads and failed a budget that was not actually being missed.
  */
-const PRECOMPRESSED = new Set([".png", ".jpg", ".jpeg", ".webp", ".ico", ".woff", ".woff2", ".gz"]);
+const PRECOMPRESSED = new Set([
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".ico",
+  ".woff",
+  ".woff2",
+  ".gz",
+]);
 
 const server = http.createServer((req, res) => {
   const url = decodeURIComponent((req.url || "/").split("?")[0]);
   let file = path.join(DIST, url);
-  if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(DIST, "index.html");
+  if (!fs.existsSync(file) || fs.statSync(file).isDirectory())
+    file = path.join(DIST, "index.html");
   const ext = path.extname(file);
   const body = fs.readFileSync(file);
-  const wantsGzip = /\bgzip\b/.test(req.headers["accept-encoding"] || "") && !PRECOMPRESSED.has(ext);
+  const wantsGzip =
+    /\bgzip\b/.test(req.headers["accept-encoding"] || "") &&
+    !PRECOMPRESSED.has(ext);
   const payload = wantsGzip ? zlib.gzipSync(body, { level: 6 }) : body;
   res.writeHead(200, {
     "Content-Type": MIME[ext] || "application/octet-stream",
@@ -85,7 +107,9 @@ const server = http.createServer((req, res) => {
 await new Promise((r) => server.listen(PORT, r));
 
 const browser = await chromium.launch({ headless: !HEADED });
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const ctx = await browser.newContext({
+  viewport: { width: 1280, height: 900 },
+});
 const page = await ctx.newPage();
 const base = `http://127.0.0.1:${PORT}`;
 
@@ -116,16 +140,26 @@ const paint = await page.evaluate(() => {
   };
 });
 
-const firstLoadKb = Math.round(transferred.reduce((s, r) => s + r.bytes, 0) / 1024);
+const firstLoadKb = Math.round(
+  transferred.reduce((s, r) => s + r.bytes, 0) / 1024,
+);
 const jsKb = Math.round(
-  transferred.filter((r) => r.url.endsWith(".js")).reduce((s, r) => s + r.bytes, 0) / 1024,
+  transferred
+    .filter((r) => r.url.endsWith(".js"))
+    .reduce((s, r) => s + r.bytes, 0) / 1024,
 );
 const fontKb = Math.round(
-  transferred.filter((r) => r.url.endsWith(".ttf")).reduce((s, r) => s + r.bytes, 0) / 1024,
+  transferred
+    .filter((r) => r.url.endsWith(".ttf"))
+    .reduce((s, r) => s + r.bytes, 0) / 1024,
 );
 
-console.log(`  transferred ${firstLoadKb} KB  (js ${jsKb} KB, fonts ${fontKb} KB, ${transferred.length} requests)`);
-console.log(`  first contentful paint ${paint.fcp}ms · DOM ready ${paint.domContentLoaded}ms · load ${paint.load}ms`);
+console.log(
+  `  transferred ${firstLoadKb} KB  (js ${jsKb} KB, fonts ${fontKb} KB, ${transferred.length} requests)`,
+);
+console.log(
+  `  first contentful paint ${paint.fcp}ms · DOM ready ${paint.domContentLoaded}ms · load ${paint.load}ms`,
+);
 console.log(`  sign-in screen usable at ${signInVisibleMs}ms`);
 
 check(
@@ -209,7 +243,8 @@ for (const tab of ["Progress", "Children", "Settings", "Home"]) {
   const t = Date.now();
   await page.getByRole("tab", { name: tab }).click();
   await page.waitForFunction(
-    (name) => window.location.pathname.includes(name.toLowerCase()) || name === "Home",
+    (name) =>
+      window.location.pathname.includes(name.toLowerCase()) || name === "Home",
     tab,
     { timeout: 5000 },
   );
@@ -217,7 +252,11 @@ for (const tab of ["Progress", "Children", "Settings", "Home"]) {
 }
 const worstNav = Math.max(...navTimings);
 console.log(`  tab switches: ${navTimings.join("ms, ")}ms`);
-check("switching sections is immediate", worstNav <= 400, `worst ${worstNav}ms`);
+check(
+  "switching sections is immediate",
+  worstNav <= 400,
+  `worst ${worstNav}ms`,
+);
 
 console.log("\n=== 5. A returning parent ===");
 const t2 = Date.now();
@@ -225,7 +264,11 @@ await page.reload({ waitUntil: "load" });
 await page.waitForSelector("text=Aarav", { timeout: 30000 });
 const returnMs = Date.now() - t2;
 console.log(`  dashboard back in ${returnMs}ms on a warm cache`);
-check("a reload is faster than a cold start", returnMs <= signInVisibleMs + dashboardReadyMs, `${returnMs}ms`);
+check(
+  "a reload is faster than a cold start",
+  returnMs <= signInVisibleMs + dashboardReadyMs,
+  `${returnMs}ms`,
+);
 
 if (HEADED) await page.waitForTimeout(4000);
 await browser.close();
@@ -233,6 +276,7 @@ server.close();
 
 console.log("\n" + "=".repeat(60));
 console.log(`PASSED ${pass.length} / ${pass.length + fail.length}`);
-if (fail.length) console.log("FAILED:\n" + fail.map((f) => `  - ${f}`).join("\n"));
+if (fail.length)
+  console.log("FAILED:\n" + fail.map((f) => `  - ${f}`).join("\n"));
 console.log("=".repeat(60));
 process.exit(fail.length ? 1 : 0);

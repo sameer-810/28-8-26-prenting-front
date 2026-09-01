@@ -14,12 +14,35 @@
  */
 
 const VULGAR: Record<string, string> = {
-  "½": "1/2", "⅓": "1/3", "⅔": "2/3", "¼": "1/4", "¾": "3/4",
-  "⅕": "1/5", "⅖": "2/5", "⅗": "3/5", "⅘": "4/5",
-  "⅙": "1/6", "⅚": "5/6", "⅛": "1/8", "⅜": "3/8", "⅝": "5/8", "⅞": "7/8",
+  "½": "1/2",
+  "⅓": "1/3",
+  "⅔": "2/3",
+  "¼": "1/4",
+  "¾": "3/4",
+  "⅕": "1/5",
+  "⅖": "2/5",
+  "⅗": "3/5",
+  "⅘": "4/5",
+  "⅙": "1/6",
+  "⅚": "5/6",
+  "⅛": "1/8",
+  "⅜": "3/8",
+  "⅝": "5/8",
+  "⅞": "7/8",
 };
 
-const FILLER = new Set(["the", "a", "an", "is", "are", "it", "its", "of", "to", "="]);
+const FILLER = new Set([
+  "the",
+  "a",
+  "an",
+  "is",
+  "are",
+  "it",
+  "its",
+  "of",
+  "to",
+  "=",
+]);
 
 export interface Question {
   prompt: string;
@@ -38,8 +61,11 @@ export interface Verdict {
 }
 
 export function normalise(value: unknown): string {
-  let s = String(value ?? "").trim().toLowerCase();
-  for (const [glyph, plain] of Object.entries(VULGAR)) s = s.split(glyph).join(plain);
+  let s = String(value ?? "")
+    .trim()
+    .toLowerCase();
+  for (const [glyph, plain] of Object.entries(VULGAR))
+    s = s.split(glyph).join(plain);
   return (
     s
       .replace(/[₹$€£]/g, "")
@@ -100,7 +126,12 @@ export function parseNumeric(value: unknown): Numeric | null {
   if (frac) {
     const [, num, den] = frac.map(Number);
     if (den === 0) return null;
-    return { value: num / den, isFraction: true, numerator: num, denominator: den };
+    return {
+      value: num / den,
+      isFraction: true,
+      numerator: num,
+      denominator: den,
+    };
   }
 
   if (/^-?(\d+\.?\d*|\.\d+)$/.test(stripped)) {
@@ -133,7 +164,9 @@ export function resolveOption(value: unknown, options?: string[]): number {
   const exact = options.findIndex((o) => normalise(o) === s);
   if (exact >= 0) return exact;
 
-  const loose = options.findIndex((o) => normaliseWords(o) === normaliseWords(s));
+  const loose = options.findIndex(
+    (o) => normaliseWords(o) === normaliseWords(s),
+  );
   if (loose >= 0) return loose;
 
   if (/^[a-z]$/.test(s)) {
@@ -161,10 +194,20 @@ export function grade(given: unknown, question: Question): Verdict {
    * their accuracy, and that number propagates into their fluency band.
    */
   if (question?.unscored || normalise(expected) === "") {
-    return { correct: false, skipped: true, reason: "unscored", needsSimplifying: false };
+    return {
+      correct: false,
+      skipped: true,
+      reason: "unscored",
+      needsSimplifying: false,
+    };
   }
   if (given === null || given === undefined || normalise(given) === "") {
-    return { correct: false, skipped: true, reason: "blank", needsSimplifying: false };
+    return {
+      correct: false,
+      skipped: true,
+      reason: "blank",
+      needsSimplifying: false,
+    };
   }
 
   if (options?.length) {
@@ -202,13 +245,28 @@ export function grade(given: unknown, question: Question): Verdict {
   }
 
   if (normalise(given) === normalise(expected)) {
-    return { correct: true, skipped: false, reason: "exact", needsSimplifying: false };
+    return {
+      correct: true,
+      skipped: false,
+      reason: "exact",
+      needsSimplifying: false,
+    };
   }
   if (normaliseWords(given) === normaliseWords(expected)) {
-    return { correct: true, skipped: false, reason: "text", needsSimplifying: false };
+    return {
+      correct: true,
+      skipped: false,
+      reason: "text",
+      needsSimplifying: false,
+    };
   }
 
-  return { correct: false, skipped: false, reason: "mismatch", needsSimplifying: false };
+  return {
+    correct: false,
+    skipped: false,
+    reason: "mismatch",
+    needsSimplifying: false,
+  };
 }
 
 /**

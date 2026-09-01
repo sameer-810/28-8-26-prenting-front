@@ -4,7 +4,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAdminStore } from "@shared/store/useAdminStore";
 import { useTheme } from "@shared/useTheme";
 import { palette } from "@shared/designSystem";
-import { AdminNav, type AdminSection } from "@modules/admin/components/AdminNav";
+import {
+  AdminNav,
+  type AdminSection,
+} from "@modules/admin/components/AdminNav";
 import AdminLoginScreen from "@modules/admin/screens/AdminLoginScreen";
 import AdminDashboardScreen from "@modules/admin/screens/AdminDashboardScreen";
 import AdminFamiliesScreen from "@modules/admin/screens/AdminFamiliesScreen";
@@ -79,7 +82,11 @@ export default function AdminNavigator() {
         header: ({ navigation, route }) => (
           <AdminNav
             /** The detail screen is reached from Households, so that stays lit. */
-            active={(route.name === "AdminFamilyDetail" ? "AdminFamilies" : route.name) as AdminSection}
+            active={
+              (route.name === "AdminFamilyDetail"
+                ? "AdminFamilies"
+                : route.name) as AdminSection
+            }
             onNavigate={(section) => navigation.navigate(section)}
           />
         ),
@@ -88,7 +95,10 @@ export default function AdminNavigator() {
     >
       <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} />
       <Stack.Screen name="AdminFamilies" component={AdminFamiliesScreen} />
-      <Stack.Screen name="AdminFamilyDetail" component={AdminFamilyDetailScreen} />
+      <Stack.Screen
+        name="AdminFamilyDetail"
+        component={AdminFamilyDetailScreen}
+      />
       <Stack.Screen name="AdminCurriculum" component={AdminCurriculumScreen} />
       <Stack.Screen name="AdminStaff" component={AdminStaffScreen} />
     </Stack.Navigator>

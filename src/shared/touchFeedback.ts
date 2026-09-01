@@ -1,7 +1,8 @@
 import { Platform, AccessibilityInfo } from "react-native";
 import * as Haptics from "expo-haptics";
 
-export type FeedbackTone = "select" | "impact" | "success" | "warning" | "error";
+export type FeedbackTone =
+  "select" | "impact" | "success" | "warning" | "error";
 
 /**
  * Haptics, with the two guards that matter.

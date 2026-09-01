@@ -1,10 +1,24 @@
 import React from "react";
 import { View, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Sparkles, Flame, TrendingUp, Star, CloudOff } from "lucide-react-native";
+import {
+  Sparkles,
+  Flame,
+  TrendingUp,
+  Star,
+  CloudOff,
+} from "lucide-react-native";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
-import { Text, Button, Card, VStack, HStack, StatTile, StatRow } from "@shared/ui";
+import {
+  Text,
+  Button,
+  Card,
+  VStack,
+  HStack,
+  StatTile,
+  StatRow,
+} from "@shared/ui";
 import { FluencyMeter } from "@shared/ui/FluencyMeter";
 import type { StudyPlan, CompletionResult } from "../api/sessionApi";
 
@@ -116,7 +130,8 @@ export function CompletionSheet({
                   />
                   <VStack gap={2} flex={1}>
                     <Text variant="label-lg">
-                      {streak.current} day{streak.current === 1 ? "" : "s"} in a row
+                      {streak.current} day{streak.current === 1 ? "" : "s"} in a
+                      row
                     </Text>
                     <Text variant="caption" tone="tertiary">
                       {streak.isNewRecord
@@ -147,7 +162,9 @@ export function CompletionSheet({
              * band moved. Filtered to the ones that are not already spelled out
              * above, so the sheet does not say the same thing three times.
              */}
-            {milestones.filter((m) => m.kind !== "daily_card" && m.kind !== "streak").length > 0 ? (
+            {milestones.filter(
+              (m) => m.kind !== "daily_card" && m.kind !== "streak",
+            ).length > 0 ? (
               <VStack gap={8}>
                 {milestones
                   .filter((m) => m.kind !== "daily_card" && m.kind !== "streak")

@@ -45,14 +45,22 @@ export default function AdminStaffScreen() {
         {isLoading ? (
           <Skeleton height={140} />
         ) : error ? (
-          <ErrorState message={apiErrorMessage(error, "Could not load staff")} onRetry={refetch} />
+          <ErrorState
+            message={apiErrorMessage(error, "Could not load staff")}
+            onRetry={refetch}
+          />
         ) : (
           <Card>
             <VStack gap={8}>
               {(data || []).map((a, i) => (
                 <View key={a.id}>
                   {i > 0 ? <Divider /> : null}
-                  <HStack justify="space-between" align="center" gap={10} style={{ paddingVertical: 6 }}>
+                  <HStack
+                    justify="space-between"
+                    align="center"
+                    gap={10}
+                    style={{ paddingVertical: 6 }}
+                  >
                     <VStack gap={2} flex={1}>
                       <HStack gap={8} align="center" wrap>
                         <Text variant="label">{a.name}</Text>
@@ -124,17 +132,21 @@ function CreateAdminCard({ onCreated }: { onCreated: () => void }) {
         <Text variant="h3">Add a staff account</Text>
 
         {create.isError ? (
-          <Banner tone="danger" title="Not created" body={apiErrorMessage(create.error)} />
+          <Banner
+            tone="danger"
+            title="Not created"
+            body={apiErrorMessage(create.error)}
+          />
         ) : null}
         {create.isSuccess ? (
-          <Banner tone="success" title="Account created" body="They can sign in now." />
+          <Banner
+            tone="success"
+            title="Account created"
+            body="They can sign in now."
+          />
         ) : null}
 
-        <ControlledTextField
-          control={control}
-          name="name"
-          label="Name"
-        />
+        <ControlledTextField control={control} name="name" label="Name" />
         <ControlledTextField
           control={control}
           name="email"
@@ -155,8 +167,16 @@ function CreateAdminCard({ onCreated }: { onCreated: () => void }) {
           name="role"
           label="Role"
           options={[
-          { value: "support", label: "Support", hint: "Read only — cannot change plans" },
-          { value: "superadmin", label: "Superadmin", hint: "Can change plans and disable households" },
+            {
+              value: "support",
+              label: "Support",
+              hint: "Read only — cannot change plans",
+            },
+            {
+              value: "superadmin",
+              label: "Superadmin",
+              hint: "Can change plans and disable households",
+            },
           ]}
         />
 
@@ -174,8 +194,9 @@ function CreateAdminCard({ onCreated }: { onCreated: () => void }) {
         />
 
         <Text variant="caption" tone="disabled">
-          There is no self-service password reset for staff. A locked-out account is recovered by an
-          operator running the seed script against production.
+          There is no self-service password reset for staff. A locked-out
+          account is recovered by an operator running the seed script against
+          production.
         </Text>
       </VStack>
     </Card>

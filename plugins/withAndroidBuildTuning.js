@@ -20,11 +20,16 @@
  * into the global Gradle home, because there is a window before this plugin is
  * applied and the failure lands inside it.
  */
-const { withAppBuildGradle, withGradleProperties } = require("@expo/config-plugins");
+const {
+  withAppBuildGradle,
+  withGradleProperties,
+} = require("@expo/config-plugins");
 
 /** Upsert a gradle.properties key=value pair. */
 function setProp(cfg, key, value) {
-  const i = cfg.modResults.findIndex((p) => p.type === "property" && p.key === key);
+  const i = cfg.modResults.findIndex(
+    (p) => p.type === "property" && p.key === key,
+  );
   const item = { type: "property", key, value };
   if (i >= 0) cfg.modResults[i] = item;
   else cfg.modResults.push(item);
@@ -32,7 +37,11 @@ function setProp(cfg, key, value) {
 
 module.exports = function withAndroidBuildTuning(config) {
   config = withGradleProperties(config, (cfg) => {
-    setProp(cfg, "org.gradle.jvmargs", "-Xmx4096m -XX:MaxMetaspaceSize=1024m -Dfile.encoding=UTF-8");
+    setProp(
+      cfg,
+      "org.gradle.jvmargs",
+      "-Xmx4096m -XX:MaxMetaspaceSize=1024m -Dfile.encoding=UTF-8",
+    );
     setProp(cfg, "reactNativeArchitectures", "arm64-v8a,armeabi-v7a");
     return cfg;
   });

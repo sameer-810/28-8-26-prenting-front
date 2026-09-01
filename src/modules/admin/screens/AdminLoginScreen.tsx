@@ -30,7 +30,14 @@ export default function AdminLoginScreen() {
 
   return (
     <Screen>
-      <View style={{ width: "100%", maxWidth: 400, alignSelf: "center", paddingTop: 40 }}>
+      <View
+        style={{
+          width: "100%",
+          maxWidth: 400,
+          alignSelf: "center",
+          paddingTop: 40,
+        }}
+      >
         <Card>
           <VStack gap={20}>
             <VStack gap={6}>
@@ -91,8 +98,9 @@ export default function AdminLoginScreen() {
             />
 
             <Text variant="caption" tone="disabled">
-              Staff accounts have no password reset. If you are locked out, an operator runs{" "}
-              npm run seed:admin -- --email you@… --reset-password against production.
+              Staff accounts have no password reset. If you are locked out, an
+              operator runs npm run seed:admin -- --email you@… --reset-password
+              against production.
             </Text>
           </VStack>
         </Card>

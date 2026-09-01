@@ -6,7 +6,11 @@ import { Clock, RefreshCw, Play, BookOpen } from "lucide-react-native";
 import { apiErrorMessage } from "@api/apiClient";
 import { useTheme } from "@shared/useTheme";
 import { useFontStore, type LanguageCode } from "@shared/fonts";
-import { useAppNavigation, goToTab, type AppStackParamList } from "@navigation/types";
+import {
+  useAppNavigation,
+  goToTab,
+  type AppStackParamList,
+} from "@navigation/types";
 import {
   Screen,
   Text,
@@ -51,7 +55,8 @@ export default function PlanScreen() {
   }, [plan, ensureFont]);
 
   const start = useMutation({
-    mutationFn: () => sessionApi.start({ studyPlanId: planId, childId: plan!.childId }),
+    mutationFn: () =>
+      sessionApi.start({ studyPlanId: planId, childId: plan!.childId }),
     onSuccess: (res) =>
       navigation.navigate("Session", { sessionId: res.session.id }),
   });
@@ -151,7 +156,9 @@ export default function PlanScreen() {
                       width: 3,
                       alignSelf: "stretch",
                       borderRadius: 2,
-                      backgroundColor: phase.ready ? theme.brand[400] : theme.border.default,
+                      backgroundColor: phase.ready
+                        ? theme.brand[400]
+                        : theme.border.default,
                     }}
                   />
                   <VStack gap={1} flex={1}>
@@ -164,7 +171,8 @@ export default function PlanScreen() {
                       ) : null}
                     </HStack>
                     <Text variant="caption" tone="tertiary">
-                      {phase.audience === "parent" ? "You" : "Your child"} · {phase.objective}
+                      {phase.audience === "parent" ? "You" : "Your child"} ·{" "}
+                      {phase.objective}
                     </Text>
                   </VStack>
                 </HStack>
@@ -205,7 +213,8 @@ export default function PlanScreen() {
           />
           {!ready ? (
             <Text variant="caption" tone="tertiary" align="center">
-              Your teaching guide is ready — the questions take a few more seconds.
+              Your teaching guide is ready — the questions take a few more
+              seconds.
             </Text>
           ) : null}
 

@@ -13,7 +13,8 @@ import { adminApi, type ListFamiliesParams } from "../api/adminApi";
 export const adminKeys = {
   all: ["admin"] as const,
   overview: () => [...adminKeys.all, "overview"] as const,
-  families: (params: ListFamiliesParams) => [...adminKeys.all, "families", params] as const,
+  families: (params: ListFamiliesParams) =>
+    [...adminKeys.all, "families", params] as const,
   family: (id: string) => [...adminKeys.all, "family", id] as const,
   curriculum: () => [...adminKeys.all, "curriculum"] as const,
   admins: () => [...adminKeys.all, "admins"] as const,
@@ -88,7 +89,10 @@ export function useAdminCurriculum() {
 }
 
 export function useAdminList() {
-  return useQuery({ queryKey: adminKeys.admins(), queryFn: adminApi.listAdmins });
+  return useQuery({
+    queryKey: adminKeys.admins(),
+    queryFn: adminApi.listAdmins,
+  });
 }
 
 /**
@@ -102,12 +106,19 @@ export function useAdminList() {
 export function useSetPlan(familyId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ planCode, note }: { planCode: Parameters<typeof adminApi.setPlan>[1]; note: string }) =>
-      adminApi.setPlan(familyId, planCode, note),
+    mutationFn: ({
+      planCode,
+      note,
+    }: {
+      planCode: Parameters<typeof adminApi.setPlan>[1];
+      note: string;
+    }) => adminApi.setPlan(familyId, planCode, note),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adminKeys.family(familyId) });
       queryClient.invalidateQueries({ queryKey: adminKeys.overview() });
-      queryClient.invalidateQueries({ queryKey: [...adminKeys.all, "families"] });
+      queryClient.invalidateQueries({
+        queryKey: [...adminKeys.all, "families"],
+      });
     },
   });
 }
@@ -120,7 +131,9 @@ export function useSetActive(familyId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adminKeys.family(familyId) });
       queryClient.invalidateQueries({ queryKey: adminKeys.overview() });
-      queryClient.invalidateQueries({ queryKey: [...adminKeys.all, "families"] });
+      queryClient.invalidateQueries({
+        queryKey: [...adminKeys.all, "families"],
+      });
     },
   });
 }
@@ -129,6 +142,7 @@ export function useCreateAdmin() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: adminApi.createAdmin,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: adminKeys.admins() }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: adminKeys.admins() }),
   });
 }

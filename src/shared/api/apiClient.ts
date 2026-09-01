@@ -45,7 +45,8 @@ apiClient.interceptors.response.use(
     // An HTTP error still travelled the wire; only a MISSING response means the
     // network itself is gone.
     if (error.response) useOfflineStore.getState().setOnline(true);
-    else if (axios.isAxiosError(error)) useOfflineStore.getState().setOnline(false);
+    else if (axios.isAxiosError(error))
+      useOfflineStore.getState().setOnline(false);
 
     const original = error.config as RetryableConfig | undefined;
     if (!original) return Promise.reject(error);
@@ -78,19 +79,23 @@ apiClient.interceptors.response.use(
 
 /** The server's machine-readable code, when it sent one. */
 export function apiErrorCode(err: unknown): string | undefined {
-  return (err as { response?: { data?: { error?: { code?: string } } } })?.response?.data?.error
-    ?.code;
+  return (err as { response?: { data?: { error?: { code?: string } } } })
+    ?.response?.data?.error?.code;
 }
 
 /** Whatever structured detail the server attached — suggestions, limits. */
-export function apiErrorDetails<T = Record<string, unknown>>(err: unknown): T | undefined {
-  return (err as { response?: { data?: { error?: { details?: T } } } })?.response?.data?.error
-    ?.details;
+export function apiErrorDetails<T = Record<string, unknown>>(
+  err: unknown,
+): T | undefined {
+  return (err as { response?: { data?: { error?: { details?: T } } } })
+    ?.response?.data?.error?.details;
 }
 
 /** Field name out of a zod path: ["body","child","name"] → "name". */
 function fieldLabel(path: (string | number)[]) {
-  const parts = path.filter((p) => p !== "body" && p !== "query" && p !== "params");
+  const parts = path.filter(
+    (p) => p !== "body" && p !== "query" && p !== "params",
+  );
   const name = parts.filter((p) => typeof p === "string").pop();
   return name ? String(name) : "";
 }
@@ -103,26 +108,35 @@ function fieldLabel(path: (string | number)[]) {
  * developer reading server logs to find out which field a form was unhappy
  * about.
  */
-export function apiErrorMessage(err: unknown, fallback = "Something went wrong") {
+export function apiErrorMessage(
+  err: unknown,
+  fallback = "Something went wrong",
+) {
   const e = err as {
     code?: string;
     response?: {
       data?: {
         error?: {
           message?: string;
-          details?: { issues?: { path: (string | number)[]; message: string }[] };
+          details?: {
+            issues?: { path: (string | number)[]; message: string }[];
+          };
         };
       };
     };
   };
 
   // No response at all — the network, not the server.
-  if (!e?.response && (e?.code === "ERR_NETWORK" || e?.code === "ECONNABORTED")) {
+  if (
+    !e?.response &&
+    (e?.code === "ERR_NETWORK" || e?.code === "ECONNABORTED")
+  ) {
     return "You appear to be offline. We'll retry when you're back.";
   }
 
   const error = e?.response?.data?.error;
-  const plain = !error && err instanceof Error && err.message ? err.message : "";
+  const plain =
+    !error && err instanceof Error && err.message ? err.message : "";
   const message = error?.message || plain || fallback;
 
   const issues = error?.details?.issues;
@@ -142,7 +156,9 @@ export function apiErrorMessage(err: unknown, fallback = "Something went wrong")
 }
 
 /** Unwraps the `{ success, data }` envelope every endpoint returns. */
-export async function unwrap<T>(promise: Promise<{ data: { data: T } }>): Promise<T> {
+export async function unwrap<T>(
+  promise: Promise<{ data: { data: T } }>,
+): Promise<T> {
   const res = await promise;
   return res.data.data;
 }

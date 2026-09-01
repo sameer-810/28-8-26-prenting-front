@@ -20,7 +20,10 @@ export function useBreakpoint() {
     isWide: width >= layout.wideBreakpoint,
     isXWide: width >= breakpoints.xl,
     /** Page gutter: 28 on a desktop, 20 on a phone. */
-    gutter: width >= layout.wideBreakpoint ? layout.screenPadding : layout.screenPaddingPhone,
+    gutter:
+      width >= layout.wideBreakpoint
+        ? layout.screenPadding
+        : layout.screenPaddingPhone,
   };
 }
 

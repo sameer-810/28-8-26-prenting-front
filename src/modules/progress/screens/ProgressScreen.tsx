@@ -64,7 +64,10 @@ export default function ProgressScreen() {
 
   const allowed = family?.limits?.timelines ?? ["daily", "weekly"];
 
-  const { data, isLoading, error, refetch, isRefetching } = useTimeline(child?.id, timeline);
+  const { data, isLoading, error, refetch, isRefetching } = useTimeline(
+    child?.id,
+    timeline,
+  );
   const { data: streak } = useStreak(child?.id);
 
   /**
@@ -143,7 +146,11 @@ export default function ProgressScreen() {
                 label={t.label}
                 selected={timeline === t.key}
                 onPress={() => setTimeline(t.key)}
-                icon={locked ? <Lock size={11} color={theme.text.disabled} /> : undefined}
+                icon={
+                  locked ? (
+                    <Lock size={11} color={theme.text.disabled} />
+                  ) : undefined
+                }
               />
             );
           })}
@@ -169,7 +176,10 @@ export default function ProgressScreen() {
             </VStack>
           </Card>
         ) : error ? (
-          <ErrorState message={apiErrorMessage(error)} onRetry={() => refetch()} />
+          <ErrorState
+            message={apiErrorMessage(error)}
+            onRetry={() => refetch()}
+          />
         ) : isLoading || !data ? (
           <VStack gap={14}>
             <Skeleton height={110} />
@@ -186,13 +196,22 @@ export default function ProgressScreen() {
             <Card>
               <VStack gap={16}>
                 <StatRow>
-                  <StatTile value={data.totals.completedSessions} label="Sessions" />
-                  <StatTile value={`${data.totals.hoursStudied}h`} label="Studied" />
+                  <StatTile
+                    value={data.totals.completedSessions}
+                    label="Sessions"
+                  />
+                  <StatTile
+                    value={`${data.totals.hoursStudied}h`}
+                    label="Studied"
+                  />
                   <StatTile
                     value={`${Math.round(data.totals.accuracy * 100)}%`}
                     label="Accuracy"
                   />
-                  <StatTile value={data.totals.topicsMastered} label="Mastered" />
+                  <StatTile
+                    value={data.totals.topicsMastered}
+                    label="Mastered"
+                  />
                 </StatRow>
 
                 {streak ? (
@@ -207,7 +226,10 @@ export default function ProgressScreen() {
             <Card>
               <VStack gap={14}>
                 <Text variant="h3">Day by day</Text>
-                <TimelineChart series={data.series} windowDays={data.windowDays} />
+                <TimelineChart
+                  series={data.series}
+                  windowDays={data.windowDays}
+                />
               </VStack>
             </Card>
 
@@ -222,8 +244,14 @@ export default function ProgressScreen() {
                 <FluencyMeter {...data.fluency} />
                 {data.fluency.rated ? (
                   <HStack gap={16} wrap>
-                    <Component label="Accuracy" value={data.fluency.components.accuracy} />
-                    <Component label="Pace" value={data.fluency.components.speed} />
+                    <Component
+                      label="Accuracy"
+                      value={data.fluency.components.accuracy}
+                    />
+                    <Component
+                      label="Pace"
+                      value={data.fluency.components.speed}
+                    />
                     <Component
                       label="Consistency"
                       value={data.fluency.components.consistency}
@@ -271,7 +299,11 @@ export default function ProgressScreen() {
                     .map((s) => (
                       <VStack key={s.skill} gap={5}>
                         <HStack justify="space-between" gap={10}>
-                          <Text variant="body-sm" style={{ flex: 1 }} numberOfLines={1}>
+                          <Text
+                            variant="body-sm"
+                            style={{ flex: 1 }}
+                            numberOfLines={1}
+                          >
                             {s.skill}
                           </Text>
                           <Text variant="label-sm" tone="tertiary" numeric>
@@ -282,9 +314,11 @@ export default function ProgressScreen() {
                       </VStack>
                     ))}
 
-                  {mastery.skills.filter((s) => s.attempted >= 3).length === 0 ? (
+                  {mastery.skills.filter((s) => s.attempted >= 3).length ===
+                  0 ? (
                     <Text variant="body-sm" tone="tertiary">
-                      A few more sessions and the per-skill breakdown will appear.
+                      A few more sessions and the per-skill breakdown will
+                      appear.
                     </Text>
                   ) : null}
                 </VStack>

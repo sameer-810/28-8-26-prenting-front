@@ -31,16 +31,34 @@ export type ColorScheme = "light" | "dark";
  * not string) and the two sets refuse to unify. Naming the shape keeps the keys
  * checked while letting either scheme satisfy it.
  */
-type Ramp = Record<50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900, string>;
+type Ramp = Record<
+  50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900,
+  string
+>;
 type Surfaces = Record<
-  "primary" | "secondary" | "tertiary" | "raised" | "sunken" | "dark" | "darkRaised",
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "raised"
+  | "sunken"
+  | "dark"
+  | "darkRaised",
   string
 >;
 type Inks = Record<
-  "primary" | "secondary" | "tertiary" | "disabled" | "inverse" | "accent" | "link",
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "disabled"
+  | "inverse"
+  | "accent"
+  | "link",
   string
 >;
-type Borders = Record<"subtle" | "default" | "strong" | "focus" | "dark", string>;
+type Borders = Record<
+  "subtle" | "default" | "strong" | "focus" | "dark",
+  string
+>;
 type Semantic = { bg: string; text: string; border: string };
 type AccentPair = { color: string; tint: string };
 
@@ -84,7 +102,9 @@ function build(scheme: ColorScheme): Theme {
     brand: palette.moss,
     apricot: palette.apricot,
     accents: dark ? darkAccents : accents,
-    shadows: dark ? { ...shadows, xs: {}, sm: {}, md: {}, lg: {}, xl: {} } : shadows,
+    shadows: dark
+      ? { ...shadows, xs: {}, sm: {}, md: {}, lg: {}, xl: {} }
+      : shadows,
   };
 }
 

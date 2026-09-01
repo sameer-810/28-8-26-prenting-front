@@ -5,8 +5,6 @@ import { saveOnWeb, shareOrExplain } from "@shared/download";
 import { useAuthStore, type Family } from "@shared/store/useAuthStore";
 import type { SubscriptionState } from "../types";
 
-
-
 export const settingsApi = {
   async family() {
     return unwrap<Family>(apiClient.get("/family"));
@@ -22,14 +20,22 @@ export const settingsApi = {
   },
 
   async consent() {
-    return unwrap<{ accepted: boolean; acceptedAt: string | null; policyVersion: string }>(
-      apiClient.get("/family/consent"),
-    );
+    return unwrap<{
+      accepted: boolean;
+      acceptedAt: string | null;
+      policyVersion: string;
+    }>(apiClient.get("/family/consent"));
   },
 
   async devices() {
     return unwrap<
-      { id: string; deviceName: string; platform: string; lastUsedAt: string; createdAt: string }[]
+      {
+        id: string;
+        deviceName: string;
+        platform: string;
+        lastUsedAt: string;
+        createdAt: string;
+      }[]
     >(apiClient.get("/auth/devices"));
   },
 
@@ -37,13 +43,24 @@ export const settingsApi = {
     return unwrap<{ message: string }>(apiClient.delete(`/auth/devices/${id}`));
   },
 
-  async changePassword(input: { currentPassword: string; newPassword: string }) {
-    return unwrap<{ message: string }>(apiClient.post("/auth/change-password", input));
+  async changePassword(input: {
+    currentPassword: string;
+    newPassword: string;
+  }) {
+    return unwrap<{ message: string }>(
+      apiClient.post("/auth/change-password", input),
+    );
   },
 
   async activityLog() {
     return unwrap<
-      { id: string; action: string; description: string; by: string; createdAt: string }[]
+      {
+        id: string;
+        action: string;
+        description: string;
+        by: string;
+        createdAt: string;
+      }[]
     >(apiClient.get("/activity-logs?limit=30"));
   },
 
@@ -95,11 +112,15 @@ export const subscriptionApi = {
     paymentId: string;
     signature: string;
   }) {
-    return unwrap<SubscriptionState>(apiClient.post("/subscription/checkout/confirm", input));
+    return unwrap<SubscriptionState>(
+      apiClient.post("/subscription/checkout/confirm", input),
+    );
   },
 
   async cancel(immediately = false) {
-    return unwrap<SubscriptionState>(apiClient.post("/subscription/cancel", { immediately }));
+    return unwrap<SubscriptionState>(
+      apiClient.post("/subscription/cancel", { immediately }),
+    );
   },
 };
 
@@ -115,15 +136,22 @@ export const subscriptionApi = {
  * right to obtain, and putting it through the share sheet lets them decide
  * where it goes.
  */
-export async function downloadExport(): Promise<{ ok: boolean; reason?: string }> {
+export async function downloadExport(): Promise<{
+  ok: boolean;
+  reason?: string;
+}> {
   const token = useAuthStore.getState().token;
   try {
     const res = await fetch(`${environment.apiUrl}/family/export`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
       body: "{}",
     });
-    if (!res.ok) return { ok: false, reason: `The server returned ${res.status}` };
+    if (!res.ok)
+      return { ok: false, reason: `The server returned ${res.status}` };
 
     if (Platform.OS === "web") {
       saveOnWeb(
@@ -140,7 +168,10 @@ export async function downloadExport(): Promise<{ ok: boolean; reason?: string }
     file.write(text);
     return await shareOrExplain(file.uri, "application/json");
   } catch (err) {
-    return { ok: false, reason: (err as Error)?.message || "The export failed" };
+    return {
+      ok: false,
+      reason: (err as Error)?.message || "The export failed",
+    };
   }
 }
 
@@ -175,16 +206,21 @@ export async function openRazorpayCheckout(input: {
      */
     return {
       ok: false,
-      reason: "Payments aren't available in the app yet. You can subscribe from the web.",
+      reason:
+        "Payments aren't available in the app yet. You can subscribe from the web.",
     };
   }
 
   const loaded = await loadRazorpayScript();
-  if (!loaded) return { ok: false, reason: "Could not reach the payment provider." };
+  if (!loaded)
+    return { ok: false, reason: "Could not reach the payment provider." };
 
   return new Promise((resolve) => {
-    const Razorpay = (window as unknown as { Razorpay?: new (o: unknown) => { open: () => void } })
-      .Razorpay;
+    const Razorpay = (
+      window as unknown as {
+        Razorpay?: new (o: unknown) => { open: () => void };
+      }
+    ).Razorpay;
     if (!Razorpay) {
       resolve({ ok: false, reason: "Could not reach the payment provider." });
       return;
@@ -209,7 +245,8 @@ export async function openRazorpayCheckout(input: {
       modal: {
         // A dismissal is not a failure. Reported separately so the UI can stay
         // quiet rather than showing an error for a parent who changed their mind.
-        ondismiss: () => resolve({ ok: false, reason: "Checkout closed", dismissed: true }),
+        ondismiss: () =>
+          resolve({ ok: false, reason: "Checkout closed", dismissed: true }),
       },
     });
     rzp.open();
@@ -219,7 +256,8 @@ export async function openRazorpayCheckout(input: {
 let scriptPromise: Promise<boolean> | null = null;
 function loadRazorpayScript(): Promise<boolean> {
   if (typeof document === "undefined") return Promise.resolve(false);
-  if ((window as unknown as { Razorpay?: unknown }).Razorpay) return Promise.resolve(true);
+  if ((window as unknown as { Razorpay?: unknown }).Razorpay)
+    return Promise.resolve(true);
   if (scriptPromise) return scriptPromise;
 
   scriptPromise = new Promise<boolean>((resolve) => {

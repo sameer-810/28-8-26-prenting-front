@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Pressable, TextInputProps, ViewStyle } from "react-native";
+import {
+  View,
+  TextInput,
+  Pressable,
+  TextInputProps,
+  ViewStyle,
+} from "react-native";
 import { Eye, EyeOff } from "lucide-react-native";
 import { radius, typography } from "../designSystem";
 import { useTheme } from "../useTheme";
@@ -93,16 +99,18 @@ export function TextField({
           numberOfLines={multilineRows}
           placeholderTextColor={theme.text.disabled}
           accessibilityLabel={rest.accessibilityLabel ?? label}
-          style={{
-            flex: 1,
-            color: theme.text.primary,
-            fontFamily: typography.body.default.fontFamily,
-            fontSize: typography.body.default.fontSize,
-            minHeight: multilineRows ? multilineRows * 22 : undefined,
-            textAlignVertical: multilineRows ? "top" : "center",
-            // Removes the default focus outline on web; ours is the border.
-            outlineStyle: "none",
-          } as never}
+          style={
+            {
+              flex: 1,
+              color: theme.text.primary,
+              fontFamily: typography.body.default.fontFamily,
+              fontSize: typography.body.default.fontSize,
+              minHeight: multilineRows ? multilineRows * 22 : undefined,
+              textAlignVertical: multilineRows ? "top" : "center",
+              // Removes the default focus outline on web; ours is the border.
+              outlineStyle: "none",
+            } as never
+          }
         />
         {isPassword ? (
           <Pressable

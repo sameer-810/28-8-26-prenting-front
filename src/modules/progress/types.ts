@@ -65,7 +65,13 @@ export interface ProofOfProgress {
 }
 
 export interface YearlyReport {
-  child: { id: string; name: string; grade: number; board: string; school: string };
+  child: {
+    id: string;
+    name: string;
+    grade: number;
+    board: string;
+    school: string;
+  };
   year: number;
   period: { from: string; to: string; days: number };
   totals: {

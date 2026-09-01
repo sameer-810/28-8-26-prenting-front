@@ -49,7 +49,10 @@ export function Sidebar({ state, navigation }: BottomTabBarProps) {
         ) : null}
       </VStack>
 
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: 12 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingHorizontal: 12 }}
+      >
         <VStack gap={2}>
           {state.routes.map((route, index) => {
             const item = NAV_ITEMS.find((i) => i.name === route.name);
@@ -66,7 +69,8 @@ export function Sidebar({ state, navigation }: BottomTabBarProps) {
                     target: route.key,
                     canPreventDefault: true,
                   });
-                  if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
+                  if (!focused && !event.defaultPrevented)
+                    navigation.navigate(route.name);
                 }}
                 accessibilityRole="tab"
                 accessibilityState={{ selected: focused }}
@@ -79,7 +83,9 @@ export function Sidebar({ state, navigation }: BottomTabBarProps) {
                   minHeight: layout.navRowHeight,
                   paddingHorizontal: 12,
                   borderRadius: radius.md,
-                  backgroundColor: focused ? theme.accents.moss.tint : "transparent",
+                  backgroundColor: focused
+                    ? theme.accents.moss.tint
+                    : "transparent",
                 }}
               >
                 <Icon
@@ -96,7 +102,13 @@ export function Sidebar({ state, navigation }: BottomTabBarProps) {
         </VStack>
       </ScrollView>
 
-      <View style={{ padding: 12, borderTopWidth: 1, borderTopColor: theme.border.subtle }}>
+      <View
+        style={{
+          padding: 12,
+          borderTopWidth: 1,
+          borderTopColor: theme.border.subtle,
+        }}
+      >
         <HStack gap={10} style={{ paddingHorizontal: 8, paddingBottom: 10 }}>
           <View
             style={{

@@ -26,8 +26,15 @@ const fresh = () =>
 test("a new session starts in phase 1 with the PRD's allocations", () => {
   const s = fresh();
   assert.equal(s.currentPhase, 1);
-  assert.deepEqual(s.phases.map((p) => p.plannedSeconds), [600, 480, 360, 180, 180]);
-  assert.equal(TOTAL_SECONDS, 1800, "the five phases must total exactly 30 minutes");
+  assert.deepEqual(
+    s.phases.map((p) => p.plannedSeconds),
+    [600, 480, 360, 180, 180],
+  );
+  assert.equal(
+    TOTAL_SECONDS,
+    1800,
+    "the five phases must total exactly 30 minutes",
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -77,7 +84,11 @@ test("advancing closes the phase and reports what to checkpoint", () => {
   assert.deepEqual(r.checkpoint, { phaseIndex: 1, actualSeconds: 600 });
   assert.equal(r.state.currentPhase, 2);
   assert.equal(r.state.phases[0].completed, true);
-  assert.equal(r.state.phases[1].startedAt, sec(600), "the next phase opens immediately");
+  assert.equal(
+    r.state.phases[1].startedAt,
+    sec(600),
+    "the next phase opens immediately",
+  );
 });
 
 test("finishing early reports the ACTUAL seconds, not the budget", () => {
@@ -116,7 +127,11 @@ test("a pause does not eat the phase's budget", () => {
   let s = fresh();
   s = pause(s, sec(120));
   s = resume(s, sec(420)); // Five minutes away.
-  assert.equal(elapsedSeconds(s, s.phases[0], sec(480)), 180, "2 min before + 1 min after");
+  assert.equal(
+    elapsedSeconds(s, s.phases[0], sec(480)),
+    180,
+    "2 min before + 1 min after",
+  );
   assert.equal(remainingSeconds(s, sec(480)), 420);
 });
 
@@ -136,7 +151,11 @@ test("advancing while paused resumes — the parent has clearly moved on", () =>
   const s = pause(fresh(), sec(120));
   const r = advance(s, sec(300));
   assert.equal(r.state.pausedAt, null);
-  assert.equal(r.checkpoint?.actualSeconds, 120, "the paused span is not counted");
+  assert.equal(
+    r.checkpoint?.actualSeconds,
+    120,
+    "the paused span is not counted",
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -178,7 +197,10 @@ test("segments describe the ring: sized by budget, filled by elapsed", () => {
   const s = fresh();
   const segs = segments(s, sec(300));
   assert.equal(segs.length, 5);
-  assert.ok(Math.abs(segs.reduce((a, x) => a + x.share, 0) - 1) < 1e-9, "shares total 1");
+  assert.ok(
+    Math.abs(segs.reduce((a, x) => a + x.share, 0) - 1) < 1e-9,
+    "shares total 1",
+  );
   assert.ok(Math.abs(segs[0].share - 600 / 1800) < 1e-9);
   assert.equal(segs[0].active, true);
   assert.ok(Math.abs(segs[0].fill - 0.5) < 1e-9);
@@ -196,7 +218,11 @@ test("an overrunning segment fills to 1, never beyond", () => {
 
 test("resuming opens the phase the server says we are on", () => {
   const s = createRuntime({
-    sessionId: "s1", studyPlanId: "p1", childId: "c1", now: T0, currentPhase: 3,
+    sessionId: "s1",
+    studyPlanId: "p1",
+    childId: "c1",
+    now: T0,
+    currentPhase: 3,
   });
   assert.equal(s.currentPhase, 3);
   assert.equal(currentPhase(s)?.key, "practice");
@@ -211,7 +237,11 @@ test("resuming does NOT invent durations for the phases already done", () => {
    * different histories.
    */
   const s = createRuntime({
-    sessionId: "s1", studyPlanId: "p1", childId: "c1", now: T0, currentPhase: 3,
+    sessionId: "s1",
+    studyPlanId: "p1",
+    childId: "c1",
+    now: T0,
+    currentPhase: 3,
   });
   assert.equal(s.phases[0].completed, true);
   assert.equal(s.phases[0].startedAt, null);

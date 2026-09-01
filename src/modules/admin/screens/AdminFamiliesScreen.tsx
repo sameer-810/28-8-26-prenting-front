@@ -60,7 +60,8 @@ export default function AdminFamiliesScreen() {
     status?: SubscriptionStatus;
   }>({ page: 1, limit: 25 });
 
-  const { data, isLoading, error, refetch, isRefetching } = useAdminFamilies(applied);
+  const { data, isLoading, error, refetch, isRefetching } =
+    useAdminFamilies(applied);
 
   const apply = () =>
     setApplied({
@@ -121,7 +122,10 @@ export default function AdminFamiliesScreen() {
             <Skeleton height={64} />
           </VStack>
         ) : error ? (
-          <ErrorState message={apiErrorMessage(error, "Could not load households")} onRetry={refetch} />
+          <ErrorState
+            message={apiErrorMessage(error, "Could not load households")}
+            onRetry={refetch}
+          />
         ) : rows.length === 0 ? (
           <EmptyState
             title="No households match that"
@@ -136,13 +140,18 @@ export default function AdminFamiliesScreen() {
                 info: theme.info,
                 warning: theme.warning,
                 danger: theme.danger,
-                neutral: { bg: theme.surface.sunken, text: theme.text.tertiary },
+                neutral: {
+                  bg: theme.surface.sunken,
+                  text: theme.text.tertiary,
+                },
               }[tone];
 
               return (
                 <Pressable
                   key={f.id}
-                  onPress={() => navigation.navigate("AdminFamilyDetail", { id: f.id })}
+                  onPress={() =>
+                    navigation.navigate("AdminFamilyDetail", { id: f.id })
+                  }
                   accessibilityRole="button"
                   accessibilityLabel={`${f.name}, ${f.planName}, ${statusLabel(f.status)}`}
                 >
@@ -160,7 +169,10 @@ export default function AdminFamiliesScreen() {
                                 backgroundColor: theme.danger.bg,
                               }}
                             >
-                              <Text variant="caption" style={{ color: theme.danger.text }}>
+                              <Text
+                                variant="caption"
+                                style={{ color: theme.danger.text }}
+                              >
                                 disabled
                               </Text>
                             </View>
@@ -168,7 +180,9 @@ export default function AdminFamiliesScreen() {
                         </HStack>
                         <Text variant="caption" tone="tertiary">
                           {f.planName} · joined {shortDate(f.createdAt)}
-                          {f.currentPeriodEnd ? ` · renews ${shortDate(f.currentPeriodEnd)}` : ""}
+                          {f.currentPeriodEnd
+                            ? ` · renews ${shortDate(f.currentPeriodEnd)}`
+                            : ""}
                         </Text>
                       </VStack>
 
@@ -195,7 +209,8 @@ export default function AdminFamiliesScreen() {
             {meta && meta.pages > 1 ? (
               <HStack justify="space-between" align="center" gap={12}>
                 <Text variant="caption" tone="tertiary">
-                  {count(meta.total)} households · page {meta.page} of {meta.pages}
+                  {count(meta.total)} households · page {meta.page} of{" "}
+                  {meta.pages}
                 </Text>
                 <HStack gap={8}>
                   <Button
@@ -204,7 +219,9 @@ export default function AdminFamiliesScreen() {
                     variant="secondary"
                     fullWidth={false}
                     disabled={applied.page <= 1}
-                    onPress={() => setApplied((a) => ({ ...a, page: a.page - 1 }))}
+                    onPress={() =>
+                      setApplied((a) => ({ ...a, page: a.page - 1 }))
+                    }
                   />
                   <Button
                     label="Next"
@@ -212,7 +229,9 @@ export default function AdminFamiliesScreen() {
                     variant="secondary"
                     fullWidth={false}
                     disabled={applied.page >= meta.pages}
-                    onPress={() => setApplied((a) => ({ ...a, page: a.page + 1 }))}
+                    onPress={() =>
+                      setApplied((a) => ({ ...a, page: a.page + 1 }))
+                    }
                   />
                 </HStack>
               </HStack>

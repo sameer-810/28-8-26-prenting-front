@@ -13,7 +13,11 @@ import {
   isFinished,
   type RuntimeState,
 } from "../sessionRuntime";
-import { sessionApi, type StudyPlan, type CompletionResult } from "../api/sessionApi";
+import {
+  sessionApi,
+  type StudyPlan,
+  type CompletionResult,
+} from "../api/sessionApi";
 import { summarise, type Verdict } from "../grading";
 
 export interface AnswerRecord {
@@ -43,12 +47,21 @@ export function useSessionPlayer({
 }) {
   const queryClient = useQueryClient();
   const [state, setState] = useState<RuntimeState>(() =>
-    createRuntime({ sessionId, studyPlanId, childId, currentPhase: startingPhase }),
+    createRuntime({
+      sessionId,
+      studyPlanId,
+      childId,
+      currentPhase: startingPhase,
+    }),
   );
   const [now, setNow] = useState(() => Date.now());
 
-  const [practiceAnswers, setPracticeAnswers] = useState<Record<number, AnswerRecord>>({});
-  const [mockAnswers, setMockAnswers] = useState<Record<number, AnswerRecord>>({});
+  const [practiceAnswers, setPracticeAnswers] = useState<
+    Record<number, AnswerRecord>
+  >({});
+  const [mockAnswers, setMockAnswers] = useState<Record<number, AnswerRecord>>(
+    {},
+  );
   const [revision, setRevision] = useState<StudyPlan["revision"]>(null);
   const [revisionLoading, setRevisionLoading] = useState(false);
   const [completion, setCompletion] = useState<CompletionResult | null>(null);
@@ -107,7 +120,10 @@ export function useSessionPlayer({
    * to wait for.
    */
   const flushAnswers = useCallback(
-    async (which: "practice" | "mock", answers: Record<number, AnswerRecord>) => {
+    async (
+      which: "practice" | "mock",
+      answers: Record<number, AnswerRecord>,
+    ) => {
       const payload = Object.entries(answers).map(([index, a]) => ({
         phase: which,
         questionIndex: Number(index),
@@ -159,10 +175,19 @@ export function useSessionPlayer({
       // Only now do the misses exist, so only now can phase 5 be built.
       void loadRevision();
     }
-  }, [state, sessionId, practiceAnswers, mockAnswers, flushAnswers, loadRevision]);
+  }, [
+    state,
+    sessionId,
+    practiceAnswers,
+    mockAnswers,
+    flushAnswers,
+    loadRevision,
+  ]);
 
   const togglePause = useCallback(() => {
-    setState((s) => (s.pausedAt ? resume(s, Date.now()) : pause(s, Date.now())));
+    setState((s) =>
+      s.pausedAt ? resume(s, Date.now()) : pause(s, Date.now()),
+    );
     setNow(Date.now());
   }, []);
 
@@ -225,7 +250,9 @@ export function useSessionPlayer({
   const canAdvance = (() => {
     if (!plan) return false;
     if (phaseKey === "practice") {
-      return Object.keys(practiceAnswers).length >= (plan.practice?.length ?? 0);
+      return (
+        Object.keys(practiceAnswers).length >= (plan.practice?.length ?? 0)
+      );
     }
     if (phaseKey === "mock") {
       return Object.keys(mockAnswers).length >= (plan.mock?.length ?? 0);

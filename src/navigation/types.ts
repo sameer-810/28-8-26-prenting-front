@@ -84,7 +84,10 @@ export function useAppNavigation() {
  * route name. This helper is the fix that generalises: any screen that wants a
  * tab calls this instead of guessing the form.
  */
-export function goToTab(navigation: AppNavigation, tab: keyof TabParamList = "Home") {
+export function goToTab(
+  navigation: AppNavigation,
+  tab: keyof TabParamList = "Home",
+) {
   navigation.navigate("Shell", { screen: tab });
 }
 

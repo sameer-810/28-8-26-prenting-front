@@ -7,10 +7,27 @@ import { Pause, Play, X, ChevronRight } from "lucide-react-native";
 import { radius } from "@shared/designSystem";
 import { useTheme } from "@shared/useTheme";
 import { useOfflineStore } from "@shared/offline/useOfflineStore";
-import { useAppNavigation, goToTab, type AppStackParamList } from "@navigation/types";
-import { Text, Button, VStack, HStack, LoadingState, ErrorState, Banner } from "@shared/ui";
+import {
+  useAppNavigation,
+  goToTab,
+  type AppStackParamList,
+} from "@navigation/types";
+import {
+  Text,
+  Button,
+  VStack,
+  HStack,
+  LoadingState,
+  ErrorState,
+  Banner,
+} from "@shared/ui";
 import { useBreakpoint } from "@shared/ui/useBreakpoint";
-import { sessionApi, cachedPlan, clearCachedPlan, type StudyPlan } from "../api/sessionApi";
+import {
+  sessionApi,
+  cachedPlan,
+  clearCachedPlan,
+  type StudyPlan,
+} from "../api/sessionApi";
 import { PHASES as RUNTIME_PHASES } from "../sessionRuntime";
 import { useSessionPlayer } from "../hooks/useSessionPlayer";
 import { SessionRing } from "../components/SessionRing";
@@ -97,7 +114,9 @@ export default function SessionScreen() {
   }
 
   if (error && !offlinePlan) {
-    return <ErrorState offline={!isOnline} onRetry={() => goToTab(navigation)} />;
+    return (
+      <ErrorState offline={!isOnline} onRetry={() => goToTab(navigation)} />
+    );
   }
 
   /**
@@ -143,7 +162,10 @@ export default function SessionScreen() {
             plan={plan}
             revision={player.revision}
             loading={player.revisionLoading}
-            perfect={player.localScore.attempted > 0 && player.localScore.incorrect === 0}
+            perfect={
+              player.localScore.attempted > 0 &&
+              player.localScore.incorrect === 0
+            }
           />
         );
       default:
@@ -168,7 +190,11 @@ export default function SessionScreen() {
   const controls = (
     <VStack gap={10}>
       <Button
-        label={isLastPhase ? "Finish session" : `Next: ${nextPhaseTitle(player.state.currentPhase)}`}
+        label={
+          isLastPhase
+            ? "Finish session"
+            : `Next: ${nextPhaseTitle(player.state.currentPhase)}`
+        }
         onPress={async () => {
           if (isLastPhase) {
             await player.complete();
@@ -178,7 +204,9 @@ export default function SessionScreen() {
         }}
         loading={player.completing}
         disabled={!player.canAdvance}
-        rightIcon={!isLastPhase ? <ChevronRight size={16} color="#FFFFFF" /> : undefined}
+        rightIcon={
+          !isLastPhase ? <ChevronRight size={16} color="#FFFFFF" /> : undefined
+        }
         size="lg"
       />
       {!player.canAdvance ? (
@@ -243,14 +271,19 @@ export default function SessionScreen() {
             {ring}
             {controls}
           </VStack>
-          <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 40 }}>
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: 40 }}
+          >
             <View style={{ maxWidth: 760 }}>{content}</View>
           </ScrollView>
         </View>
       ) : (
         /* Phone: the ring is pinned, the content scrolls under it. */
         <View style={{ flex: 1 }}>
-          <View style={{ alignItems: "center", paddingBottom: 12 }}>{ring}</View>
+          <View style={{ alignItems: "center", paddingBottom: 12 }}>
+            {ring}
+          </View>
           <ScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ padding: 16, paddingBottom: 140 }}
@@ -340,7 +373,14 @@ export default function SessionScreen() {
       ) : null}
 
       {!isOnline ? (
-        <View style={{ position: "absolute", top: insets.top + 54, left: 16, right: 16 }}>
+        <View
+          style={{
+            position: "absolute",
+            top: insets.top + 54,
+            left: 16,
+            right: 16,
+          }}
+        >
           <Banner
             tone="info"
             title="Offline — carry on"
@@ -353,5 +393,7 @@ export default function SessionScreen() {
 }
 
 function nextPhaseTitle(currentIndex: number): string {
-  return RUNTIME_PHASES.find((p) => p.index === currentIndex + 1)?.title ?? "Finish";
+  return (
+    RUNTIME_PHASES.find((p) => p.index === currentIndex + 1)?.title ?? "Finish"
+  );
 }

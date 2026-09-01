@@ -45,7 +45,8 @@ export function clientOpId(): string {
   if (typeof globalThis.crypto?.getRandomValues === "function") {
     globalThis.crypto.getRandomValues(bytes);
   } else {
-    for (let i = 0; i < bytes.length; i += 1) bytes[i] = Math.floor(Math.random() * 256);
+    for (let i = 0; i < bytes.length; i += 1)
+      bytes[i] = Math.floor(Math.random() * 256);
   }
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
@@ -69,7 +70,9 @@ export const planApi = {
   },
 
   async regenerate(planId: string) {
-    return unwrap<StudyPlan>(apiClient.post(`/study-plans/${planId}/regenerate`));
+    return unwrap<StudyPlan>(
+      apiClient.post(`/study-plans/${planId}/regenerate`),
+    );
   },
 };
 
@@ -99,7 +102,11 @@ export const sessionApi = {
    * returns `alreadyComplete` — so a blind retry is safe and the UI never waits
    * on the server to advance.
    */
-  async checkpoint(sessionId: string, phaseIndex: number, actualSeconds: number) {
+  async checkpoint(
+    sessionId: string,
+    phaseIndex: number,
+    actualSeconds: number,
+  ) {
     await enqueue({
       method: "patch",
       url: `/sessions/${sessionId}/checkpoint`,
@@ -110,12 +117,19 @@ export const sessionApi = {
 
   async submitAnswers(
     sessionId: string,
-    answers: { phase: "practice" | "mock"; questionIndex: number; given: string; answerMs: number }[],
+    answers: {
+      phase: "practice" | "mock";
+      questionIndex: number;
+      given: string;
+      answerMs: number;
+    }[],
   ) {
     await enqueue({
       method: "post",
       url: `/sessions/${sessionId}/attempts`,
-      body: { answers: answers.map((a) => ({ ...a, clientOpId: clientOpId() })) },
+      body: {
+        answers: answers.map((a) => ({ ...a, clientOpId: clientOpId() })),
+      },
       invalidate: [["dashboard"]],
     });
   },
@@ -129,7 +143,9 @@ export const sessionApi = {
   async complete(sessionId: string): Promise<CompletionResult | null> {
     try {
       return await unwrap<CompletionResult>(
-        apiClient.post(`/sessions/${sessionId}/complete`, { clientOpId: clientOpId() }),
+        apiClient.post(`/sessions/${sessionId}/complete`, {
+          clientOpId: clientOpId(),
+        }),
       );
     } catch {
       await enqueue({
@@ -152,7 +168,9 @@ export const sessionApi = {
   },
 
   async abandon(sessionId: string) {
-    return unwrap<SessionRecord>(apiClient.post(`/sessions/${sessionId}/abandon`));
+    return unwrap<SessionRecord>(
+      apiClient.post(`/sessions/${sessionId}/abandon`),
+    );
   },
 };
 
@@ -177,7 +195,11 @@ export const captureApi = {
    * bytes and the server's answer, so there is nothing useful to queue. Offline
    * this fails and the capture screen says so.
    */
-  async uploadPages(input: { childId?: string; kind?: string; files: { uri: string; name: string; type: string }[] }) {
+  async uploadPages(input: {
+    childId?: string;
+    kind?: string;
+    files: { uri: string; name: string; type: string }[];
+  }) {
     const form = new FormData();
     if (input.childId) form.append("childId", input.childId);
     if (input.kind) form.append("kind", input.kind);
@@ -204,10 +226,22 @@ export const captureApi = {
 
   async chapters(board: string, grade: number, subject: string) {
     return unwrap<
-      { chapter: string; topics: { id: string; topic: string; difficulty: number }[] }[]
-    >(apiClient.get(`/curriculum/chapters?board=${board}&grade=${grade}&subject=${subject}`));
+      {
+        chapter: string;
+        topics: { id: string; topic: string; difficulty: number }[];
+      }[]
+    >(
+      apiClient.get(
+        `/curriculum/chapters?board=${board}&grade=${grade}&subject=${subject}`,
+      ),
+    );
   },
 };
 
 /** Re-exported for existing imports; the shapes live in `../types`. */
-export type { PlanLanguage, StudyPlan, SessionRecord, CompletionResult } from "../types";
+export type {
+  PlanLanguage,
+  StudyPlan,
+  SessionRecord,
+  CompletionResult,
+} from "../types";

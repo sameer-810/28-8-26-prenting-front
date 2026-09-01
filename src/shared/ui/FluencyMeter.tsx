@@ -31,7 +31,14 @@ interface Props {
   compact?: boolean;
 }
 
-export function FluencyMeter({ rated, band, label, score, sessionsToRate = 0, compact }: Props) {
+export function FluencyMeter({
+  rated,
+  band,
+  label,
+  score,
+  sessionsToRate = 0,
+  compact,
+}: Props) {
   const theme = useTheme();
   const index = BANDS.findIndex((b) => b.key === band);
 
@@ -99,7 +106,12 @@ export function FluencyMeter({ rated, band, label, score, sessionsToRate = 0, co
               // ends anchor to their edges so the track underneath is legible.
               style={{
                 flex: 1,
-                textAlign: i === 0 ? "left" : i === BANDS.length - 1 ? "right" : "center",
+                textAlign:
+                  i === 0
+                    ? "left"
+                    : i === BANDS.length - 1
+                      ? "right"
+                      : "center",
               }}
             >
               {b.key === "foundations" ? "Foundations" : b.label.split(" ")[0]}

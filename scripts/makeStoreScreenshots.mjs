@@ -44,7 +44,10 @@ const RAW = path.join(ROOT, "store-assets", "raw-screens");
 const PORT = 8099;
 const CAPTIONS = !process.argv.includes("--raw");
 
-const DEMO = { email: "demo.parent@parentai.app", password: "ParentAI-Demo-2026" };
+const DEMO = {
+  email: "demo.parent@parentai.app",
+  password: "ParentAI-Demo-2026",
+};
 
 const MOSS_900 = "#1B2A18";
 const LEAF = "#E4F0DF";
@@ -91,14 +94,22 @@ if (!fs.existsSync(path.join(DIST, "index.html"))) {
 }
 
 const MIME = {
-  ".html": "text/html", ".js": "text/javascript", ".css": "text/css",
-  ".json": "application/json", ".ttf": "font/ttf", ".png": "image/png", ".ico": "image/x-icon",
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".ttf": "font/ttf",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
 };
 const server = http.createServer((req, res) => {
   const url = decodeURIComponent((req.url || "/").split("?")[0]);
   let file = path.join(DIST, url);
-  if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(DIST, "index.html");
-  res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream" });
+  if (!fs.existsSync(file) || fs.statSync(file).isDirectory())
+    file = path.join(DIST, "index.html");
+  res.writeHead(200, {
+    "Content-Type": MIME[path.extname(file)] || "application/octet-stream",
+  });
   fs.createReadStream(file).pipe(res);
 });
 await new Promise((r) => server.listen(PORT, r));
@@ -179,7 +190,9 @@ for (const shot of SHOTS) {
   await composer.screenshot({ path: path.join(OUT, shot.file) });
   await composer.close();
 
-  console.log(`  ${shot.file.padEnd(20)} ${VIEW.width * SCALE}×${VIEW.height * SCALE}  "${shot.caption}"`);
+  console.log(
+    `  ${shot.file.padEnd(20)} ${VIEW.width * SCALE}×${VIEW.height * SCALE}  "${shot.caption}"`,
+  );
 }
 
 await browser.close();
@@ -187,5 +200,7 @@ server.close();
 
 console.log(
   `\n  ${SHOTS.length} screenshots in store-assets/screenshots/` +
-    (CAPTIONS ? "\n  raw captures, uncaptioned, in store-assets/raw-screens/\n" : "\n"),
+    (CAPTIONS
+      ? "\n  raw captures, uncaptioned, in store-assets/raw-screens/\n"
+      : "\n"),
 );
