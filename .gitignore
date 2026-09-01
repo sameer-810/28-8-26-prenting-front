@@ -27,3 +27,6 @@ _tmp_*
 # Android release signing — read by plugins/withReleaseSigning.js.
 # The keystore and its passwords never belong in the repo.
 credentials/
+
+# Generated preview from tools/makeTestGuide.mjs --preview
+_guide-preview.png

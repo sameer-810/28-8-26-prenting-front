@@ -20,7 +20,8 @@
     "assets:feature": "node scripts/makeFeatureGraphic.mjs",
     "assets:screens": "node scripts/makeStoreScreenshots.mjs",
     "assets": "npm run assets:icons && npm run assets:feature && npm run assets:screens",
-    "smoke:admin": "node tools/adminSmoke.mjs"
+    "smoke:admin": "node tools/adminSmoke.mjs",
+    "guide": "node tools/makeTestGuide.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/fraunces": "^0.4.0",
