@@ -143,7 +143,7 @@ export function ReportsCard({ child }: { child: ChildProfile }) {
          * footer. A document that could be mistaken for a school assessment
          * should be understood as what it is before it is forwarded anywhere.
          */}
-        <Text variant="caption" tone="disabled">
+        <Text variant="caption" tone="tertiary">
           These record work done in ParentAI. They aren't school assessments or
           exam results.
         </Text>

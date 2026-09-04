@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -78,6 +78,12 @@ export function useSessionPlayer({
   const [completed, setCompleted] = useState(false);
 
   /**
+   * True only while the session is paused because the app left the foreground,
+   * so returning does not cancel a pause the parent set deliberately.
+   */
+  const autoPaused = useRef(false);
+
+  /**
    * One interval, purely to re-render. It is NOT the clock — dropping ticks
    * costs nothing because the time is derived from timestamps on every render.
    */
@@ -87,15 +93,47 @@ export function useSessionPlayer({
   }, []);
 
   /**
-   * Returning to the foreground forces an immediate re-render.
+   * Leaving the app pauses the session; coming back resumes it.
    *
-   * Without it, a parent who backgrounded the app for five minutes sees the old
-   * time for up to a second after coming back — brief, but it looks like the
-   * timer stalled, which is the one thing a timer must never look like.
+   * Elapsed time is derived from wall-clock timestamps, so without this a phone
+   * call, a switch to WhatsApp or a screen lock all counted as study time. A
+   * five-minute session left open recorded up to sixty minutes — the server
+   * clamps each phase at twice its budget, and that clamp was the only thing
+   * bounding it. Reported by a parent as "40 minutes studied after five".
+   *
+   * `pause`/`resume` accumulate the away span into `pausedMs` rather than
+   * stopping a counter, which keeps the wall-clock derivation intact — the
+   * alternative is a counter kept running by something, and that something is
+   * exactly what the OS suspends.
+   *
+   * Returning to the foreground also forces an immediate re-render: without it
+   * the old time shows for up to a second, which looks like a stalled timer.
    */
   useEffect(() => {
-    const sub = AppState.addEventListener("change", (s) => {
-      if (s === "active") setNow(Date.now());
+    const sub = AppState.addEventListener("change", (next) => {
+      if (next === "active") {
+        /**
+         * Only un-pause what leaving the app paused. A parent who tapped Pause
+         * before putting the phone down must come back to a session that is
+         * still paused — resuming it for them would restart the clock on a
+         * child who has gone to get a glass of water.
+         */
+        if (autoPaused.current) {
+          autoPaused.current = false;
+          setState((s) => (s.completedAt ? s : resume(s, Date.now())));
+        }
+        setNow(Date.now());
+      } else {
+        // "background" and "inactive" both mean the parent is no longer
+        // looking. iOS reports "inactive" for the app switcher and for a
+        // notification shade, and treating it as still-studying is how a
+        // glance at a message becomes ten minutes of recorded work.
+        setState((s) => {
+          if (s.completedAt || s.pausedAt) return s; // already paused by hand
+          autoPaused.current = true;
+          return pause(s, Date.now());
+        });
+      }
     });
     return () => sub.remove();
   }, []);
@@ -185,6 +223,10 @@ export function useSessionPlayer({
   ]);
 
   const togglePause = useCallback(() => {
+    // A deliberate tap takes ownership of the pause either way: pausing by hand
+    // must survive a trip to the home screen, and resuming by hand must not be
+    // undone by the next foreground event.
+    autoPaused.current = false;
     setState((s) =>
       s.pausedAt ? resume(s, Date.now()) : pause(s, Date.now()),
     );

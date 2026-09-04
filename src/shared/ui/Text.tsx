@@ -63,6 +63,13 @@ interface Props {
    */
   accessibilityLabel?: string;
   accessibilityRole?: "text" | "header" | "link" | "none";
+  /**
+   * For a word INSIDE a paragraph that can be acted on — the tap-to-define
+   * lookup. A wrapping Pressable cannot be used for this: it would break the
+   * line into boxes and the passage would stop wrapping and justifying as
+   * prose, which matters most in the scripts a parent reads aloud.
+   */
+  onPress?: () => void;
   style?: StyleProp<TextStyle>;
   children: React.ReactNode;
 }
@@ -137,6 +144,7 @@ export function Text({
   selectable,
   accessibilityLabel,
   accessibilityRole,
+  onPress,
   style,
   children,
 }: Props) {
@@ -180,6 +188,7 @@ export function Text({
       selectable={selectable}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole={accessibilityRole}
+      onPress={onPress}
       maxFontSizeMultiplier={maxFontSizeMultiplier ?? MAX_SCALE[variant]}
       style={[
         base,

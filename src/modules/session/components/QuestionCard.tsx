@@ -68,6 +68,18 @@ export function QuestionCard({
 
   const isMultipleChoice = Boolean(question.options?.length);
 
+  /**
+   * Whether the expected answer is a number.
+   *
+   * Read from the answer the question already carries rather than from the
+   * subject: "how many legs does an insect have" is a numeric Science answer,
+   * and "write the formula" is a textual Maths one. Digits, a decimal point, a
+   * fraction slash, a percent or a minus sign — and nothing else — count.
+   */
+  const expectsNumber =
+    !isMultipleChoice &&
+    /^[\d\s./%:+-]+$/.test(String(question.answer ?? "").trim());
+
   return (
     <VStack gap={14}>
       <HStack justify="space-between">
@@ -77,7 +89,7 @@ export function QuestionCard({
         {question.skill ? (
           <Text
             variant="caption"
-            tone="disabled"
+            tone="tertiary"
             numberOfLines={1}
             style={{ maxWidth: "55%" }}
           >
@@ -179,7 +191,20 @@ export function QuestionCard({
             value={given}
             onChangeText={setGiven}
             editable={!verdict}
-            placeholder="Type the answer"
+            placeholder={expectsNumber ? "Type the number" : "Type the answer"}
+            /**
+             * The keyboard follows the ANSWER, not the subject.
+             *
+             * A child asked "what is 3/4 + 1/8" on a phone should get digits
+             * without hunting for the number key; one asked "plants are known
+             * as ___" needs letters. Choosing by subject instead is what put a
+             * numeric pad under a Science question.
+             *
+             * `decimal-pad` rather than `numeric`: it carries the separators a
+             * decimal or fraction answer needs and omits symbols that would
+             * only produce ungradeable input.
+             */
+            keyboardType={expectsNumber ? "decimal-pad" : "default"}
             autoCapitalize="none"
             autoCorrect={false}
             returnKeyType="done"

@@ -67,7 +67,9 @@ export function PhoneTabBar({ state, navigation }: BottomTabBarProps) {
             <Icon size={21} color={color} strokeWidth={focused ? 2.4 : 1.9} />
             <Text
               variant="label-sm"
-              style={{ color, fontSize: 11 }}
+              // 12px, not 11: these four words are permanent navigation, and
+              // 11px was the only text in the product under the 12px floor.
+              style={{ color, fontSize: 12 }}
               // Capped: this label lives in a fixed slot, and past this it is
               // clipped rather than helpful.
               maxFontSizeMultiplier={1.3}

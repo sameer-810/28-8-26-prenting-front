@@ -97,7 +97,7 @@ export default function AdminLoginScreen() {
               onPress={handleSubmit((v) => login.mutate(v))}
             />
 
-            <Text variant="caption" tone="disabled">
+            <Text variant="caption" tone="tertiary">
               Staff accounts have no password reset. If you are locked out, an
               operator runs npm run seed:admin -- --email you@… --reset-password
               against production.

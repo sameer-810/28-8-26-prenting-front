@@ -61,7 +61,7 @@ export function ProofOfProgressCard({ data }: { data: ProofOfProgress }) {
             score={before.rated ? before.score : null}
             muted
           />
-          <ArrowRight size={18} color={theme.text.disabled} />
+          <ArrowRight size={18} color={theme.text.tertiary} />
           <Half
             caption="Now"
             label={after.rated ? after.label : "No rating yet"}
@@ -103,7 +103,7 @@ function Half({
 }) {
   return (
     <VStack gap={3} flex={1}>
-      <Text variant="caption" tone="disabled">
+      <Text variant="caption" tone="tertiary">
         {caption}
       </Text>
       <Text variant="label-lg" tone={muted ? "tertiary" : "accent"}>
@@ -118,7 +118,7 @@ function Half({
           {score}
         </Text>
       ) : (
-        <Text variant="body-sm" tone="disabled">
+        <Text variant="body-sm" tone="tertiary">
           —
         </Text>
       )}

@@ -45,7 +45,9 @@ export function AuthLayout({
       }
     >
       <VStack gap={isWide ? 16 : 8} style={{ maxWidth: 460 }}>
-        <Text variant="overline" style={{ color: palette.moss[200] }}>
+        {/* moss[50], not [200]: on the gradient panel the 200 shade measures
+            4.04:1, just under AA for this size. */}
+        <Text variant="overline" style={{ color: palette.moss[50] }}>
           ParentAI
         </Text>
         <Text
@@ -57,7 +59,7 @@ export function AuthLayout({
             : "ParentAI"}
         </Text>
         {isWide ? (
-          <Text variant="body-lg" style={{ color: palette.moss[100] }}>
+          <Text variant="body-lg" style={{ color: palette.moss[50] }}>
             Thirty structured minutes. A script you can read aloud. Progress you
             can actually see.
           </Text>

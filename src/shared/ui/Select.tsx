@@ -158,14 +158,37 @@ export function Select({
               }}
             />
             {label ? (
-              <Text
-                variant="h3"
-                style={{ paddingHorizontal: 20, paddingBottom: 8 }}
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  paddingBottom: 8,
+                  flexDirection: "row",
+                  alignItems: "baseline",
+                  justifyContent: "space-between",
+                  gap: 12,
+                }}
               >
-                {label}
-              </Text>
+                <Text variant="h3">{label}</Text>
+                {/**
+                 * The count, whenever the sheet is likely to be taller than it
+                 * can show. The list has always scrolled, but a bottom sheet
+                 * cropped mid-row with no scrollbar reads as a list that ends
+                 * there — reported as "the picker cuts off and won't scroll".
+                 * Saying how many there are makes the crop legible as a crop.
+                 */}
+                {options.length > 5 ? (
+                  <Text variant="caption" tone="tertiary">
+                    {options.length} options — scroll
+                  </Text>
+                ) : null}
+              </View>
             ) : null}
-            <ScrollView>
+            <ScrollView
+              // Persistent on iOS, where the indicator otherwise fades out
+              // before a parent opening the sheet has seen it.
+              persistentScrollbar
+              indicatorStyle={theme.isDark ? "white" : "black"}
+            >
               {options.map((o) => {
                 const isSelected = o.value === value;
                 return (

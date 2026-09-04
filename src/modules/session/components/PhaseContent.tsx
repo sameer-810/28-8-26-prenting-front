@@ -35,7 +35,12 @@ export function ConceptPhase({ plan }: { plan: StudyPlan }) {
           <Text variant="overline" tone="tertiary">
             READ THIS ALOUD
           </Text>
-          <ReadAloud text={plan.concept.script} language={parentLang} />
+          <ReadAloud
+            text={plan.concept.script}
+            language={parentLang}
+            childId={plan.childId}
+            parentLanguage={parentLang}
+          />
         </VStack>
       </Card>
 
@@ -141,7 +146,12 @@ export function TeachingPhase({ plan }: { plan: StudyPlan }) {
               Work this through together
             </Text>
           </HStack>
-          <ReadAloud text={plan.teaching.workedExample} language={parentLang} />
+          <ReadAloud
+            text={plan.teaching.workedExample}
+            language={parentLang}
+            childId={plan.childId}
+            parentLanguage={parentLang}
+          />
         </VStack>
       </Card>
 

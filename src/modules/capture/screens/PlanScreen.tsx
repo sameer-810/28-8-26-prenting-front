@@ -165,7 +165,7 @@ export default function PlanScreen() {
                     <HStack gap={6}>
                       <Text variant="label">{phase.title}</Text>
                       {!phase.ready ? (
-                        <Text variant="caption" tone="disabled">
+                        <Text variant="caption" tone="tertiary">
                           preparing…
                         </Text>
                       ) : null}

@@ -336,7 +336,7 @@ export default function ProgressScreen() {
 function Component({ label, value }: { label: string; value: number }) {
   return (
     <VStack gap={1}>
-      <Text variant="caption" tone="disabled">
+      <Text variant="caption" tone="tertiary">
         {label}
       </Text>
       <Text variant="label" numeric>

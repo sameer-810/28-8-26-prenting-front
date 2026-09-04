@@ -67,6 +67,7 @@ export default function SignupScreen() {
           <Pressable
             onPress={() => navigation.navigate("Login")}
             accessibilityRole="link"
+            style={{ paddingVertical: 12, paddingHorizontal: 8 }}
           >
             <Text variant="label" tone="link">
               Sign in

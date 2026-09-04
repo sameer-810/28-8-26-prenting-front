@@ -101,7 +101,13 @@ export function FluencyMeter({
             <Text
               key={b.key}
               variant="label-sm"
-              tone={i === index ? "accent" : "disabled"}
+              /**
+               * The bands the child has not reached are still the scale — they
+               * say what "Proficient" is measured against. `disabled` renders
+               * them at 2.6:1, which is below AA for text this size and is a
+               * tone meant for controls you cannot operate, not for a legend.
+               */
+              tone={i === index ? "accent" : "tertiary"}
               // The scale reads as a ladder rather than four equal labels: the
               // ends anchor to their edges so the track underneath is legible.
               style={{

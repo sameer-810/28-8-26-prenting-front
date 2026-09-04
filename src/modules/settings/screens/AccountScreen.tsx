@@ -180,7 +180,7 @@ export default function AccountScreen() {
           </VStack>
         </Card>
 
-        <Text variant="caption" tone="disabled">
+        <Text variant="caption" tone="tertiary">
           Signing a device out here frees a slot against your plan's device
           limit straight away.
         </Text>

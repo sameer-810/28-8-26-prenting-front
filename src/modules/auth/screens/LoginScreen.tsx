@@ -49,6 +49,7 @@ export default function LoginScreen() {
           <Pressable
             onPress={() => navigation.navigate("Signup")}
             accessibilityRole="link"
+            style={{ paddingVertical: 12, paddingHorizontal: 8 }}
           >
             <Text variant="label" tone="link">
               Create an account
@@ -93,7 +94,11 @@ export default function LoginScreen() {
         <Pressable
           onPress={() => navigation.navigate("ForgotPassword")}
           accessibilityRole="link"
-          style={{ alignSelf: "flex-end" }}
+          style={{
+            alignSelf: "flex-end",
+            paddingVertical: 12,
+            paddingHorizontal: 8,
+          }}
         >
           <Text variant="label" tone="link">
             Forgot password?

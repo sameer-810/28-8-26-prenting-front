@@ -196,7 +196,7 @@ export default function AdminFamilyDetailScreen() {
                 </View>
               ))
             )}
-            <Text variant="caption" tone="disabled">
+            <Text variant="caption" tone="tertiary">
               No session content, teaching scripts or answers are available
               here, to anyone.
             </Text>
@@ -405,7 +405,7 @@ function SuperadminActions({
           ) : null}
         </VStack>
 
-        <Text variant="caption" tone="disabled">
+        <Text variant="caption" tone="tertiary">
           Neither action deletes anything. Erasure is the household's own right,
           exercised from their privacy screen.
         </Text>

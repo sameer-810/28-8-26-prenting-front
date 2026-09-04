@@ -45,7 +45,7 @@ export function ListRow({
       </VStack>
       {right}
       {showChevron && onPress ? (
-        <ChevronRight size={18} color={theme.text.disabled} />
+        <ChevronRight size={18} color={theme.text.tertiary} />
       ) : null}
     </HStack>
   );

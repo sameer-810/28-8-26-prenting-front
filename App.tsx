@@ -74,6 +74,12 @@ const linking = {
           Login: "login",
           Signup: "signup",
           ForgotPassword: "forgot-password",
+          /**
+           * Must match the URL in sendPasswordResetEmail exactly — the token
+           * arrives as a query parameter, which react-navigation maps onto the
+           * route's `token` param.
+           */
+          ResetPassword: "reset-password",
         },
       },
       App: {

@@ -361,8 +361,11 @@ export const typography = {
   },
   overline: {
     fontFamily: fonts.semibold,
-    fontSize: 11,
-    lineHeight: 14,
+    // 12px is the floor for any text in the product. Uppercase with letter
+    // spacing survives being small better than body text does, but 11px put
+    // this below the line for no gain.
+    fontSize: 12,
+    lineHeight: 15,
     fontWeight: "600" as const,
     letterSpacing: 0.6,
     textTransform: "uppercase" as const,

@@ -193,7 +193,7 @@ function CreateAdminCard({ onCreated }: { onCreated: () => void }) {
           )}
         />
 
-        <Text variant="caption" tone="disabled">
+        <Text variant="caption" tone="tertiary">
           There is no self-service password reset for staff. A locked-out
           account is recovered by an operator running the seed script against
           production.

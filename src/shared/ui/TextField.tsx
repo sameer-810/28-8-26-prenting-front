@@ -117,7 +117,21 @@ export function TextField({
             onPress={() => setReveal((v) => !v)}
             accessibilityRole="button"
             accessibilityLabel={reveal ? "Hide password" : "Show password"}
+            /**
+             * hitSlop alone is not enough: react-native-web does not implement
+             * it, so on the web build the reveal toggle was an 18x18 target —
+             * the smallest control in the product, on the sign-in screen. The
+             * explicit box gives every platform a real 44x44; hitSlop stays for
+             * native, where it costs nothing.
+             */
             hitSlop={10}
+            style={{
+              width: 44,
+              height: 44,
+              alignItems: "center",
+              justifyContent: "center",
+              marginRight: -8,
+            }}
           >
             {reveal ? (
               <EyeOff size={18} color={theme.text.tertiary} />

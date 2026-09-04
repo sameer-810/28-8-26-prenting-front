@@ -194,7 +194,7 @@ export default function PrivacyScreen() {
               {activity.slice(0, 8).map((a) => (
                 <VStack key={a.id} gap={1}>
                   <Text variant="body-sm">{a.description || a.action}</Text>
-                  <Text variant="caption" tone="disabled">
+                  <Text variant="caption" tone="tertiary">
                     {a.by} · {shortDate(a.createdAt)}
                   </Text>
                 </VStack>

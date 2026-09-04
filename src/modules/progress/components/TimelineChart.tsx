@@ -100,7 +100,11 @@ export function TimelineChart({
               accessibilityLabel={`Show ${m.label}`}
               style={{
                 paddingHorizontal: 10,
-                paddingVertical: 6,
+                // 28px tall was above WCAG 2.2's 24px floor but below the 32px
+                // the chips beside it use. Matching them costs nothing.
+                paddingVertical: 8,
+                minHeight: 32,
+                justifyContent: "center",
                 borderRadius: radius.full,
                 backgroundColor:
                   metric === m.key ? theme.accents.moss.tint : "transparent",
@@ -117,7 +121,7 @@ export function TimelineChart({
         </HStack>
 
         {grouped ? (
-          <Text variant="caption" tone="disabled">
+          <Text variant="caption" tone="tertiary">
             by week
           </Text>
         ) : null}
@@ -164,6 +168,14 @@ export function TimelineChart({
                 alignItems: "center",
                 justifyContent: "flex-end",
                 height,
+                /**
+                 * The bar is 9px wide on a phone, and the screen tells the
+                 * parent to tap it. The touch target is therefore decoupled
+                 * from the drawn bar: 24px is WCAG 2.2's AA minimum (2.5.5's
+                 * 44px is AAA, and unreachable for a 30-day chart at 390px —
+                 * that would be a 1,320px scroller for one month).
+                 */
+                minWidth: 24,
               }}
             >
               <View
@@ -209,7 +221,7 @@ export function TimelineChart({
           </VStack>
         </View>
       ) : (
-        <Text variant="caption" tone="disabled">
+        <Text variant="caption" tone="tertiary">
           Tap a bar for that day.
         </Text>
       )}

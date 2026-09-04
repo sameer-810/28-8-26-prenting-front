@@ -41,7 +41,7 @@ export function StreakBadge({
       >
         <Flame
           size={14}
-          color={active ? palette.apricot[600] : theme.text.disabled}
+          color={active ? palette.apricot[600] : theme.text.tertiary}
           // Filled only when the streak is live — an outline flame at zero says
           // "not yet" without shouting about it.
           fill={active ? palette.apricot[500] : "none"}
@@ -50,7 +50,13 @@ export function StreakBadge({
           variant="label-sm"
           numeric
           style={{
-            color: active ? theme.accents.apricot.color : theme.text.disabled,
+            /**
+             * apricot[700], not the accent colour. The accent (#B76A2C) is
+             * tuned to sit on white; on the apricot tint this chip uses it
+             * measures 3.55:1, under AA for 12px text. 700 is the shade the
+             * palette documents as "text on light".
+             */
+            color: active ? palette.apricot[700] : theme.text.tertiary,
           }}
         >
           {days === 0 ? "No streak yet" : `${days} day${days === 1 ? "" : "s"}`}

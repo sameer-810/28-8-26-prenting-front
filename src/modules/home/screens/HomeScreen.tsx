@@ -236,7 +236,7 @@ function ChildCardView({ child }: { child: ChildCard }) {
                   >
                     {plan.title}
                   </Text>
-                  <ChevronRight size={16} color={theme.text.disabled} />
+                  <ChevronRight size={16} color={theme.text.tertiary} />
                 </Pressable>
               ))}
             </VStack>

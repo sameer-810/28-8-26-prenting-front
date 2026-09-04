@@ -151,11 +151,22 @@ await page.waitForTimeout(700);
 check("tapping a bar shows that day's detail", /correct/.test(await body()));
 
 /**
- * Checked on "This year", which always spans enough days to contain a gap. On a
- * short window — "This month" on the 1st — there may legitimately be no empty
- * day, and asserting there is one tests the calendar rather than the chart.
+ * Checked on "This month", NOT "This year".
+ *
+ * Past a 70-day window the chart folds days into weeks (TimelineChart's
+ * `grouped`), so a bar on the yearly view is empty only when all seven of its
+ * days are. The demo seed's rest pattern never leaves a whole week idle — its
+ * longest gap is six days — so on the yearly view this assertion could only
+ * ever pass by accident, on a partially-empty boundary week. It did, until a
+ * session landed in that week and it began failing for a reason that had
+ * nothing to do with the chart.
+ *
+ * "This month" draws one bar per day, which is what is being asserted. The
+ * precondition is read off the screen rather than assumed: the summary line
+ * states how many days were studied out of how many, so the test only demands
+ * an empty bar when the window actually contains an empty day.
  */
-await page.getByRole("button", { name: /This year/i }).click();
+await page.getByRole("button", { name: /This month/i }).click();
 await page
   .waitForFunction(
     () => /studied out of/.test(document.body.innerText || ""),
@@ -165,20 +176,45 @@ await page
     },
   )
   .catch(() => {});
+
+const gapSummary = (await body()).match(/(\d+)\s+days? studied out of (\d+)/);
+const daysStudied = gapSummary ? Number(gapSummary[1]) : 0;
+const daysInWindow = gapSummary ? Number(gapSummary[2]) : 0;
 const emptyBars = await page
   .getByRole("button", { name: /: no session/ })
   .count();
-check(
-  "empty days are drawn, not skipped",
-  emptyBars > 0,
-  `${emptyBars} empty days on the yearly view`,
-);
+
+if (daysInWindow > daysStudied) {
+  check(
+    "empty days are drawn, not skipped",
+    emptyBars > 0,
+    `the window reports ${daysInWindow - daysStudied} day(s) without a session, but ${emptyBars} empty bars were drawn`,
+  );
+} else {
+  check(
+    "empty days are drawn, not skipped",
+    true,
+    `skipped: every one of the ${daysInWindow} days in this window has a session, so there is no gap to draw`,
+  );
+}
 
 /**
  * Asserted on the yearly window. A rating needs five sessions, so a short
  * window legitimately shows "N more sessions to your first rating" instead of
  * the breakdown — checking it there would test the calendar.
+ *
+ * Switched back explicitly: the empty-day check above moved to "This month",
+ * and leaving the screen there would quietly evaluate this on a three-day
+ * window at the start of a month.
  */
+await page.getByRole("button", { name: /This year/i }).click();
+await page
+  .waitForFunction(
+    () => /studied out of/.test(document.body.innerText || ""),
+    null,
+    { timeout: 20000 },
+  )
+  .catch(() => {});
 const yearly = await body();
 check(
   "the fluency components are broken out",

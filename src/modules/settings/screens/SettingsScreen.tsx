@@ -304,7 +304,7 @@ export default function SettingsScreen() {
           loading={logout.isPending}
         />
 
-        <Text variant="caption" tone="disabled" align="center">
+        <Text variant="caption" tone="tertiary" align="center">
           ParentAI 1.0.0
         </Text>
       </VStack>
