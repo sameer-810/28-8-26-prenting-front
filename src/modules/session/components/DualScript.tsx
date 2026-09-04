@@ -213,12 +213,23 @@ export function ReadAloud({
    * lookup is written for a specific grade and pair of languages.
    */
   childId,
+  /**
+   * The two languages the DEFINITION comes back in, which are not the same as
+   * the language of the passage above.
+   *
+   * The passage is in the parent's language; the definition is written for the
+   * child in their school medium, with the parent's rendering beside it. Passing
+   * `language` for both collapses that into one and the parent's half never
+   * shows — which is the half a parent who cannot read English needs.
+   */
+  childLanguage,
   parentLanguage,
 }: {
   text: string;
   language: LanguageCode;
   size?: "body" | "body-lg";
   childId?: string;
+  childLanguage?: LanguageCode;
   parentLanguage?: LanguageCode;
 }) {
   const theme = useTheme();
@@ -228,7 +239,10 @@ export function ReadAloud({
     <TappableText
       text={text}
       childId={childId}
+      // The passage's own language, for rendering it in the right script.
       language={language}
+      // The pair the definition sheet needs.
+      childLanguage={childLanguage}
       parentLanguage={parentLanguage}
       variant={size}
       style={{ letterSpacing: 0.1 }}

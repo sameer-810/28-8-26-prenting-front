@@ -39,6 +39,7 @@ export function ConceptPhase({ plan }: { plan: StudyPlan }) {
             text={plan.concept.script}
             language={parentLang}
             childId={plan.childId}
+            childLanguage={plan.languages.child.code as LanguageCode}
             parentLanguage={parentLang}
           />
         </VStack>
@@ -150,6 +151,7 @@ export function TeachingPhase({ plan }: { plan: StudyPlan }) {
             text={plan.teaching.workedExample}
             language={parentLang}
             childId={plan.childId}
+            childLanguage={plan.languages.child.code as LanguageCode}
             parentLanguage={parentLang}
           />
         </VStack>

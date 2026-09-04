@@ -36,13 +36,18 @@ export function TappableText({
   text,
   childId,
   language = "en",
+  childLanguage,
   parentLanguage,
   style,
   variant = "body",
 }: {
   text: string;
   childId: string;
+  /** The passage's own language, for rendering it in the right script. */
   language?: LanguageCode;
+  /** The language the definition comes back in — the child's school medium. */
+  childLanguage?: LanguageCode;
+  /** The parent's language, shown beside it so they can say it aloud. */
   parentLanguage?: LanguageCode;
   style?: object;
   variant?: "body" | "body-lg" | "body-sm";
@@ -179,7 +184,10 @@ export function TappableText({
                           onPress={() =>
                             speech.speaking
                               ? speech.stop()
-                              : speech.speak(lookup.definition ?? "", language)
+                              : speech.speak(
+                                  lookup.definition ?? "",
+                                  childLanguage ?? language,
+                                )
                           }
                         />
                       ) : null}
@@ -189,7 +197,7 @@ export function TappableText({
                   {/* The parent's language, so they can say it themselves. */}
                   {lookup?.definitionParent &&
                   parentLanguage &&
-                  parentLanguage !== language ? (
+                  parentLanguage !== (childLanguage ?? language) ? (
                     <View
                       style={{
                         backgroundColor: theme.accents.moss.tint,
